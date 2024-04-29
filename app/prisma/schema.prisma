@@ -1,0 +1,164 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  CustomerId    String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  CustomerType  CustomerType
+  Email         String
+  Password      String
+  FirstName     String
+  LastName      String
+  DateOfBirth   DateTime
+  PhoneNumber   String
+  Address       String
+  CreatedAt     DateTime @default(now())
+  UpdatedAt     DateTime @default(now())
+
+  Account      Account[]
+  Loans         Loan[]
+  Notifications Notification[]
+  CustomerSender Transaction[] @relation("CustomerSender")
+  CustomerReceiver Transaction[] @relation("CustomerReceiver")
+}
+
+enum CustomerType {
+  Personal
+  Company
+}
+
+model Employee {
+  EmployeeId  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  Position    Position
+  LastName    String
+  FirstName   String
+  DateOfBirth DateTime
+  Email       String
+  PhoneNumber String
+  Address     String
+  Salary      Int
+  CreatedAt   DateTime @default(now())
+  UpdatedAt   DateTime @default(now())
+
+  Loans Loan[]
+  Notifications Notification[]
+}
+
+enum Position {
+  employee
+  manager
+  owner
+}
+
+model Account {
+  AccountId String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  Customer   Customer @relation(fields: [CustomerId], references: [CustomerId])
+  CustomerId String   @db.Uuid
+
+  AccountNumber String
+  Balance       Float
+  AccountType   AccountType
+  AccountStatus String
+  CreatedAt     DateTime @default(now())
+  UpdatedAt     DateTime @default(now())
+}
+
+enum AccountType {
+  Deposit
+  Saving
+}
+
+model Loan {
+  LoanId String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  ResponsibleEmployeeId String  @db.Uuid // EmployeeId
+  Employee              Employee @relation(fields: [ResponsibleEmployeeId], references: [EmployeeId])
+
+  CustomerId String  @db.Uuid // CustomerId
+  Customer   Customer @relation(fields: [CustomerId], references: [CustomerId])
+
+  LoanType     LoanType
+  LoanAmount   Float
+  InterestRate Float
+  Term         Int
+  LoanStatus   LoanStatus
+  
+  EndDate      DateTime
+  StartDate    DateTime @default(now())
+  UpdatedAt DateTime @default(now())
+  LoanPayments LoanPayment[]
+}
+
+enum LoanType {
+  normal
+  special
+}
+
+enum LoanStatus {
+  onProcess
+  inDebt
+}
+
+
+
+model LoanPayment {
+  LoanId               String  @db.Uuid
+  Loan Loan @relation(fields: [LoanId], references: [LoanId])
+
+  LoanPaymentId         String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  ScheduledPaymentDate DateTime
+  PaymentAmount        Float
+  PrincipalAmount      Float
+  InterestAmount       Float
+  PaidAmount           Float
+  PaidDate             DateTime
+
+  CreatedAt   DateTime @default(now())
+  UpdatedAt   DateTime @default(now())
+}
+
+model Transaction {
+  TransactionId   String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  
+  Sender            String  @db.Uuid 
+  CustomerSender  Customer @relation("CustomerSender", fields: [Sender], references: [CustomerId])
+  
+  Receiver              String  @db.Uuid 
+  CustomerReceiver Customer @relation("CustomerReceiver",fields: [Receiver], references: [CustomerId])
+  
+
+  TransactionType String
+  Amount          Float
+  TransactionDate DateTime
+  CreatedAt   DateTime @default(now())
+  UpdatedAt   DateTime @default(now())  
+}
+
+model Notification {
+  NotiId           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  Receiver         String  @db.Uuid
+  CustomerReceiver Customer @relation(fields: [Receiver], references: [CustomerId])
+
+  CreatedBy        String   @db.Uuid // employee
+  EmployeeCreated Employee @relation(fields: [CreatedBy], references: [EmployeeId])
+
+  Text        String
+  Read        Boolean
+  PublishedAt DateTime @default(now())
+  CreatedAt   DateTime @default(now())
+  UpdatedAt   DateTime @default(now())
+}
+
