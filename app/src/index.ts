@@ -1,15 +1,13 @@
 import { Elysia, t } from "elysia";
 import { PrismaClient } from '@prisma/client'
-import { swagger } from '@elysiajs/swagger'
-import userHttp from "./user/user.httpHandler";
 import { jwt } from '@elysiajs/jwt'
+import userHttp from "./user/user.HttpHandler";
 
 export const db = new PrismaClient() 
 
 
 
 const app = new Elysia()  
-    .use(swagger())
     .use(
       jwt({
           name: 'jwt',
@@ -17,7 +15,9 @@ const app = new Elysia()
       })
   )
     .post('/sign-up', userHttp.SignUpMethod.func, userHttp.SignUpMethod.validate) 
-
+    .post('/sign-in', userHttp.SignInMethod.func, userHttp.SignInMethod.validate) 
+    .get('/current-user', userHttp.CurrentCustomer.func) 
+    .get("/fdlp", (jwt) => {jwt})
   .listen(3000)
 
 

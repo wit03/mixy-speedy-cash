@@ -32,7 +32,7 @@ async function CustomerSignIn(body:CustomerSigninReq) {
     
     const customer = await userRepo.FindCustomerByIdRepo(checkedCustomer.CustomerId)
     
-    return {error: undefined, data:customer}
+    return {error: undefined, customer:customer}
 
 }
 
