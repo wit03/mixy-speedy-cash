@@ -24,3 +24,8 @@ export interface CustomerRegisterReq {
     customerType: CustomerType;
     address: string;
 }
+
+export interface CustomerSigninReq {
+    email:string;
+    password:string;
+}

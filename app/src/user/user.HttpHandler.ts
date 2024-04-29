@@ -1,5 +1,5 @@
 import { Context, t } from "elysia"
-import { CustomerRegisterReq } from "./user.type";
+import { CustomerRegisterReq, CustomerSigninReq } from "./user.type";
 import userUsecase from "./user.Usecase";
 
 
@@ -83,6 +83,62 @@ async function SignUpHttpHandler({
         }
     }
 }
+
+
+
+const ValidateSignin = {
+    body: t.Object({
+        email: t.String({ 
+            minLength: 2,
+            format: "email"
+        }),
+        password: t.String({
+            minLength: 2,
+        }),
+    }),
+    error({ code }:{code:string}) {
+        switch (code) {
+            case 'P2002':
+                return {
+                    error: 'Email must be unique'
+            }
+        }
+    },
+}
+
+async function SignInHttpHandler({
+    body,
+    set,
+    cookie: {auth},
+    jwt,
+}:{
+    body:CustomerSigninReq,
+    set:Context["set"],
+    jwt:any
+    cookie: {
+        auth:any
+    }
+}) {
+    // const {dateOfBirth, email, firstName, lastName, password, phoneNumber} = body;;
+    
+        set.status = 201;
+        const data = await userUsecase.SignInUsecase(body)
+
+        auth.set({
+            value: await jwt.sign(data.customer),
+            httpOnly: false,
+            maxAge: 7 * 86400,
+            path: '/profile',
+
+        })
+
+        return {
+            "msg": "ok",
+            "customer": data.customer,
+        }
+}
+
+
 
 
 const userHttp = {
