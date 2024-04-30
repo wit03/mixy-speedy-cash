@@ -1,6 +1,6 @@
-import { Elysia, t } from "elysia";
-import customerRepo from "../../customer/customer.Repository";
+import { Elysia } from "elysia";
 import { jwtAccessSetup } from "../setup";
+import { FindCustomerByIdRepo } from "../../customer/customer.Repository";
 
 
 export const currentCustomer = new Elysia()
@@ -31,7 +31,7 @@ export const currentCustomer = new Elysia()
                 }
             } 
             else {
-                const customer = await customerRepo.FindCustomerByIdRepo(parseData.CustomerId)
+                const customer = await FindCustomerByIdRepo(parseData.CustomerId)
         
                 if(!customer){
                     return {

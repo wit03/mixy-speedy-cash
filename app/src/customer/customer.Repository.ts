@@ -3,7 +3,7 @@ import { db } from "..";
 import { CustomerRegisterReq } from "./customer.type";
 
 // for insert customer when signup
-async function InsertCustomer(body:CustomerRegisterReq): Promise<{
+export async function InsertCustomerRepo(body:CustomerRegisterReq): Promise<{
     CustomerId: string;
     CustomerType: $Enums.CustomerType;
     Email: string;
@@ -41,7 +41,7 @@ async function InsertCustomer(body:CustomerRegisterReq): Promise<{
 }
 
 
-async function FindCustomerById(customerId:string) {
+export async function FindCustomerByIdRepo(customerId:string) {
     return await db.customer.findFirst({
         where:{
             CustomerId: customerId
@@ -60,7 +60,7 @@ async function FindCustomerById(customerId:string) {
     })
 }
 
-async function FindCustomerByEmail(email:string) {
+export async function FindCustomerByEmailRepo(email:string) {
     return await db.customer.findFirst({
         where:{
             Email: email
@@ -76,10 +76,3 @@ async function FindCustomerByEmail(email:string) {
 //rth4065kzb0t2a0
 
 
-const customerRepo = {
-    SignUpRepo: InsertCustomer,
-    FindCustomerByIdRepo: FindCustomerById,
-    FindCustomerByEmailRepo: FindCustomerByEmail,
-}
-
-export default customerRepo

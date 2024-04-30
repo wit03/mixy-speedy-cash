@@ -1,6 +1,5 @@
-import { password } from "bun";
-import userRepo from "./customer.Repository";
 import { CustomerRegisterReq, CustomerSigninReq } from "./customer.type";
+import { FindCustomerByEmailRepo, FindCustomerByIdRepo, InsertCustomerRepo } from "./customer.Repository";
 
 
 // for insert customer when signup
@@ -9,14 +8,14 @@ export async function CustomerSignUp(body:CustomerRegisterReq) {
         algorithm:"bcrypt",
         cost: 4
     })
-    const data = await userRepo.SignUpRepo(body)
+    const data = await InsertCustomerRepo(body)
 
     return {customer:data}
 }
 
 
 export async function CustomerSignIn(body:CustomerSigninReq) {
-    const checkedCustomer = await userRepo.FindCustomerByEmailRepo(body.email)
+    const checkedCustomer = await FindCustomerByEmailRepo(body.email)
     if(!checkedCustomer || checkedCustomer.Email !== body.email) {
         return {error: "Email or password is incorrect", data:undefined}
     }
@@ -26,7 +25,7 @@ export async function CustomerSignIn(body:CustomerSigninReq) {
         return {error: "Email or password is incorrect", data:undefined}
     }
     
-    const customer = await userRepo.FindCustomerByIdRepo(checkedCustomer.CustomerId)
+    const customer = await FindCustomerByIdRepo(checkedCustomer.CustomerId)
     
     return {error: undefined, customer:customer}
 

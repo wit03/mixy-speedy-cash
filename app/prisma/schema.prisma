@@ -140,10 +140,9 @@ model Transaction {
   CustomerReceiver Customer @relation("CustomerReceiver",fields: [Receiver], references: [CustomerId])
   
 
-  TransactionType String
+  // TransactionType String
   Amount          Float
-  TransactionDate DateTime
-  CreatedAt   DateTime @default(now())
+  TransactionDate DateTime  @default(now())
   UpdatedAt   DateTime @default(now())  
 }
 
