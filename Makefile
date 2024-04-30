@@ -7,6 +7,9 @@ server:
 db-up:
 	@docker compose up -d
 
+db-stop:
+	@docker compose stop
+
 # Ex. make migrate name=init
 db-migrate:
 	@cd app && bunx prisma migrate dev --name $(name)

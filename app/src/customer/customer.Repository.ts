@@ -1,6 +1,6 @@
 import { $Enums } from "@prisma/client";
 import { db } from "..";
-import { CustomerRegisterReq } from "./user.type";
+import { CustomerRegisterReq } from "./customer.type";
 
 // for insert customer when signup
 async function InsertCustomer(body:CustomerRegisterReq): Promise<{
@@ -73,12 +73,13 @@ async function FindCustomerByEmail(email:string) {
     })
 }
 
+//rth4065kzb0t2a0
 
 
-const userRepo = {
+const customerRepo = {
     SignUpRepo: InsertCustomer,
     FindCustomerByIdRepo: FindCustomerById,
     FindCustomerByEmailRepo: FindCustomerByEmail,
 }
 
-export default userRepo
+export default customerRepo
