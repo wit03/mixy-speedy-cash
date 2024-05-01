@@ -2,6 +2,7 @@ import { Elysia, t } from "elysia";
 import { jwtAccessSetup } from "../setup";
 import { CustomerSignIn } from "../../customer/customer.Usecase";
 import { CustomerSigninReq } from "../../customer/customer.type";
+import { FindOldestAccountIdByCustomerId } from "../../account/account.Repository";
 
 
 const ValidateSignin = {
@@ -31,19 +32,39 @@ export const login = new Elysia()
         async function SignInHttpHandler({
             body,
             set,
-            cookie: { auth },
+            cookie: { auth, currentAccount },
             jwtAccess,
         }) {
-            set.status = 200;
 
             const {customer, error} = await CustomerSignIn(body as CustomerSigninReq)
             if(error !== undefined){
+                set.status = 401;
                 return {
                     msg:error || "Email or password is incorrect",
                     customer: undefined
                 }
             }
             if (customer) {
+                
+                // if do not have account selected
+                if(!currentAccount.value){
+                    const account = await FindOldestAccountIdByCustomerId(customer.CustomerId)
+                    if(!account || !account.AccountId){
+                        set.status = 401;
+                        return {
+                            msg: "Get oldest account failed",
+                            customer: undefined,
+                        }
+                    }
+                    currentAccount.set({
+                        value: account?.AccountId,
+                        httpOnly: false,
+                        maxAge: 7 * 86400,
+                        path: '/',
+                    })
+                }
+                
+                set.status = 200;
                 auth.set({
                     value: await jwtAccess.sign(customer),
                     httpOnly: false,

@@ -1,3 +1,4 @@
+import { $Enums } from "@prisma/client";
 import { db } from "..";
 
 
@@ -47,3 +48,34 @@ export async function DepositBalanceRepo(reciever:string, amount:number) {
 //         select:
 //     })
 // }
+export async function InsertAccountRepo(CustomerId:string, AccountType:$Enums.AccountType) {
+    return await db.account.create({
+        data:{
+            AccountId:new Date().valueOf().toString(),
+            AccountStatus: "InUse",
+            Balance: 1000,
+            AccountType: AccountType,
+            CustomerId: CustomerId,
+        },
+        select:{
+            AccountId:true,
+            AccountStatus:true,
+            Balance:true,
+            AccountType:true,
+        }
+    })
+}
+
+export async function FindOldestAccountIdByCustomerId(customerId:string) {
+    return await db.account.findFirst({
+        where:{
+            CustomerId: customerId,
+        },
+        orderBy:{
+            CreatedAt:  "desc"
+        },
+        select:{
+            AccountId:true
+        }
+    })
+}

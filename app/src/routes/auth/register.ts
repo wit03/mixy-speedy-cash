@@ -52,12 +52,33 @@ export const register = new Elysia()
     async function SignUpHttpHandler({
         body,
         set,
-        cookie: {auth},
+        cookie: {auth, currentAccount},
         jwtAccess,
     }) {
         if (body.customerType === "Company" || body.customerType === "Personal"){
             set.status = 201;
-            const {customer} = await CustomerSignUp(body as CustomerRegisterReq)
+            const {customer, error, account} = await CustomerSignUp(body as CustomerRegisterReq)
+            if(error || !customer || !account) {
+                return {
+                    msg: error || "Register failed",
+                    customer: undefined,
+                    account: undefined
+                }
+            }
+
+            if(!account || !account.AccountId){
+                set.status = 401;
+                return {
+                    msg: "Create account failed",
+                    customer: undefined,
+                }
+            }
+            currentAccount.set({
+                value: account?.AccountId,
+                httpOnly: false,
+                maxAge: 7 * 86400,
+                path: '/',
+            })
 
             auth.set({
                 value: await jwtAccess.sign(customer),
@@ -67,8 +88,9 @@ export const register = new Elysia()
     
             })
             return {
-                "msg": "ok",
-                "customer": customer,
+                msg: "ok",
+                customer: customer,
+                account: account
             }
         }
         

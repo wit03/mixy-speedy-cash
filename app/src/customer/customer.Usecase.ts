@@ -1,5 +1,6 @@
 import { CustomerRegisterReq, CustomerSigninReq } from "./customer.type";
-import { FindCustomerByEmailRepo, FindCustomerByIdRepo, InsertCustomerRepo } from "./customer.Repository";
+import { DeleteCustomer, FindCustomerByEmailRepo, FindCustomerByIdRepo, InsertCustomerRepo } from "./customer.Repository";
+import { InsertAccountRepo } from "../account/account.Repository";
 
 
 // for insert customer when signup
@@ -8,10 +9,25 @@ export async function CustomerSignUp(body:CustomerRegisterReq) {
         algorithm:"bcrypt",
         cost: 4
     })
-    const data = await InsertCustomerRepo(body)
+    const resCustomer = await InsertCustomerRepo(body)
 
-    return {customer:data}
+    // if no data return an error
+    if(!resCustomer.CustomerId){
+        return {customer:undefined, error:"Register customer failed"}
+    }
+    else {
+        
+        const resAccount =  await InsertAccountRepo(resCustomer.CustomerId, "Deposit")
+        // if create account failed delete customer
+        if(!resAccount.AccountId){
+            const _ = await DeleteCustomer(resCustomer.CustomerId)
+            return {customer:undefined, error:"Register customer failed cause of can't create account", account:undefined}
+        }        
+        return {customer:resCustomer, error:undefined, account:resAccount}
+    }
+    
 }
+
 
 
 export async function CustomerSignIn(body:CustomerSigninReq) {
@@ -30,3 +46,4 @@ export async function CustomerSignIn(body:CustomerSigninReq) {
     return {error: undefined, customer:customer}
 
 }
+

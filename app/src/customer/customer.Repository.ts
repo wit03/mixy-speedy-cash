@@ -40,6 +40,14 @@ export async function InsertCustomerRepo(body:CustomerRegisterReq): Promise<{
 })
 }
 
+export async function DeleteCustomer(customerId:string) {
+    return await db.customer.delete({
+        where:{
+            CustomerId: customerId
+        },
+    })
+}
+
 
 export async function FindCustomerByIdRepo(customerId:string) {
     return await db.customer.findFirst({

@@ -14,23 +14,20 @@ datasource db {
 }
 
 model Customer {
-  CustomerId    String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  CustomerType  CustomerType
-  Email         String @unique
-  Password      String
-  FirstName     String
-  LastName      String
-  DateOfBirth   DateTime
-  PhoneNumber   String
-  Address       String
-  CreatedAt     DateTime @default(now())
-  UpdatedAt     DateTime @default(now())
+  CustomerId   String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  CustomerType CustomerType
+  Email        String       @unique
+  Password     String
+  FirstName    String
+  LastName     String
+  DateOfBirth  DateTime
+  PhoneNumber  String
+  Address      String
+  CreatedAt    DateTime     @default(now())
+  UpdatedAt    DateTime     @default(now())
 
-  Account      Account[]
-  Loans         Loan[]
+  Account       Account[]
   Notifications Notification[]
-  CustomerSender Transaction[] @relation("CustomerSender")
-  CustomerReceiver Transaction[] @relation("CustomerReceiver")
 }
 
 enum CustomerType {
@@ -51,7 +48,7 @@ model Employee {
   CreatedAt   DateTime @default(now())
   UpdatedAt   DateTime @default(now())
 
-  Loans Loan[]
+  Loans         Loan[]
   Notifications Notification[]
 }
 
@@ -62,17 +59,20 @@ enum Position {
 }
 
 model Account {
-  AccountId String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  AccountId String @id @unique
 
   Customer   Customer @relation(fields: [CustomerId], references: [CustomerId])
   CustomerId String   @db.Uuid
 
-  AccountNumber String
   Balance       Float
   AccountType   AccountType
-  AccountStatus String
-  CreatedAt     DateTime @default(now())
-  UpdatedAt     DateTime @default(now())
+  AccountStatus AccountStatus
+  CreatedAt     DateTime    @default(now())
+  UpdatedAt     DateTime    @default(now())
+
+  AccountSender   Transaction[] @relation("AccountSender")
+  AccountReceiver Transaction[] @relation("AccountReceiver")
+  Loans           Loan[]
 }
 
 enum AccountType {
@@ -80,24 +80,29 @@ enum AccountType {
   Saving
 }
 
+enum AccountStatus {
+  InUse
+  Closed
+}
+
 model Loan {
   LoanId String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
-  ResponsibleEmployeeId String  @db.Uuid // EmployeeId
+  ResponsibleEmployeeId String   @db.Uuid // EmployeeId
   Employee              Employee @relation(fields: [ResponsibleEmployeeId], references: [EmployeeId])
 
-  CustomerId String  @db.Uuid // CustomerId
-  Customer   Customer @relation(fields: [CustomerId], references: [CustomerId])
+  AccountId String
+  Account   Account @relation(fields: [AccountId], references: [AccountId])
 
   LoanType     LoanType
   LoanAmount   Float
   InterestRate Float
   Term         Int
   LoanStatus   LoanStatus
-  
+
   EndDate      DateTime
-  StartDate    DateTime @default(now())
-  UpdatedAt DateTime @default(now())
+  StartDate    DateTime      @default(now())
+  UpdatedAt    DateTime      @default(now())
   LoanPayments LoanPayment[]
 }
 
@@ -111,13 +116,11 @@ enum LoanStatus {
   inDebt
 }
 
-
-
 model LoanPayment {
-  LoanId               String  @db.Uuid
-  Loan Loan @relation(fields: [LoanId], references: [LoanId])
+  LoanId String @db.Uuid
+  Loan   Loan   @relation(fields: [LoanId], references: [LoanId])
 
-  LoanPaymentId         String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  LoanPaymentId String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
   ScheduledPaymentDate DateTime
   PaymentAmount        Float
@@ -126,32 +129,31 @@ model LoanPayment {
   PaidAmount           Float
   PaidDate             DateTime
 
-  CreatedAt   DateTime @default(now())
-  UpdatedAt   DateTime @default(now())
+  CreatedAt DateTime @default(now())
+  UpdatedAt DateTime @default(now())
 }
 
 model Transaction {
-  TransactionId   String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  
-  Sender            String  @db.Uuid 
-  CustomerSender  Customer @relation("CustomerSender", fields: [Sender], references: [CustomerId])
-  
-  Receiver              String  @db.Uuid 
-  CustomerReceiver Customer @relation("CustomerReceiver",fields: [Receiver], references: [CustomerId])
-  
+  TransactionId String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  Detail        String
+  Sender        String
+  AccountSender Account @relation("AccountSender", fields: [Sender], references: [AccountId])
+
+  Receiver        String
+  AccountReceiver Account @relation("AccountReceiver", fields: [Receiver], references: [AccountId])
 
   // TransactionType String
   Amount          Float
-  TransactionDate DateTime  @default(now())
-  UpdatedAt   DateTime @default(now())  
+  TransactionDate DateTime @default(now())
+  UpdatedAt       DateTime @default(now())
 }
 
 model Notification {
   NotiId           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  Receiver         String  @db.Uuid
+  Receiver         String   @db.Uuid
   CustomerReceiver Customer @relation(fields: [Receiver], references: [CustomerId])
 
-  CreatedBy        String   @db.Uuid // employee
+  CreatedBy       String   @db.Uuid // employee
   EmployeeCreated Employee @relation(fields: [CreatedBy], references: [EmployeeId])
 
   Text        String
@@ -160,4 +162,3 @@ model Notification {
   CreatedAt   DateTime @default(now())
   UpdatedAt   DateTime @default(now())
 }
-

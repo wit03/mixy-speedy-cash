@@ -16,6 +16,9 @@ const ValidateTransferBalance = {
         amount: t.Number({
             minimum: 0,
         }),
+        currentAccount: t.String({
+            minLength: 2,
+        })
     }),
 }
 
@@ -28,8 +31,7 @@ export const transferBalance = new Elysia()
             set,
             customerDecrypt
         }) {
-            const {amount, reciever}  = body
-
+            const {amount, reciever, currentAccount, sender}  = body
             
 
 

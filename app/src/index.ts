@@ -4,7 +4,9 @@ import { jwt } from '@elysiajs/jwt'
 import { verifyJwt } from "./utils/jwt";
 import { auth } from "./routes/plugin";
 
-export const db = new PrismaClient()
+export const db = new PrismaClient({
+  log:["info", "query"],
+})
 
 
 
@@ -32,7 +34,7 @@ const app = new Elysia()
 })
   .listen(3000)
 
-
+  // console.log(new Date().valueOf())
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port} ${new Date("2024-04-29T18:49:21.000Z").toISOString()}`
 );
