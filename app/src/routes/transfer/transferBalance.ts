@@ -38,7 +38,7 @@ export const transferBalance = new Elysia()
             customerDecrypt
         }) {
 
-            if (!customerDecrypt || !customerDecrypt.CustomerId) {
+            if (!customerDecrypt || !customerDecrypt.customerId) {
                 set.status = 401
                 return {
                     msg: "Unauthorized"
@@ -46,7 +46,7 @@ export const transferBalance = new Elysia()
             }
 
 
-            const { CustomerId: senderCustomerId } = customerDecrypt
+            const { customerId: senderCustomerId } = customerDecrypt
             const { amount, reciever:recieverAccountId, currentAccount } = body
 
             const { error, senderData } = await HandleTransferBalance(senderCustomerId, recieverAccountId, currentAccount, amount)

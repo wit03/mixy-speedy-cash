@@ -24,15 +24,15 @@ export async function CustomerSignUp(body:CustomerRegisterReq) {
     const resCustomer = await InsertCustomerRepo(body)
 
     // if no data return an error
-    if(!resCustomer || !resCustomer.CustomerId){
+    if(!resCustomer || !resCustomer.customerId){
         return {customer:undefined, error:"Register customer failed"}
     }
     else {
         
-        const resAccount =  await InsertAccountRepo(resCustomer.CustomerId, body.pin, "Deposit")
+        const resAccount =  await InsertAccountRepo(resCustomer.customerId, body.pin, "Deposit")
         // if create account failed delete customer
-        if(!resAccount || !resAccount.AccountId){
-            const _ = await DeleteCustomer(resCustomer.CustomerId)
+        if(!resAccount || !resAccount.accountId){
+            const _ = await DeleteCustomer(resCustomer.customerId)
             return {customer:undefined, error:"Register customer failed cause of can't create account", account:undefined}
         }        
         return {customer:resCustomer, error:undefined, account:resAccount}
@@ -43,16 +43,16 @@ export async function CustomerSignUp(body:CustomerRegisterReq) {
 
 export async function CustomerSignIn(body:CustomerSigninReq) {
     const checkedCustomer = await FindCustomerByEmailRepo(body.email)
-    if(!checkedCustomer || checkedCustomer.Email !== body.email) {
+    if(!checkedCustomer || checkedCustomer.email !== body.email) {
         return {error: "Email or password is incorrect", data:undefined}
     }
     
-    const correct = await Bun.password.verify(body.password, checkedCustomer.Password)
+    const correct = await Bun.password.verify(body.password, checkedCustomer.password)
     if(!correct) {
         return {error: "Email or password is incorrect", data:undefined}
     }
     
-    const customer = await FindCustomerByIdRepo(checkedCustomer.CustomerId)
+    const customer = await FindCustomerByIdRepo(checkedCustomer.customerId)
     
     return {error: undefined, customer:customer}
 

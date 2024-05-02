@@ -8,15 +8,15 @@ export const jwtAccessSetup = new Elysia({
     jwt({
       name: "jwtAccess",
       schema: t.Object({
-        CustomerId: t.String(),
-        CustomerType: t.Enum($Enums.CustomerType),
-        Email: t.String(),
-        FirstName: t.String(),
-        LastName: t.String(),
-        PhoneNumber: t.String(),
-        Address: t.String(),
-        DateOfBirth: t.Date(),
-        CreatedAt: t.Date()
+        customerId: t.String(),
+        customerType: t.Enum($Enums.CustomerType),
+        email: t.String(),
+        firstName: t.String(),
+        lastName: t.String(),
+        phoneNumber: t.String(),
+        address: t.String(),
+        dateOfBirth: t.Date(),
+        createdAt: t.Date()
       }),
       secret: process.env.JWT_SECRET as string,
       exp: "7d",

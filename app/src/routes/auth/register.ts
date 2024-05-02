@@ -86,7 +86,7 @@ export const register = new Elysia()
                 }
             }
 
-            if(!account || !account.AccountId){
+            if(!account || !account.accountId){
                 set.status = 401;
                 return {
                     msg: "Create account failed",
@@ -94,7 +94,7 @@ export const register = new Elysia()
                 }
             }
             currentAccount.set({
-                value: account?.AccountId,
+                value: account?.accountId,
                 httpOnly: false,
                 maxAge: 7 * 86400,
                 path: '/',

@@ -11,7 +11,7 @@ export async function HandleTransferBalance(senderCustomerId:string, recieverAcc
             senderData: undefined
         }
     }
-    else if(currentAccountData.Balance < amount){
+    else if(currentAccountData.balance < amount){
         return {
             error:"Your account can't make a transfer, not enough money",
             senderData: undefined
@@ -19,7 +19,7 @@ export async function HandleTransferBalance(senderCustomerId:string, recieverAcc
     }
 
     // decrement balance of sender first
-    const resultWithDraw = await WithdrawBalanceRepo(senderCustomerId, amount, currentAccountData.AccountId)
+    const resultWithDraw = await WithdrawBalanceRepo(senderCustomerId, amount, currentAccountData.accountId)
     // if there is no result return an error
     if(!resultWithDraw){
         return {
@@ -33,7 +33,7 @@ export async function HandleTransferBalance(senderCustomerId:string, recieverAcc
     if(!resultDeposit){
         // if increment balance reciever failed
         // increment the balance of sender back
-        const resultWithDraw = await DepositBalanceRepo(currentAccountData.AccountId, amount)
+        const resultWithDraw = await DepositBalanceRepo(currentAccountData.accountId, amount)
         
         if(!resultWithDraw){
             console.error("fatal error here transfer failed and can't increment the balance of sender back")
@@ -47,14 +47,14 @@ export async function HandleTransferBalance(senderCustomerId:string, recieverAcc
     
     
     // if everything success create a transaction
-    const resultTransaction = await InsertTransaction(currentAccountData.AccountId, recieverAccountId, amount, `Tranfer money from ${currentAccount} to ${recieverAccountId}`)
+    const resultTransaction = await InsertTransaction(currentAccountData.accountId, recieverAccountId, amount, `Tranfer money from ${currentAccount} to ${recieverAccountId}`)
     if(!resultTransaction){
         // if create transaction is failed
         // decrement balance reciever
         // increment balance sender
         const [resWithDraw, resDeposit] = await Promise.all([
             WithdrawBalanceRepo(recieverAccountId, amount, currentAccount),
-            DepositBalanceRepo(currentAccountData.AccountId, amount)
+            DepositBalanceRepo(currentAccountData.accountId, amount)
         ]);
         
         
