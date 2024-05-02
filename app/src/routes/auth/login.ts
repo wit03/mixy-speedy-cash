@@ -24,11 +24,12 @@ const ValidateSignin = {
         }
     },
 }
-
+// เตรีัยมของ หั่นผัก validate ข้อมูล
+// ลงกระทะ business logic
+// ผัด ต่อ db
 export const login = new Elysia()
     .use(jwtAccessSetup)
-    .post(
-        "/sign-in",
+    .post("/sign-in",
         async function SignInHttpHandler({
             body,
             set,

@@ -15,7 +15,7 @@ export async function InsertCustomerRepo(body:CustomerRegisterReq): Promise<{
     CreatedAt: Date;
 }>
  {
-   return await db.customer.create({
+    return await db.customer.create({
     data:{
         CustomerType:  body.customerType,
         Email: body.email,
@@ -25,6 +25,9 @@ export async function InsertCustomerRepo(body:CustomerRegisterReq): Promise<{
         DateOfBirth: body.dateOfBirth,
         PhoneNumber: body.phoneNumber,
         Address: body.address,
+        Career: body.career,
+        CitizenId: body.citizenId,
+        Salary: body.salary,
     },
     select:{
         CustomerId: true,

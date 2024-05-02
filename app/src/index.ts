@@ -9,7 +9,6 @@ export const db = new PrismaClient({
 })
 
 
-
 const app = new Elysia()
   .use(
     jwt({
@@ -17,18 +16,19 @@ const app = new Elysia()
       secret: process.env.JWT_SECRET as string
     })
   )
-  // .post('/sign-up', userHttp.SignUpMethod.func, userHttp.SignUpMethod.validate)
-  // .post('/sign-in', userHttp.SignInMethod.func, userHttp.SignInMethod.validate)
   .use(auth)
-  // .get('/current-user', userHttp.CurrentCustomer.func)
-  .get('/', ({store, jwt}) => {
+  .get('/test', ({set, store, jwt}) => {
     jwt
     //@ts-ignore
     console.log(store)
+    set.status = 200;
+    return {
+      msg:"ok"
+    }
   }, {
     beforeHandle({ set, cookie: { session }, store, jwt }) {
       // jwt.
-      return store = "hello"
+      // return store = "hello"
       // return (set.status = 'Unauthorized')
     }
 })

@@ -16,6 +16,7 @@ datasource db {
 model Customer {
   CustomerId   String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   CustomerType CustomerType
+  CitizenId    String
   Email        String       @unique
   Password     String
   FirstName    String
@@ -23,9 +24,13 @@ model Customer {
   DateOfBirth  DateTime
   PhoneNumber  String
   Address      String
+  
+  Career String
+  Salary Decimal
+
+
   CreatedAt    DateTime     @default(now())
   UpdatedAt    DateTime     @default(now())
-
   Account       Account[]
   Notifications Notification[]
 }
@@ -38,13 +43,14 @@ enum CustomerType {
 model Employee {
   EmployeeId  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   Position    Position
+  Password String
   LastName    String
   FirstName   String
   DateOfBirth DateTime
   Email       String
   PhoneNumber String
   Address     String
-  Salary      Int
+  Salary      Decimal
   CreatedAt   DateTime @default(now())
   UpdatedAt   DateTime @default(now())
 
@@ -63,6 +69,8 @@ model Account {
 
   Customer   Customer @relation(fields: [CustomerId], references: [CustomerId])
   CustomerId String   @db.Uuid
+
+  Pin String
 
   Balance       Float
   AccountType   AccountType
@@ -97,7 +105,6 @@ model Loan {
   LoanType     LoanType
   LoanAmount   Float
   InterestRate Float
-  Term         Int
   LoanStatus   LoanStatus
 
   EndDate      DateTime

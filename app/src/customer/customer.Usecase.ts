@@ -4,11 +4,23 @@ import { InsertAccountRepo } from "../account/account.Repository";
 
 
 // for insert customer when signup
+// hash password
 export async function CustomerSignUp(body:CustomerRegisterReq) {
     body.password = await Bun.password.hash(body.password, {
         algorithm:"bcrypt",
         cost: 4
     })
+
+    body.citizenId = await Bun.password.hash(body.password, {
+        algorithm:"bcrypt",
+        cost: 4
+    }) 
+
+    body.citizenId = await Bun.password.hash(body.pin, {
+        algorithm:"bcrypt",
+        cost: 4
+    }) 
+
     const resCustomer = await InsertCustomerRepo(body)
 
     // if no data return an error
@@ -17,7 +29,7 @@ export async function CustomerSignUp(body:CustomerRegisterReq) {
     }
     else {
         
-        const resAccount =  await InsertAccountRepo(resCustomer.CustomerId, "Deposit")
+        const resAccount =  await InsertAccountRepo(resCustomer.CustomerId, body.pin, "Deposit")
         // if create account failed delete customer
         if(!resAccount.AccountId){
             const _ = await DeleteCustomer(resCustomer.CustomerId)

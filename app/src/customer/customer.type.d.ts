@@ -23,6 +23,10 @@ export interface CustomerRegisterReq {
     phoneNumber:string;
     customerType: CustomerType;
     address: string;
+    career:string;
+    salary:number;
+    citizenId:string;
+    pin:string;
 }
 
 export interface CustomerSigninReq {
