@@ -18,7 +18,7 @@ const ValidateListAccounts = {
 }
 export const addAccount = new Elysia()
         .use(isAuthenticated)
-        .get("/add-accounts",
+        .post("/add-account",
         async function AddAccount({
             set,
             customerDecrypt,

@@ -75,6 +75,7 @@ export const register = new Elysia()
         cookie: {auth, currentAccount},
         jwtAccess,
     }) {
+        
         if (body.customerType === "Company" || body.customerType === "Personal"){
             set.status = 201;
             const {customer, error, account} = await CustomerSignUp(body as CustomerRegisterReq)

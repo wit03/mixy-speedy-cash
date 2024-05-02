@@ -68,13 +68,13 @@ export async function DepositBalanceRepo(recieverAccountId: string, amount: numb
 //         select:
 //     })
 // }
-export async function InsertAccountRepo(CustomerId: string, pin: string, AccountType: $Enums.AccountType) {
+export async function InsertAccountRepo(CustomerId: string, pin: string, AccountType: $Enums.AccountType, balance:number=1000) {
     try {
         return await db.account.create({
             data: {
                 accountId: new Date().valueOf().toString(),
                 accountStatus: "InUse",
-                balance: 1000,
+                balance: balance,
                 accountType: AccountType,
                 customerId: CustomerId,
                 pin: pin,

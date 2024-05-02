@@ -109,7 +109,7 @@ export async function InsertAccount(customerId: string, pin:string) {
         cost: 4
     })
 
-    const resAccount = await InsertAccountRepo(customerId, hashedPin, "Deposit");
+    const resAccount = await InsertAccountRepo(customerId, hashedPin, "Deposit", 1000);
 
     if(!resAccount){
         return {
