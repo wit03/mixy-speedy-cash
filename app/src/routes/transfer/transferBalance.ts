@@ -49,8 +49,8 @@ export const transferBalance = new Elysia()
             const { customerId: senderCustomerId } = customerDecrypt
             const { amount, reciever:recieverAccountId, currentAccount } = body
 
-            const { error, senderData } = await HandleTransferBalance(senderCustomerId, recieverAccountId, currentAccount, amount)
-            if (error !== undefined || senderData === undefined) {
+            const { error, senderData, recieverData } = await HandleTransferBalance(senderCustomerId, recieverAccountId, currentAccount, amount)
+            if (error !== undefined || senderData === undefined || recieverData === undefined) {
                 set.status = 400
                 return {
                     msg: error || "failed to transfer the money"
@@ -59,7 +59,9 @@ export const transferBalance = new Elysia()
             set.status = 200
             return {
                 msg: "transfer money success",
-                currentCustomer: senderData
+                balanceLeft: senderData.balance,
+                senderData: senderData,
+                recieverData: recieverData
             }
 
             // const {} = await HandleTransferBalance()

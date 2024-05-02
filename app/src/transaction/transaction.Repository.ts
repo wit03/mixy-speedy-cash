@@ -10,3 +10,42 @@ export async function InsertTransaction(senderAccountId:string, recieverAccountI
         }
     })
 }
+
+export async function FindManyTransactions(limit: number, skip: number) {
+    try {
+        return await db.transaction.findMany({
+            skip: skip,
+            take: limit,
+            select: {
+                amount: true,
+                detail: true,
+                transactionDate: true,
+                transactionId: true,
+                AccountSender:{
+                    select:{
+                        customer:{
+                            select:{
+                                firstName: true,
+                                lastName: true,
+                            }
+                        }
+                    }
+                },
+                AccountReceiver:{
+                    select:{
+                        customer:{
+                            select:{
+                                firstName: true,
+                                lastName: true,
+                            }
+                        }
+                    }
+                },
+            },
+            
+        })
+    } catch (_) {
+        return undefined
+    }
+}
+

@@ -1,5 +1,5 @@
 import { InsertTransaction } from "../transaction/transaction.Repository";
-import { DepositBalanceRepo, FindAccountDataRepo, FindManyAccountRepo, WithdrawBalanceRepo } from "./account.Repository";
+import { DepositBalanceRepo, FindAccountDataRepo, FindManyAccountRepo, InsertAccountRepo, WithdrawBalanceRepo } from "./account.Repository";
 
 export async function HandleTransferBalance(senderCustomerId:string, recieverAccountId:string, currentAccount:string,  amount:number) {
  
@@ -19,9 +19,9 @@ export async function HandleTransferBalance(senderCustomerId:string, recieverAcc
     }
 
     // decrement balance of sender first
-    const resultWithDraw = await WithdrawBalanceRepo(senderCustomerId, amount, currentAccountData.accountId)
+    const resultWithDrawSender = await WithdrawBalanceRepo(senderCustomerId, amount, currentAccountData.accountId)
     // if there is no result return an error
-    if(!resultWithDraw){
+    if(!resultWithDrawSender){
         return {
             error:"Withdraw sender balance failed",
             senderData: undefined
@@ -29,19 +29,20 @@ export async function HandleTransferBalance(senderCustomerId:string, recieverAcc
     }
     
     // increment balance of reciever
-    const resultDeposit = await DepositBalanceRepo(recieverAccountId, amount)
-    if(!resultDeposit){
+    const resultDepositReciever = await DepositBalanceRepo(recieverAccountId, amount)
+    if(!resultDepositReciever){
         // if increment balance reciever failed
         // increment the balance of sender back
-        const resultWithDraw = await DepositBalanceRepo(currentAccountData.accountId, amount)
+        const resultWithDrawSender = await DepositBalanceRepo(currentAccountData.accountId, amount)
         
-        if(!resultWithDraw){
+        if(!resultWithDrawSender){
             console.error("fatal error here transfer failed and can't increment the balance of sender back")
         }
         
         return {
             error:"Deposit reciever balance failed",
-            senderData: undefined
+            senderData: undefined,
+            recieverData: undefined,
         }
     }
     
@@ -64,17 +65,23 @@ export async function HandleTransferBalance(senderCustomerId:string, recieverAcc
         
         return {
             error:"Create transaction failed",
-            senderData: undefined
+            senderData: undefined,
+            recieverData: undefined,
         }
-        
     }
-
+    
+    //@ts-ignore
+    delete resultDepositReciever.balance;
+    //@ts-ignore
+    delete resultDepositReciever.customerId;
+    //@ts-ignore
+    delete resultWithDrawSender.customerId;
     return {
         error: undefined, 
-        senderData:resultWithDraw
+        senderData:resultWithDrawSender,
+        recieverData: resultDepositReciever,
     }
-
-
+    
 }
 
 
@@ -91,6 +98,29 @@ export async function ListAllAccounts(limit:number, skip:number) {
     return {
         error: undefined,
         accounts: resAccounts
+    }
+}
+
+
+export async function InsertAccount(customerId: string, pin:string) {
+    
+    let hashedPin = await Bun.password.hash(pin, {
+        algorithm:"bcrypt",
+        cost: 4
+    })
+
+    const resAccount = await InsertAccountRepo(customerId, hashedPin, "Deposit");
+
+    if(!resAccount){
+        return {
+            error: "Failed to isnert an account to database",
+            account: undefined
+        }
+    }
+    
+    return {
+        error: undefined,
+        account: resAccount
     }
 
 }

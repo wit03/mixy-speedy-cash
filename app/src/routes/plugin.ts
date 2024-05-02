@@ -1,10 +1,11 @@
 import { Elysia } from "elysia";
-import { login } from "./auth/login";
-import { register } from "./auth/register";
-import { currentCustomer } from "./auth/current-customer";
+import { login } from "./customer/login";
+import { register } from "./customer/register";
+import { currentCustomer } from "./customer/current-customer";
 import { EmployeeLogin } from "./employee/employeeLogin";
 import { transferBalance } from "./transfer/transferBalance";
 import { listAccounts } from "./account/list-accounts";
+import { listTransactions } from "./transaction/list-transactions";
 
 export const auth = new Elysia({
   prefix: "/auth",
@@ -19,12 +20,18 @@ export const employee = new Elysia({
   .use(EmployeeLogin)
 
 
-  export const transfer = new Elysia({
-    prefix:"/transfer",
-  })
-  .use(transferBalance)
+export const transfer = new Elysia({
+  prefix:"/transfer",
+})
+.use(transferBalance)
 
-  export const accounts = new Elysia({
-    prefix:"/account",
-  })
-  .use(listAccounts)
+export const accounts = new Elysia({
+  prefix:"/account",
+})
+.use(listAccounts)
+
+
+export const transaction = new Elysia({
+  prefix:"/transaction",
+})
+.use(listTransactions)

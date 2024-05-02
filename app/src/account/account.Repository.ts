@@ -1,7 +1,6 @@
 import { $Enums } from "@prisma/client";
 import { db } from "..";
 
-
 // ถอนเงิน
 // WithdrawBalance -> decrement the balance
 // sender is an owner of the account
@@ -19,6 +18,12 @@ export async function WithdrawBalanceRepo(senderCustomerId: string, amount: numb
                 customerId: true,
                 accountId: true,
                 balance: true,
+                customer:{
+                    select:{
+                        firstName: true,
+                        lastName: true
+                    }
+                }
             }
         })
     } catch (_) {
@@ -42,6 +47,12 @@ export async function DepositBalanceRepo(recieverAccountId: string, amount: numb
                 customerId: true,
                 accountId: true,
                 balance: true,
+                customer:{
+                    select:{
+                        firstName: true,
+                        lastName: true
+                    }
+                }
             }
         })
     } catch (error) {
@@ -136,5 +147,4 @@ export async function FindManyAccountRepo(limit: number, skip: number) {
         return undefined
     }
 }
-
 

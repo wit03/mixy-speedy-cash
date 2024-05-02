@@ -31,7 +31,7 @@ export const currentCustomer = new Elysia()
                 }
             } 
             else {
-                const customer = await FindCustomerByIdRepo(parseData.CustomerId)
+                const customer = await FindCustomerByIdRepo(parseData.customerId)
         
                 if(!customer){
                     return {
