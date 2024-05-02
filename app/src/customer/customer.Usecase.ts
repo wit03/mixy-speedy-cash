@@ -1,6 +1,7 @@
 import { CustomerRegisterReq, CustomerSigninReq } from "./customer.type";
 import { DeleteCustomer, FindCustomerByEmailRepo, FindCustomerByIdRepo, InsertCustomerRepo } from "./customer.Repository";
 import { InsertAccountRepo } from "../account/account.Repository";
+import { InsertTransaction } from "../transaction/transaction.Repository";
 
 
 // for insert customer when signup
@@ -35,6 +36,8 @@ export async function CustomerSignUp(body:CustomerRegisterReq) {
             const _ = await DeleteCustomer(resCustomer.customerId)
             return {customer:undefined, error:"Register customer failed cause of can't create account", account:undefined}
         }        
+
+        
         
         return {customer:resCustomer, error:undefined, account:resAccount}
     }

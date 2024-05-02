@@ -44,7 +44,7 @@ model Employee {
   employeeId  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   position    Position
   password String
-  kastName    String
+  lastName    String
   firstName   String
   dateOfBirth DateTime
   email       String
