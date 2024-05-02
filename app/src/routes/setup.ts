@@ -21,4 +21,4 @@ export const jwtAccessSetup = new Elysia({
       secret: process.env.JWT_SECRET as string,
       exp: "7d",
     })
-  );
+);

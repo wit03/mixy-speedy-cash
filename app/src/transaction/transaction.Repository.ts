@@ -1,11 +1,12 @@
 import { db } from "..";
 
-export async function InsertTransaction(sender:string, reciever:string,  amount:number) {
+export async function InsertTransaction(senderAccountId:string, recieverAccountId:string,  amount:number, detail: string = "") {
     return await db.transaction.create({
         data:{
-            Amount: amount,
-            Receiver:reciever,
-            Sender:sender,
+            amount: amount,
+            receiver:recieverAccountId,
+            sender:senderAccountId,
+            detail: detail
         }
     })
 }

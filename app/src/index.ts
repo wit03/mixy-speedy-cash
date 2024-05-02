@@ -1,8 +1,7 @@
 import { Elysia, t } from "elysia";
 import { PrismaClient } from '@prisma/client'
 import { jwt } from '@elysiajs/jwt'
-import { verifyJwt } from "./utils/jwt";
-import { auth } from "./routes/plugin";
+import { accounts, auth, employee, transfer } from "./routes/plugin";
 
 export const db = new PrismaClient({
   log:["info", "query"],
@@ -17,6 +16,9 @@ const app = new Elysia()
     })
   )
   .use(auth)
+  .use(employee)
+  .use(transfer)
+  .use(accounts)
   .get('/test', ({set, store, jwt}) => {
     jwt
     //@ts-ignore

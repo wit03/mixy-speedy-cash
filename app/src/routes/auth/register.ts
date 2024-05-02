@@ -42,17 +42,25 @@ const ValidateSignUp = {
             minLength: 2,
         }),
         pin: t.String({
-            minLength: 2,
+            minLength: 6,
+            maxLength:6,
         }),
     }),
-    error({ code, set }: {code:string, set:Context["set"]}) {
-        
+    error({ code, set, error }: {code:string, set:Context["set"], error:any}) {
         switch (code) {
             case 'P2002':
                 set.status = 422
                 return {
-                    error: 'Email must be unique'
-                }
+                    msg: 'Email must be unique'
+            }
+            default: return {
+                msg:error
+            }
+            // case "VALIDATION":
+            //     set.status = 400
+            //     return {
+            //         msg: error
+            //     }
         }
     },
 }
@@ -67,10 +75,6 @@ export const register = new Elysia()
         cookie: {auth, currentAccount},
         jwtAccess,
     }) {
-        // register
-        // validate
-        // hash password
-        // insert database
         if (body.customerType === "Company" || body.customerType === "Personal"){
             set.status = 201;
             const {customer, error, account} = await CustomerSignUp(body as CustomerRegisterReq)

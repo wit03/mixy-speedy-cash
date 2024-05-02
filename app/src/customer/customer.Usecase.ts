@@ -11,12 +11,12 @@ export async function CustomerSignUp(body:CustomerRegisterReq) {
         cost: 4
     })
 
-    body.citizenId = await Bun.password.hash(body.password, {
+    body.citizenId = await Bun.password.hash(body.citizenId, {
         algorithm:"bcrypt",
         cost: 4
     }) 
 
-    body.citizenId = await Bun.password.hash(body.pin, {
+    body.pin = await Bun.password.hash(body.pin, {
         algorithm:"bcrypt",
         cost: 4
     }) 
@@ -24,20 +24,19 @@ export async function CustomerSignUp(body:CustomerRegisterReq) {
     const resCustomer = await InsertCustomerRepo(body)
 
     // if no data return an error
-    if(!resCustomer.CustomerId){
+    if(!resCustomer || !resCustomer.CustomerId){
         return {customer:undefined, error:"Register customer failed"}
     }
     else {
         
         const resAccount =  await InsertAccountRepo(resCustomer.CustomerId, body.pin, "Deposit")
         // if create account failed delete customer
-        if(!resAccount.AccountId){
+        if(!resAccount || !resAccount.AccountId){
             const _ = await DeleteCustomer(resCustomer.CustomerId)
             return {customer:undefined, error:"Register customer failed cause of can't create account", account:undefined}
         }        
         return {customer:resCustomer, error:undefined, account:resAccount}
     }
-    
 }
 
 
@@ -58,4 +57,3 @@ export async function CustomerSignIn(body:CustomerSigninReq) {
     return {error: undefined, customer:customer}
 
 }
-

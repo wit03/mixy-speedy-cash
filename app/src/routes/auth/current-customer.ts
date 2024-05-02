@@ -6,7 +6,7 @@ import { FindCustomerByIdRepo } from "../../customer/customer.Repository";
 export const currentCustomer = new Elysia()
 .use(jwtAccessSetup)
   .get(
-    "/current-customer",
+        "/current-customer",
     async function CurrentUserHttpHandler({
         set,
         cookie: {auth},

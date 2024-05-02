@@ -14,23 +14,23 @@ datasource db {
 }
 
 model Customer {
-  CustomerId   String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  CustomerType CustomerType
-  CitizenId    String
-  Email        String       @unique
-  Password     String
-  FirstName    String
-  LastName     String
-  DateOfBirth  DateTime
-  PhoneNumber  String
-  Address      String
+  customerId   String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid 
+  customerType CustomerType
+  citizenId    String
+  email        String       @unique
+  password     String
+  firstName    String
+  lastName     String
+  dateOfBirth  DateTime
+  phoneNumber  String
+  address      String
   
-  Career String
-  Salary Decimal
+  career String
+  salary Decimal
 
 
-  CreatedAt    DateTime     @default(now())
-  UpdatedAt    DateTime     @default(now())
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default(now())
   Account       Account[]
   Notifications Notification[]
 }
@@ -41,18 +41,18 @@ enum CustomerType {
 }
 
 model Employee {
-  EmployeeId  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  Position    Position
-  Password String
-  LastName    String
-  FirstName   String
-  DateOfBirth DateTime
-  Email       String
-  PhoneNumber String
-  Address     String
-  Salary      Decimal
-  CreatedAt   DateTime @default(now())
-  UpdatedAt   DateTime @default(now())
+  employeeId  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  position    Position
+  password String
+  kastName    String
+  firstName   String
+  dateOfBirth DateTime
+  email       String
+  phoneNumber String
+  address     String
+  salary      Decimal
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
 
   Loans         Loan[]
   Notifications Notification[]
@@ -65,18 +65,19 @@ enum Position {
 }
 
 model Account {
-  AccountId String @id @unique
+  accountId String @id @unique
 
-  Customer   Customer @relation(fields: [CustomerId], references: [CustomerId])
-  CustomerId String   @db.Uuid
+  customer   Customer @relation(fields: [customerId], references: [customerId])
+  customerId String   @db.Uuid
+  
+  pin String
 
-  Pin String
 
-  Balance       Float
-  AccountType   AccountType
-  AccountStatus AccountStatus
-  CreatedAt     DateTime    @default(now())
-  UpdatedAt     DateTime    @default(now())
+  balance       Float
+  accountType   AccountType
+  accountStatus AccountStatus
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now())
 
   AccountSender   Transaction[] @relation("AccountSender")
   AccountReceiver Transaction[] @relation("AccountReceiver")
@@ -94,22 +95,22 @@ enum AccountStatus {
 }
 
 model Loan {
-  LoanId String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  loanId String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
-  ResponsibleEmployeeId String   @db.Uuid // EmployeeId
-  Employee              Employee @relation(fields: [ResponsibleEmployeeId], references: [EmployeeId])
+  responsibleEmployeeId String   @db.Uuid // EmployeeId
+  Employee              Employee @relation(fields: [responsibleEmployeeId], references: [employeeId])
 
-  AccountId String
-  Account   Account @relation(fields: [AccountId], references: [AccountId])
+  accountId String
+  Account   Account @relation(fields: [accountId], references: [accountId])
 
-  LoanType     LoanType
-  LoanAmount   Float
-  InterestRate Float
-  LoanStatus   LoanStatus
+  loanType     LoanType
+  loanAmount   Float
+  interestRate Float
+  loanStatus   LoanStatus
 
-  EndDate      DateTime
-  StartDate    DateTime      @default(now())
-  UpdatedAt    DateTime      @default(now())
+  endDate      DateTime
+  startDate    DateTime      @default(now())
+  updatedAt    DateTime      @default(now())
   LoanPayments LoanPayment[]
 }
 
@@ -124,48 +125,48 @@ enum LoanStatus {
 }
 
 model LoanPayment {
-  LoanId String @db.Uuid
-  Loan   Loan   @relation(fields: [LoanId], references: [LoanId])
+  loanId String @db.Uuid
+  Loan   Loan   @relation(fields: [loanId], references: [loanId])
 
-  LoanPaymentId String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  loanPaymentId String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
-  ScheduledPaymentDate DateTime
-  PaymentAmount        Float
-  PrincipalAmount      Float
-  InterestAmount       Float
-  PaidAmount           Float
-  PaidDate             DateTime
+  scheduledPaymentDate DateTime
+  paymentAmount        Float
+  orincipalAmount      Float
+  interestAmount       Float
+  paidAmount           Float
+  oaidDate             DateTime
 
-  CreatedAt DateTime @default(now())
-  UpdatedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model Transaction {
-  TransactionId String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  Detail        String
-  Sender        String
-  AccountSender Account @relation("AccountSender", fields: [Sender], references: [AccountId])
+  transactionId String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  detail        String
+  sender        String
+  AccountSender Account @relation("AccountSender", fields: [sender], references: [accountId])
 
-  Receiver        String
-  AccountReceiver Account @relation("AccountReceiver", fields: [Receiver], references: [AccountId])
+  receiver        String
+  AccountReceiver Account @relation("AccountReceiver", fields: [receiver], references: [accountId])
 
   // TransactionType String
-  Amount          Float
-  TransactionDate DateTime @default(now())
-  UpdatedAt       DateTime @default(now())
+  amount          Float
+  transactionDate DateTime @default(now())
+  updatedAt       DateTime @default(now())
 }
 
 model Notification {
-  NotiId           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  Receiver         String   @db.Uuid
-  CustomerReceiver Customer @relation(fields: [Receiver], references: [CustomerId])
+  notiId           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  receiver         String   @db.Uuid
+  CustomerReceiver Customer @relation(fields: [receiver], references: [customerId])
 
-  CreatedBy       String   @db.Uuid // employee
-  EmployeeCreated Employee @relation(fields: [CreatedBy], references: [EmployeeId])
+  createdBy       String   @db.Uuid // employee
+  EmployeeCreated Employee @relation(fields: [createdBy], references: [employeeId])
 
-  Text        String
-  Read        Boolean
-  PublishedAt DateTime @default(now())
-  CreatedAt   DateTime @default(now())
-  UpdatedAt   DateTime @default(now())
+  text        String
+  read        Boolean
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
 }
