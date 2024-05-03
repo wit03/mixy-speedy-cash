@@ -6,6 +6,7 @@ import Link from "next/link"
 const Navbar = () => {
     const [active, setActive] = useState(0)
     return (
+      
         <div className="w-full flex justify-around items-center bg-white py-6 shadow-top z-40 sticky bottom-0">
             <Link href="/">
             <button onClick={()=> setActive(0)}>

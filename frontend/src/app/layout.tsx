@@ -34,8 +34,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="bg-[#F5F5F5]">
-      <body className={`${interFont.variable} ${rubikFont.variable} ${plexMonoFont.variable} `}>
+      <body className={`flex flex-col ${interFont.variable} ${rubikFont.variable} ${plexMonoFont.variable} `}>
+        <div className="min-h-screen">
         {children}
+        </div>
         <Navbar />
       </body>
       
