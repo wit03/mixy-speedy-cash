@@ -12,9 +12,7 @@ const ValidateTransferBalance = {
         amount: t.Number({
             minimum: 0,
         }),
-        currentAccount: t.String({
-            minLength: 2,
-        })
+       
     }),
     error({ code, set, error }: { code: string, set: Context["set"], error: any }) {
         return {
@@ -35,10 +33,11 @@ export const transferBalance = new Elysia()
         async function TransferBalanceHttpHandler({
             body,
             set,
-            customerDecrypt
+            customerDecrypt,
+            cookie: {currentAccount},
         }) {
 
-            if (!customerDecrypt || !customerDecrypt.customerId) {
+            if (!customerDecrypt || !customerDecrypt.customerId || !currentAccount.value) {
                 set.status = 401
                 return {
                     msg: "Unauthorized"
@@ -47,9 +46,9 @@ export const transferBalance = new Elysia()
 
 
             const { customerId: senderCustomerId } = customerDecrypt
-            const { amount, reciever:recieverAccountId, currentAccount } = body
-
-            const { error, senderData, recieverData } = await HandleTransferBalance(senderCustomerId, recieverAccountId, currentAccount, amount)
+            const { amount, reciever:recieverAccountId } = body
+            console.log(currentAccount.value)
+            const { error, senderData, recieverData } = await HandleTransferBalance(senderCustomerId, recieverAccountId, currentAccount.value.toString(), amount)
             if (error !== undefined || senderData === undefined || recieverData === undefined) {
                 set.status = 400
                 return {

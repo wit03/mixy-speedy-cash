@@ -30,17 +30,15 @@ export async function CustomerSignUp(body:CustomerRegisterReq) {
     }
     else {
 
-        const resAccount =  await InsertAccountRepo(resCustomer.customerId, body.pin, "Deposit", 0)
         // if create account failed delete customer
+        const resAccount =  await InsertAccountRepo(resCustomer.customerId, body.pin, "Deposit", 1000)
         if(!resAccount || !resAccount.accountId){
             const _ = await DeleteCustomer(resCustomer.customerId)
             return {customer:undefined, error:"Register customer failed cause of can't create account", account:undefined}
         }        
-
-        
         
         return {customer:resCustomer, error:undefined, account:resAccount}
-    }
+}
 }
 
 

@@ -16,6 +16,7 @@ const ValidateListAccounts = {
         }
     },
 }
+
 export const addAccount = new Elysia()
         .use(isAuthenticated)
         .post("/add-account",
@@ -23,6 +24,7 @@ export const addAccount = new Elysia()
             set,
             customerDecrypt,
             body,
+            cookie: {currentAccount},
         }) {
 
             if (!customerDecrypt || !customerDecrypt.customerId) {
@@ -34,12 +36,22 @@ export const addAccount = new Elysia()
 
             const {account, error} = await InsertAccount(customerDecrypt.customerId, body.pin)
             if(error !== undefined || account === undefined){
+                set.status = 400;
                 return {
                     msg:error || "create new account failed",
                     account: undefined
                 }
             }            
-            
+
+            // set current account to be the new account
+            currentAccount.set({
+                value: account.accountId,
+                httpOnly: false,
+                maxAge: 7 * 86400,
+                path: '/',
+            })
+
+            set.status = 200
             return {
                 msg: "ok",
                 account: account

@@ -80,7 +80,7 @@ model Account {
   updatedAt     DateTime    @default(now())
 
   AccountSender   Transaction[] @relation("AccountSender")
-  AccountReceiver Transaction[] @relation("AccountReceiver")
+  AccountReciever Transaction[] @relation("AccountReciever")
   Loans           Loan[]
 }
 
@@ -147,8 +147,8 @@ model Transaction {
   sender        String
   AccountSender Account @relation("AccountSender", fields: [sender], references: [accountId])
 
-  receiver        String
-  AccountReceiver Account @relation("AccountReceiver", fields: [receiver], references: [accountId])
+  reciever        String
+  AccountReciever Account @relation("AccountReciever", fields: [reciever], references: [accountId])
 
   // TransactionType String
   amount          Float
@@ -158,8 +158,8 @@ model Transaction {
 
 model Notification {
   notiId           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  receiver         String   @db.Uuid
-  CustomerReceiver Customer @relation(fields: [receiver], references: [customerId])
+  reciever         String   @db.Uuid
+  CustomerReciever Customer @relation(fields: [reciever], references: [customerId])
 
   createdBy       String   @db.Uuid // employee
   EmployeeCreated Employee @relation(fields: [createdBy], references: [employeeId])

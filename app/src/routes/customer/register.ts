@@ -3,7 +3,6 @@ import { CustomerRegisterReq } from "../../customer/customer.type";
 import { jwtAccessSetup } from "../setup";
 import { CustomerSignUp } from "../../customer/customer.Usecase";
 
-
 const ValidateSignUp = {
     body: t.Object({
         email: t.String({ 
@@ -88,8 +87,8 @@ export const register = new Elysia()
             }
 
             if(!account || !account.accountId){
-                set.status = 401;
-                return {
+                set.status = 400;
+                return {    
                     msg: "Create account failed",
                     customer: undefined,
                 }

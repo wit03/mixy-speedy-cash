@@ -16,3 +16,6 @@ db-migrate:
 
 db-generate:
 	bunx prisma generate
+
+db-seed:
+	@cd app && npx prisma db seed

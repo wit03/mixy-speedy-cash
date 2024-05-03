@@ -46,8 +46,8 @@ export async function HandleTransferBalance(senderCustomerId:string, recieverAcc
         }
     }
     
-    
     // if everything success create a transaction
+    console.log("running here")
     const resultTransaction = await InsertTransaction(currentAccountData.accountId, recieverAccountId, amount, `Tranfer money from ${currentAccount} to ${recieverAccountId}`)
     if(!resultTransaction){
         // if create transaction is failed

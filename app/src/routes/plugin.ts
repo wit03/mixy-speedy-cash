@@ -8,13 +8,15 @@ import { listAccounts } from "./account/list-accounts";
 import { listTransactions } from "./transaction/list-transactions";
 import { addAccount } from "./account/add-account";
 import { employeeRegister } from "./employee/employee.Register";
+import { report } from "./customer/report";
 
 export const auth = new Elysia({
-  prefix: "/auth",
+  prefix: "/customer",
 })
   .use(login)
   .use(register)
   .use(currentCustomer)
+  .use(report)
 
 export const employee = new Elysia({
   prefix: "/employee",

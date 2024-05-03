@@ -37,7 +37,10 @@ const app = new Elysia()
 })
   .listen(3000)
 
-  // console.log(new Date().valueOf())
+
+
+
+// console.log(new Date().valueOf())
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port} ${new Date("2024-04-29T18:49:21.000Z").toISOString()}`
 );

@@ -148,3 +148,22 @@ export async function FindManyAccountRepo(limit: number, skip: number) {
     }
 }
 
+export async function FindAccountByIdAndCustomer(customerId:string, accountId:string) {
+    try {
+        return await db.account.findFirst({
+            where:{
+                accountId: accountId,
+                customerId: customerId,
+            },
+            select: {
+                accountId: true,
+                customerId: true
+            }
+        })
+    } catch (err) {
+        console.log(err)
+        return undefined
+    }
+}
+
+

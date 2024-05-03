@@ -22,7 +22,7 @@ async function main() {
 
     const customer = await prisma.customer.create({
       data:{
-        customerType: "Personal",
+        customerType: "Company",
         email: "admin@gmail.com",
         firstName: "mix",
         lastName: "jateassavapirom",

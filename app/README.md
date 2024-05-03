@@ -1,3 +1,11 @@
+SELECT t.sender, t.receiver, c.email, t.amount, t."transactionDate" FROM "Transaction" as t JOIN "Account" as A on t.sender = A."accountId" JOIN "Customer" as C ON A."customerId" = C."customerId" LIMIT 100
+
+
+# On table account to list customer email from account
+SELECT a."accountId", cus.email, cus."customerId"
+FROM "Account" AS a
+JOIN "Customer" AS cus ON a."customerId" = cus."customerId";
+
 # Elysia with Bun runtime
 
 ## Getting Started

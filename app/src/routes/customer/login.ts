@@ -48,22 +48,22 @@ export const login = new Elysia()
             if (customer) {
                 
                 // if do not have account selected
-                if(!currentAccount.value){
-                    const account = await FindOldestAccountIdByCustomerId(customer.customerId)
-                    if(!account || !account.accountId){
-                        set.status = 401;
-                        return {
-                            msg: "Get oldest account failed",
-                            customer: undefined,
-                        }
+                // if(!currentAccount.value){
+                const account = await FindOldestAccountIdByCustomerId(customer.customerId)
+                if(!account || !account.accountId){
+                    set.status = 401;
+                    return {
+                        msg: "Get oldest account failed",
+                        customer: undefined,
                     }
-                    currentAccount.set({
-                        value: account?.accountId,
-                        httpOnly: false,
-                        maxAge: 7 * 86400,
-                        path: '/',
-                    })
                 }
+                currentAccount.set({
+                    value: account?.accountId,
+                    httpOnly: false,
+                    maxAge: 7 * 86400,
+                    path: '/',
+                })
+                // }
                 
                 set.status = 200;
                 auth.set({
