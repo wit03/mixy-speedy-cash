@@ -2,7 +2,7 @@ const Balance = () => {
     const balance =123456.15
 
     return (
-        <div className="bg-white rounded-2xl w-full mt-6 z-10">
+        <div className="bg-white rounded-2xl w-full z-10">
             <div className="py-5 px-3 text-[#333333]">
                 <div className="text-sm mb-2">Current Balance</div>
                 <div className="text-[28px] font-medium">{balance.toLocaleString('en-US', {minimumFractionDigits: 2})} ฿</div>
