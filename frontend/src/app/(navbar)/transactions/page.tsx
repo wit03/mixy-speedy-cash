@@ -1,5 +1,5 @@
 import Link from "next/link"
-import TransactionCard from "../components/transactions/card"
+import TransactionCard from "../../components/transactions/card"
 
 const Transactions = () => {
     const transaction = [
@@ -31,10 +31,6 @@ const Transactions = () => {
                     ))
             }
             </div>
-            
-
-
-
         </div>
 
     )

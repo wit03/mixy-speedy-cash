@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Rubik, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/navbar";
 
 const interFont = Inter({
   subsets: ['latin'],
@@ -35,10 +34,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-[#F5F5F5]">
       <body className={`flex flex-col ${interFont.variable} ${rubikFont.variable} ${plexMonoFont.variable} `}>
-        <div className="min-h-screen">
+        
         {children}
-        </div>
-        <Navbar />
+        
+        
       </body>
       
     </html>
