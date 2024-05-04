@@ -1,5 +1,6 @@
 import { $Enums } from "@prisma/client";
 import { db } from "..";
+import GenerateUniqueAccountId from "../utils/genId";
 
 // ถอนเงิน
 // WithdrawBalance -> decrement the balance
@@ -72,8 +73,8 @@ export async function InsertAccountRepo(CustomerId: string, pin: string, Account
     try {
         return await db.account.create({
             data: {
-                accountId: new Date().valueOf().toString(),
-                accountStatus: "InUse",
+                accountId: GenerateUniqueAccountId(),
+                accountStatus: "inUse",
                 balance: balance,
                 accountType: AccountType,
                 customerId: CustomerId,
@@ -118,7 +119,8 @@ export async function FindAccountDataRepo(senderCustomerId: string, accountId: s
             },
             select: {
                 accountId: true,
-                balance: true
+                balance: true,
+                pin: true
             }
         })
     } catch (_) {

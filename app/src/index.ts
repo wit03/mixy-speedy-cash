@@ -1,8 +1,8 @@
 import { Elysia, t } from "elysia";
 import { PrismaClient } from '@prisma/client'
 import { jwt } from '@elysiajs/jwt'
-import { accounts, auth, employee, transaction, transfer } from "./routes/plugin";
-
+import { accounts, auth, employee, loan, transaction, transfer } from "./routes/plugin";
+import { customAlphabet } from "nanoid";
 export const db = new PrismaClient({
   log:["info", "query"],
 })
@@ -20,21 +20,22 @@ const app = new Elysia()
   .use(transfer)
   .use(accounts)
   .use(transaction)
-  .get('/test', ({set, store, jwt}) => {
-    jwt
-    //@ts-ignore
-    console.log(store)
-    set.status = 200;
-    return {
-      msg:"ok"
-    }
-  }, {
-    beforeHandle({ set, cookie: { session }, store, jwt }) {
-      // jwt.
-      // return store = "hello"
-      // return (set.status = 'Unauthorized')
-    }
-})
+  .use(loan)
+//   .get('/test', ({set, store, jwt}) => {
+//     jwt
+//     //@ts-ignore
+//     console.log(store)
+//     set.status = 200;
+//     return {
+//       msg:"ok"
+//     }
+//   }, {
+//     beforeHandle({ set, cookie: { session }, store, jwt }) {
+//       // jwt.
+//       // return store = "hello"
+//       // return (set.status = 'Unauthorized')
+//     }
+// })
   .listen(3000)
 
 

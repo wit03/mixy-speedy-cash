@@ -36,8 +36,8 @@ model Customer {
 }
 
 enum CustomerType {
-  Personal
-  Company
+  personal
+  company
 }
 
 model Employee {
@@ -59,7 +59,7 @@ model Employee {
 }
 
 enum Position {
-  employee
+  employee  
   manager
   owner
 }
@@ -85,20 +85,20 @@ model Account {
 }
 
 enum AccountType {
-  Deposit
-  Saving
+  deposit
+  saving
 }
 
 enum AccountStatus {
-  InUse
-  Closed
+  inUse
+  closed
 }
 
 model Loan {
   loanId String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
-  responsibleEmployeeId String   @db.Uuid // EmployeeId
-  Employee              Employee @relation(fields: [responsibleEmployeeId], references: [employeeId])
+  responsibleEmployeeId String?   @db.Uuid // EmployeeId
+  Employee              Employee? @relation(fields: [responsibleEmployeeId], references: [employeeId])
 
   accountId String
   Account   Account @relation(fields: [accountId], references: [accountId])
@@ -111,6 +111,7 @@ model Loan {
   endDate      DateTime
   startDate    DateTime      @default(now())
   updatedAt    DateTime      @default(now())
+
   LoanPayments LoanPayment[]
 }
 
@@ -120,25 +121,40 @@ enum LoanType {
 }
 
 enum LoanStatus {
+  waiting
   onProcess
-  inDebt
+  inDebt 
 }
+
 
 model LoanPayment {
   loanId String @db.Uuid
   Loan   Loan   @relation(fields: [loanId], references: [loanId])
 
   loanPaymentId String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-
-  scheduledPaymentDate DateTime
-  paymentAmount        Float
+  
+  scheduledPaymentDate DateTime?
+  // เงินต้น
   principalAmount      Float
-  interestAmount       Float
+  // เงินที่ต้องจ่าย
+  paymentAmount        Float
+  // เงินดอกเบี้ยที่ต้องจ่าย
+  interestPercent       Float
+  // จ่ายมาแล้วเท่าไร
   paidAmount           Float
-  paidDate             DateTime
+  // วันที่จ่าย
+  paidDate             DateTime?
+  
+  paidStatus PaidStatus
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+}
+
+enum PaidStatus {
+  paid
+  inDept
+  onProcess
 }
 
 model Transaction {

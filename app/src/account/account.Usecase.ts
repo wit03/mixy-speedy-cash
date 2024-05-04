@@ -1,7 +1,7 @@
-import { InsertTransaction } from "../transaction/transaction.Repository";
+import { InsertTransactionRepo } from "../transaction/transaction.Repository";
 import { DepositBalanceRepo, FindAccountDataRepo, FindManyAccountRepo, InsertAccountRepo, WithdrawBalanceRepo } from "./account.Repository";
 
-export async function HandleTransferBalance(senderCustomerId:string, recieverAccountId:string, currentAccount:string,  amount:number) {
+export async function HandleTransferBalance(senderCustomerId:string, recieverAccountId:string, currentAccount:string,  amount:number, pin:string) {
  
     const currentAccountData = await FindAccountDataRepo(senderCustomerId, currentAccount);
 
@@ -14,6 +14,12 @@ export async function HandleTransferBalance(senderCustomerId:string, recieverAcc
     else if(currentAccountData.balance < amount){
         return {
             error:"Your account can't make a transfer, not enough money",
+            senderData: undefined
+        }
+    }
+    else if(!await Bun.password.verify(pin, currentAccountData.pin, "bcrypt")){
+        return {
+            error:"Pin is wrong",
             senderData: undefined
         }
     }
@@ -47,8 +53,7 @@ export async function HandleTransferBalance(senderCustomerId:string, recieverAcc
     }
     
     // if everything success create a transaction
-    console.log("running here")
-    const resultTransaction = await InsertTransaction(currentAccountData.accountId, recieverAccountId, amount, `Tranfer money from ${currentAccount} to ${recieverAccountId}`)
+    const resultTransaction = await InsertTransactionRepo(currentAccountData.accountId, recieverAccountId, amount, `Tranfer money from ${currentAccount} to ${recieverAccountId}`)
     if(!resultTransaction){
         // if create transaction is failed
         // decrement balance reciever
@@ -109,7 +114,7 @@ export async function InsertAccount(customerId: string, pin:string) {
         cost: 4
     })
 
-    const resAccount = await InsertAccountRepo(customerId, hashedPin, "Deposit", 1000);
+    const resAccount = await InsertAccountRepo(customerId, hashedPin, "deposit", 1000);
 
     if(!resAccount){
         return {

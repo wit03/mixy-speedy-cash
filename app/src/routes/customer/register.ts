@@ -35,7 +35,7 @@ const ValidateSignUp = {
         }),
         customerType: t.String({
             minLength: 2,
-            default: "Personal",
+            default: "personal",
         }),
         address: t.String({
             minLength: 2,
@@ -75,10 +75,11 @@ export const register = new Elysia()
         jwtAccess,
     }) {
         
-        if (body.customerType === "Company" || body.customerType === "Personal"){
+        if (body.customerType === "company" || body.customerType === "personal"){
             set.status = 201;
             const {customer, error, account} = await CustomerSignUp(body as CustomerRegisterReq)
             if(error || !customer || !account) {
+                set.status = 400;
                 return {
                     msg: error || "Register failed",
                     customer: undefined,
@@ -116,7 +117,7 @@ export const register = new Elysia()
         else {
             set.status = 400
             return {
-                "msg": "customer type incoorect"
+                "msg": "customer type incorrect"
             }
         }
     },

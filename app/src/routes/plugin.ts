@@ -2,13 +2,16 @@ import { Elysia } from "elysia";
 import { login } from "./customer/login";
 import { register } from "./customer/register";
 import { currentCustomer } from "./customer/current-customer";
-import { EmployeeLogin } from "./employee/employeeLogin";
 import { transferBalance } from "./transfer/transferBalance";
 import { listAccounts } from "./account/list-accounts";
 import { listTransactions } from "./transaction/list-transactions";
 import { addAccount } from "./account/add-account";
-import { employeeRegister } from "./employee/employee.Register";
+import { employeeRegister } from "./employee/employeeRegister";
 import { report } from "./customer/report";
+import { employeeLogin } from "./employee/employeeLogin";
+import { CreateLoan } from "./loan/create-loan";
+import { ListsLoan } from "./loan/list-loan";
+import { ListLoanPayments } from "./loan/list-loan-payment";
 
 export const auth = new Elysia({
   prefix: "/customer",
@@ -22,7 +25,7 @@ export const employee = new Elysia({
   prefix: "/employee",
 })
   .use(employeeRegister)
-  .use(EmployeeLogin)
+  .use(employeeLogin)
 
 
 export const transfer = new Elysia({
@@ -41,4 +44,12 @@ export const transaction = new Elysia({
   prefix:"/transaction",
 })
 .use(listTransactions)
+
+
+export const loan = new Elysia({
+  prefix:"/loan",
+})
+.use(CreateLoan)
+.use(ListsLoan)
+.use(ListLoanPayments)
 

@@ -1,6 +1,6 @@
 import { db } from "..";
 
-export async function InsertTransaction(senderAccountId:string, recieverAccountId:string,  amount:number, detail: string = "") {
+export async function InsertTransactionRepo(senderAccountId:string, recieverAccountId:string,  amount:number, detail: string = "") {
     return await db.transaction.create({
         data:{
             amount: amount,

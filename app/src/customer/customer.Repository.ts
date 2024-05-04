@@ -30,7 +30,8 @@ export async function InsertCustomerRepo(body:CustomerRegisterReq){
             createdAt : true,
         }
     })
-  } catch (_) {
+  } catch (error) {
+    console.log(error)
     return undefined
   }  
 }

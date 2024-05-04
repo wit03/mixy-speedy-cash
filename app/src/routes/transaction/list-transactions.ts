@@ -1,5 +1,4 @@
 import { Elysia, t } from "elysia";
-import { jwtAccessSetup } from "../setup";
 import { ListAllTransactions } from "../../transaction/transaction.Usecase";
 import { isAuthenticated } from "../../middleware/authen";
 

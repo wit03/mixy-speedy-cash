@@ -12,17 +12,15 @@ const ValidateTransferBalance = {
         amount: t.Number({
             minimum: 0,
         }),
-       
+        pin: t.String({
+            minLength: 6,
+            maxLength: 6,
+        })
     }),
     error({ code, set, error }: { code: string, set: Context["set"], error: any }) {
         return {
             msg: error
         }
-        // case "VALIDATION":
-        //     set.status = 400
-        //     return {
-        //         msg: error
-        //     }
     },
 }
 
@@ -34,7 +32,7 @@ export const transferBalance = new Elysia()
             body,
             set,
             customerDecrypt,
-            cookie: {currentAccount},
+            cookie: { currentAccount },
         }) {
 
             if (!customerDecrypt || !customerDecrypt.customerId || !currentAccount.value) {
@@ -44,11 +42,10 @@ export const transferBalance = new Elysia()
                 }
             }
 
-
             const { customerId: senderCustomerId } = customerDecrypt
-            const { amount, reciever:recieverAccountId } = body
-            console.log(currentAccount.value)
-            const { error, senderData, recieverData } = await HandleTransferBalance(senderCustomerId, recieverAccountId, currentAccount.value.toString(), amount)
+            const { amount, reciever: recieverAccountId, pin } = body
+
+            const { error, senderData, recieverData } = await HandleTransferBalance(senderCustomerId, recieverAccountId, currentAccount.value.toString(), amount, pin)
             if (error !== undefined || senderData === undefined || recieverData === undefined) {
                 set.status = 400
                 return {
@@ -62,8 +59,6 @@ export const transferBalance = new Elysia()
                 senderData: senderData,
                 recieverData: recieverData
             }
-
-            // const {} = await HandleTransferBalance()
 
 
         },
