@@ -22,8 +22,8 @@ export async function InsertLoanUsecase(body: InsertLoanType, accountId:string, 
 
     const nextMonth = new Date();
     // calculate end month of the loan
-    let endMonth = nextMonth
-    endMonth.setMonth(endMonth.getMonth() + body.installmentLength)
+    let endMonth = new Date()
+    endMonth.setDate(endMonth.getDate() + (body.installmentLength * 30))
     const loanRes = await InsertLoanRepo(body, endMonth, accountId)
     if(loanRes === undefined) {
         return {
@@ -39,9 +39,9 @@ export async function InsertLoanUsecase(body: InsertLoanType, accountId:string, 
     const interestPercent = body.interestRate; 
     const loanAmount = body.loanAmount;
     const paymentAmount = (loanAmount * 3) / 100
-    nextMonth.setMonth(nextMonth.getMonth() + 1);
-    nextMonth.setDate(1); 
-    
+    // nextMonth.setMonth(nextMonth.getMonth() + 1);
+    nextMonth.setDate(nextMonth.getDate() + 30);
+
     for (let i = 0; i < body.installmentLength; i++) {
         loanPayments.push({
             interestPercent: interestPercent, 
@@ -49,12 +49,16 @@ export async function InsertLoanUsecase(body: InsertLoanType, accountId:string, 
             paidAmount: 0,
             paymentAmount: paymentAmount,
             principalAmount: body.loanAmount,
-            scheduledPaymentDate: nextMonth,
+            scheduledPaymentDate: new Date(nextMonth),
             paidStatus: "onProcess",
         })
-        nextMonth.setMonth(nextMonth.getMonth() + 1);
+        nextMonth.setDate(nextMonth.getDate() + 30);    
     }
-    
+
+    loanPayments.forEach(element => { 
+        console.log(element.scheduledPaymentDate!.toDateString())
+    });
+
     // insert loan payment
     const loanPaymentRes = await InsertManyLoanPayment(loanPayments)
     // if insert loan payment failed we going to delete loan repo
