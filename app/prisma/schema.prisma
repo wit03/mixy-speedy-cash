@@ -163,13 +163,18 @@ model Transaction {
   sender        String
   AccountSender Account @relation("AccountSender", fields: [sender], references: [accountId])
 
-  reciever        String
-  AccountReciever Account @relation("AccountReciever", fields: [reciever], references: [accountId])
+  reciever        String?
+  AccountReciever Account? @relation("AccountReciever", fields: [reciever], references: [accountId])
 
-  // TransactionType String
+  transactionType TransactionType @default(transfer)
   amount          Float
   transactionDate DateTime @default(now())
   updatedAt       DateTime @default(now())
+}
+
+enum TransactionType {
+  transfer
+  loan
 }
 
 model Notification {

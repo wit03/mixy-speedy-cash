@@ -33,7 +33,15 @@ export const CreateLoan = new Elysia()
             set,
             body,
             cookie: { currentAccount },
+            customerDecrypt
         }) {
+
+            if(!customerDecrypt || !customerDecrypt.customerId){
+                set.status = 401
+                return {
+                    msg: "Unauthorized"
+                }
+            }
 
             if(body.loanType !== "normal" && body.loanType !== "special"){
                 set.status = 400
@@ -42,7 +50,7 @@ export const CreateLoan = new Elysia()
                 }
             }
             
-            const {error, loan, loanPayment, resDeposit} = await InsertLoanUsecase(body as InsertLoanType, String(currentAccount.value))
+            const {error, loan, loanPayment, resDeposit} = await InsertLoanUsecase(body as InsertLoanType, String(currentAccount.value), customerDecrypt.customerId)
             if(error !== undefined){
                 set.status = 400
                 return {

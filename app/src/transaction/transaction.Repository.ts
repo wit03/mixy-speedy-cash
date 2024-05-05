@@ -1,15 +1,22 @@
+import { $Enums } from "@prisma/client";
 import { db } from "..";
 
-export async function InsertTransactionRepo(senderAccountId:string, recieverAccountId:string,  amount:number, detail: string = "") {
+export async function InsertTransactionRepo(senderAccountId:string, recieverAccountId:string,  amount:number, detail: string = "", transactionType:$Enums.TransactionType) {
+   try {
     return await db.transaction.create({
         data:{
             amount: amount,
             reciever:recieverAccountId,
             sender:senderAccountId,
-            detail: detail
+            detail: detail,
+            transactionType: transactionType
         }
     })
+   } catch (_) {
+        return undefined
+   }
 }
+
 
 export async function FindManyTransactions(limit: number, skip: number) {
     try {

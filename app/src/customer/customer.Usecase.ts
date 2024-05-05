@@ -2,6 +2,7 @@ import { CustomerRegisterReq, CustomerSigninReq } from "./customer.type";
 import { DeleteCustomer, FindCustomerByEmailRepo, FindCustomerByIdRepo, InsertCustomerRepo } from "./customer.Repository";
 import { InsertAccountRepo } from "../account/account.Repository";
 
+
 // for insert customer when signup
 // hash password
 export async function CustomerSignUp(body:CustomerRegisterReq) {
@@ -54,3 +55,6 @@ export async function CustomerSignIn(body:CustomerSigninReq) {
     return {error: undefined, customer:customer}
 
 }
+
+
+

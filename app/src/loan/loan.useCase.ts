@@ -1,9 +1,25 @@
 import { LoanPayment } from "@prisma/client";
-import { DeleteLoanPaymentRepo, DeleteLoanRepo, InsertLoanRepo, InsertManyLoanPayment, ListLoanByAccountIdRepo, ListLoanPaymentRepo } from "./loan.repository";
+import { DeleteLoanPaymentRepo, DeleteLoanRepo, FindLoanPaymentById, InsertLoanRepo, InsertManyLoanPayment, ListLoanByAccountIdRepo, ListLoanPaymentRepo, UpdateLoanPayment } from "./loan.repository";
 import { InsertLoanType } from "./loan.type";
-import { DepositBalanceRepo } from "../account/account.Repository";
+import { DepositBalanceRepo, FindAccountByIdAndCustomer, FindAccountDataRepo, WithdrawBalanceRepo } from "../account/account.Repository";
+import { InsertTransactionRepo } from "../transaction/transaction.Repository";
+import { bankAccountId } from "../utils/bank";
 
-export async function InsertLoanUsecase(body: InsertLoanType, accountId:string) {
+export async function InsertLoanUsecase(body: InsertLoanType, accountId:string, customerId:string) {
+    
+    
+    // check first if accountId and customerId is the same owner
+    const checkedCustomerId = await FindAccountByIdAndCustomer(customerId, accountId);
+    if(!checkedCustomerId || checkedCustomerId.customerId !== customerId){
+        return {
+            error: "unathorized",
+            loan: undefined,
+            loanPayment: undefined,
+            resDeposit: undefined
+        }
+    }
+
+
     const nextMonth = new Date();
     // calculate end month of the loan
     let endMonth = nextMonth
@@ -18,6 +34,7 @@ export async function InsertLoanUsecase(body: InsertLoanType, accountId:string) 
         }
     }
     
+    // calculate how much each loan payment should be paid
     const loanPayments:Omit<LoanPayment, "loanPaymentId" | "createdAt" | "updatedAt" | "paidDate">[] = []
     const interestPercent = body.interestRate; 
     const loanAmount = body.loanAmount;
@@ -110,3 +127,83 @@ export async function ListLoanPaymentsUsecase(loanId:string) {
 
 }
 
+
+
+
+export async function CustomerPayLoanUsecase(loanId:string, loanPaymentId:string, customerId:string, accountId:string, pin:string) {
+    
+    // check first if accountId and customerId is the same owner and 
+    // check if balance is enough for paying the loan payment
+    const currentAccountData = await FindAccountDataRepo(customerId, accountId);
+    if(!currentAccountData){
+        return {
+            error: "unathorized",
+            loanPayment: undefined,
+            transaction: undefined,
+        }
+    } 
+    // verify pin
+    else if(!await Bun.password.verify(pin, currentAccountData.pin, "bcrypt")){
+        return {
+            error:"Pin is wrong",
+            loanPayment: undefined,
+            transaction: undefined,
+        }
+    }
+    
+    const loanPayment = await FindLoanPaymentById(loanId, loanPaymentId)
+    if(!loanPayment){
+        return {
+            error: "Failed to find your loan paymentId",
+            loanPayment: undefined,
+            transaction: undefined,
+        }
+    }
+    // if balance in account is not enough return error
+    else if(currentAccountData.balance < loanPayment.paymentAmount){
+        return {
+            error:"Your account can't make a transfer, not enough money",
+            loanPayment: undefined,
+            transaction: undefined,
+        }
+    }
+    
+    // withdraw balance from the account first
+    const withdrawRes = await WithdrawBalanceRepo(customerId, loanPayment.paymentAmount, accountId)
+    if(!withdrawRes){
+        return {
+            error: "Failed to find your loan paymentId",
+            loanPayment: undefined,
+            transaction: undefined,
+        }
+    }
+    
+    // update the loan payment data
+    const loanPaymentUpdateRes = await UpdateLoanPayment(loanPaymentId, loanId, loanPayment.paymentAmount, new Date().toISOString(), "paid")
+    if(!loanPaymentUpdateRes){
+        const _ = await DepositBalanceRepo(accountId, loanPayment.paymentAmount)
+        return {
+            error: "Update loan payment status to paid error",
+            loanPayment: undefined,
+            transaction: undefined,
+        }
+    }
+
+    const resultTransaction = await InsertTransactionRepo(currentAccountData.accountId, bankAccountId, loanPayment.paymentAmount, `Tranfer money from ${currentAccountData.accountId} to ${"bank"}`, "loan")
+    if(!resultTransaction){
+        await UpdateLoanPayment(loanPaymentId, loanId, 0, null, "onProcess")
+        await DepositBalanceRepo(accountId, loanPayment.paymentAmount)
+        return {
+            error: "Failed to insert transaction"
+        }
+    }
+
+    return {
+        error: undefined,
+        loanPayment: loanPaymentUpdateRes,
+        transaction: resultTransaction,
+    }
+
+
+
+}

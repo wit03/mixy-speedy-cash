@@ -53,7 +53,7 @@ export async function HandleTransferBalance(senderCustomerId:string, recieverAcc
     }
     
     // if everything success create a transaction
-    const resultTransaction = await InsertTransactionRepo(currentAccountData.accountId, recieverAccountId, amount, `Tranfer money from ${currentAccount} to ${recieverAccountId}`)
+    const resultTransaction = await InsertTransactionRepo(currentAccountData.accountId, recieverAccountId, amount, `Tranfer money from ${currentAccount} to ${recieverAccountId}`, "transfer")
     if(!resultTransaction){
         // if create transaction is failed
         // decrement balance reciever

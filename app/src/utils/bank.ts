@@ -1,0 +1,1 @@
+export const bankAccountId:string = "123456789"
