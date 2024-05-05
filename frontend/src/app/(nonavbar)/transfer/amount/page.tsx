@@ -3,9 +3,9 @@
 import { useState } from "react"
 import Link from "next/link" 
 
-import Balance from "../../components/balance"
-import ReceiverCard from "./_components/receiver"
-import AddrField from "./_components/addrField"
+import Balance from "../../../components/balance"
+import ReceiverCard from "./../_components/receiver"
+import AddrField from "./../_components/addrField"
 
 const Transfer = () => {
     const [receiver, setReceiver] = useState<number>()
@@ -37,23 +37,18 @@ const Transfer = () => {
         <div className="flex flex-col justify-between mx-6 mt-8 mb-6 font-rubik min-h-[calc(100vh-32px-24px)]">
             <div className="flex flex-col">
                 <h1 className="text-xl font-medium my-4 text-[#333333] mx-auto">Transfer</h1>
-                <div className="text-medium text-lg text-[#8B9193]">Favourite</div>
-                <div className="flex justify-between items-center my-4">
-                    {
-                        favoriteList.map((item, index) => (
-                            <button key={index} onClick={() => setReceiver(item.addr)} >
-                                <ReceiverCard img={item.img} />
-                            </button>
-                        ))
-                    }
-                </div>
-
                 <div className="text-medium text-lg text-[#8B9193]">From</div>
                 <div className="my-6">
                     <Balance />
                 </div>
                 <div className="text-medium text-lg text-[#8B9193] mb-2">To</div>
-                <AddrField setAddr={setReceiver} Addr={receiver} />
+
+                <div className="w-full bg-white rounded-2xl text-center py-16">
+                    Receiver Card
+                </div>
+
+                <div className="text-medium text-lg text-[#8B9193] mb-2">Amount</div>
+                
             </div>
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center">
