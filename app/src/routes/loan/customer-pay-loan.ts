@@ -29,14 +29,16 @@ export const CustomerPayLoan  = new Elysia()
         async function CustomerPayLoanHttpHandle({
             body,
             set,
-            cookie: { auth, currentAccount },
+            cookie: { currentAccount },
             customerDecrypt
         }) {
 
             if(!customerDecrypt || !customerDecrypt.customerId){
                 set.status = 401
                 return {
-                    msg: "Unauthorized"
+                    msg: "Unauthorized",
+                    loanPayment: null,
+                    transaction: null,
                 }
             }
 
@@ -45,7 +47,9 @@ export const CustomerPayLoan  = new Elysia()
             if(error){
                 set.status = 400
                 return {
-                    msg: error || "Faield to update loan payment"
+                    msg: error || "Faield to update loan payment",
+                    loanPayment: null,
+                    transaction: null,
                 }
             }
 

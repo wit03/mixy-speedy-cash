@@ -6,7 +6,7 @@ export async function InsertEmployeeRepo(body: EmployeeRegisterReq) {
         return await db.employee.create({
             data: {
                 email: body.email,
-                position: "employee",
+                position: body.position,
                 password: body.password,
                 firstName: body.firstName,
                 lastName: body.lastName,
@@ -71,3 +71,25 @@ export async function FindEmployeeByEmailRepo(email: string) {
         return undefined
     }
 }
+
+
+export async function CountCustomerAndAccount(): Promise<{ totalCustomers: number; totalAccounts: number } | undefined> {
+    try {
+        const counts = await db.$queryRaw<{totalcustomers:BigInt, totalaccounts:BigInt}[]>`
+            SELECT
+                (SELECT COUNT(*) FROM "Customer") AS totalcustomers,
+                (SELECT COUNT(*) FROM "Account") AS totalaccounts
+        `;
+        if (counts) {
+            const totalCustomers = Number(counts[0].totalcustomers);
+            const totalAccounts = Number(counts[0].totalaccounts);
+            return { totalCustomers, totalAccounts };
+        } else {
+            return undefined;
+        }
+    } catch (_) {
+        return undefined;
+    }
+}
+
+

@@ -18,9 +18,12 @@ export async function InsertTransactionRepo(senderAccountId:string, recieverAcco
 }
 
 
-export async function FindManyTransactions(limit: number, skip: number) {
+export async function FindManyTransactionsFromAccount(limit: number, skip: number, accountId:string) {
     try {
         return await db.transaction.findMany({
+            where:{
+                sender: accountId
+            },
             skip: skip,
             take: limit,
             select: {
@@ -28,7 +31,7 @@ export async function FindManyTransactions(limit: number, skip: number) {
                 detail: true,
                 transactionDate: true,
                 transactionId: true,
-                AccountSender:{
+                accountSender:{
                     select:{
                         customer:{
                             select:{
@@ -38,7 +41,7 @@ export async function FindManyTransactions(limit: number, skip: number) {
                         }
                     }
                 },
-                AccountReciever:{
+                accountReciever:{
                     select:{
                         customer:{
                             select:{
@@ -49,7 +52,9 @@ export async function FindManyTransactions(limit: number, skip: number) {
                     }
                 },
             },
-            
+            orderBy:{
+                transactionDate: "desc"
+            }
         })
     } catch (_) {
         return undefined

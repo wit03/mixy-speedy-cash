@@ -4,15 +4,17 @@ import { register } from "./customer/register";
 import { currentCustomer } from "./customer/current-customer";
 import { transferBalance } from "./transfer/transferBalance";
 import { listAccounts } from "./account/list-accounts";
-import { listTransactions } from "./transaction/list-transactions";
+import { listTransactions } from "./transaction/customer-list-transactions";
 import { addAccount } from "./account/add-account";
-import { employeeRegister } from "./employee/employeeRegister";
 import { report } from "./customer/report";
-import { employeeLogin } from "./employee/employeeLogin";
+import { employeeLogin } from "./employee/employee-login";
 import { CreateLoan } from "./loan/create-loan";
 import { ListsLoan } from "./loan/list-loan";
 import { ListLoanPayments } from "./loan/list-loan-payment";
 import { CustomerPayLoan } from "./loan/customer-pay-loan";
+import { employeeRegister } from "./employee/employee-register";
+import { currentEmployee } from "./employee/current-employee";
+import { managerReport } from "./employee/manager-report";
 
 export const auth = new Elysia({
   prefix: "/customer",
@@ -27,6 +29,8 @@ export const employee = new Elysia({
 })
   .use(employeeRegister)
   .use(employeeLogin)
+  .use(currentEmployee)
+  .use(managerReport)
 
 
 export const transfer = new Elysia({

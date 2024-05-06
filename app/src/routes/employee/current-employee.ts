@@ -1,16 +1,16 @@
 import { Elysia } from "elysia";
-import { jwtAccessSetup } from "../setup";
-import { FindCustomerByIdRepo } from "../../customer/customer.Repository";
+import { jwtEmployeeSetup } from "../setup";
+import { FindEmployeeByIdRepo } from "../../employee/employee.Repository";
 
 
-export const currentCustomer = new Elysia()
-.use(jwtAccessSetup)
+export const currentEmployee = new Elysia()
+.use(jwtEmployeeSetup)
   .get(
-        "/current-customer",
+        "/current-employee",
     async function CurrentUserHttpHandler({
         set,
         cookie: {auth},
-        jwtAccess,
+        jwtEmployee
     }) {
         
         const token:string | undefined = auth?.value || undefined
@@ -19,29 +19,29 @@ export const currentCustomer = new Elysia()
         if(!token || token.length === 0){
             return {
                 msg:"No token found",
-                customer: null,
+                employee: undefined,
             }
         }
         else {
-            const parseData = await jwtAccess.verify(token)
+            const parseData = await jwtEmployee.verify(token)
             if (!parseData){
                 return {
                     msg:"Parse token failed",
-                    customer:null
+                    employee:undefined
                 }
             } 
             else {
-                const customer = await FindCustomerByIdRepo(parseData.customerId)
+                const employee = await FindEmployeeByIdRepo(parseData.employeeId)
         
-                if(!customer){
+                if(!employee){
                     return {
                         msg:"ok",
-                        customer: null
+                        employee: undefined
                     }
                 } else {
                     return {
                         msg:"ok",
-                        customer: customer
+                        employee: employee
                     }
                 }
 

@@ -1,5 +1,5 @@
 import { Elysia, t } from "elysia";
-import { ListAllTransactions } from "../../transaction/transaction.Usecase";
+import { ListAllTransactionAccount } from "../../transaction/transaction.Usecase";
 import { isAuthenticated } from "../../middleware/authen";
 
 
@@ -22,17 +22,28 @@ export const listTransactions = new Elysia()
     .get("/list-transactions",
         async function ListTransactions({
             set,
-            query
+            query,
+            customerDecrypt,
+            cookie: {currentAccount}
         }) {
 
+            if(!customerDecrypt || !currentAccount.value){
+                set.status = 401;
+                return {
+                    msg:"Unauthorized",
+                    transactions: null
+                }
+            }
+            
             const {limit, skip} = query
             
-            const {transactions, error} = await ListAllTransactions(limit!, skip!)
-
+            const {transactions, error} = await ListAllTransactionAccount(limit!, skip!, customerDecrypt.customerId, String(currentAccount.value))
+            
             if(error !== undefined){
                 set.status = 400
                 return {
-                    msg: error || "List all transactions failed"
+                    msg: error || "List all transactions failed",
+                    transactions: null
                 }
             }
             set.status = 200

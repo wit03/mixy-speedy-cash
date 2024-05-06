@@ -129,7 +129,7 @@ export async function DeleteLoanPaymentRepo(loanId:string) {
     }
 }
 
-
+// for customer paying loan
 export async function UpdateLoanPayment(loanPaymentId: string, loanId:string, paidAmount:number, paidDate:string | null, paidStatus:$Enums.PaidStatus) {
     try {
         return await db.loanPayment.update({
@@ -151,6 +151,35 @@ export async function UpdateLoanPayment(loanPaymentId: string, loanId:string, pa
                 paidStatus: true,
             }
         })       
+    } catch (_) {
+        return undefined
+    }
+}
+
+// for manager report
+export async function FindProfitLoanRepo(time:Date) {
+    try {
+        return await db.loanPayment.findMany({
+            where: {
+              AND: [
+                { 
+                    createdAt: {
+                       gte: time.toISOString(),
+                    }
+                },
+                {
+                    paidAmount:{
+                        not: 0,
+                    }
+                }
+              ]
+            },
+            select:{
+                paidAmount: true,
+                createdAt: true,
+            }
+          });
+
     } catch (_) {
         return undefined
     }

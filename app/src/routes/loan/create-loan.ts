@@ -55,9 +55,9 @@ export const CreateLoan = new Elysia()
                 set.status = 400
                 return {
                     msg:error || "",
-                    loan: undefined,
-                    loanPayment: undefined,
-                    deposit: undefined,
+                    loan: null,
+                    loanPayment: null,
+                    deposit: null,
                 }
             }
             else {

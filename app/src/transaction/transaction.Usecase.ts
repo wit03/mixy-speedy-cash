@@ -1,8 +1,18 @@
 import { FindAccountByIdAndCustomer } from "../account/account.Repository";
-import { FindLastMoneyInDependOnTime, FindLastMoneyOutDependOnTime, FindManyTransactions, FindMoneyIn, FindMoneyOut } from "./transaction.Repository"
+import { FindLastMoneyInDependOnTime, FindLastMoneyOutDependOnTime, FindManyTransactionsFromAccount, FindMoneyIn, FindMoneyOut } from "./transaction.Repository"
 
-export async function ListAllTransactions(limit:number, skip:number) {
-    const resTransations = await FindManyTransactions(limit, skip)
+export async function ListAllTransactionAccount(limit:number, skip:number, customerId:string, accountId:string) {
+
+    const checkedCustomerId = await FindAccountByIdAndCustomer(customerId, accountId);
+    
+    if(!checkedCustomerId || checkedCustomerId.customerId !== customerId){
+        return {
+            error: "unathorized",
+            transactions: undefined
+        }
+    }
+
+    const resTransations = await FindManyTransactionsFromAccount(limit, skip, accountId)
 
     if(!resTransations){
         return {
@@ -18,7 +28,7 @@ export async function ListAllTransactions(limit:number, skip:number) {
 
 }
 
-export async function FindReport(customerId:string, accountId:string) {
+export async function FindReportUsecase(customerId:string, accountId:string) {
     
     const checkedCustomerId = await FindAccountByIdAndCustomer(customerId, accountId);
     

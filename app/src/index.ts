@@ -4,7 +4,7 @@ import { jwt } from '@elysiajs/jwt'
 import { accounts, auth, employee, loan, transaction, transfer } from "./routes/plugin";
 import { customAlphabet } from "nanoid";
 export const db = new PrismaClient({
-  log:["info", "query"],
+  log:["info", "query", "warn"],
 })
 
 
