@@ -15,6 +15,11 @@ import { CustomerPayLoan } from "./loan/customer-pay-loan";
 import { employeeRegister } from "./employee/employee-register";
 import { currentEmployee } from "./employee/current-employee";
 import { managerReport } from "./employee/manager-report";
+import { countAndSumTransaction } from "./employee/count-sum-transaction";
+import { listTransactionWithCondition } from "./employee/employee-list-transaction";
+import { employeeSearchCustomer } from "./employee/employee-search-customer";
+import { listLoan } from "./employee/employee-list-loan";
+import { approveLoan } from "./employee/approve-loan";
 
 export const auth = new Elysia({
   prefix: "/customer",
@@ -31,6 +36,11 @@ export const employee = new Elysia({
   .use(employeeLogin)
   .use(currentEmployee)
   .use(managerReport)
+  .use(countAndSumTransaction)
+  .use(listTransactionWithCondition)
+  .use(employeeSearchCustomer)
+  .use(listLoan)
+  .use(approveLoan)
 
 
 export const transfer = new Elysia({

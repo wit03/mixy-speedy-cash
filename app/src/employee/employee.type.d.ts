@@ -32,3 +32,5 @@ export interface EmployeeSigninReq {
     email:string;
     password:string;
 }
+
+export type TransactionSearchCondition =  "loan" | "transfer" | "all"

@@ -1,6 +1,7 @@
 import { Elysia } from "elysia";
 import { jwtAccessSetup } from "../setup";
 import { FindCustomerByIdRepo } from "../../customer/customer.Repository";
+import { FindAccountBalanceRepo } from "../../account/account.Repository";
 
 
 export const currentCustomer = new Elysia()
@@ -9,7 +10,7 @@ export const currentCustomer = new Elysia()
         "/current-customer",
     async function CurrentUserHttpHandler({
         set,
-        cookie: {auth},
+        cookie: {auth, currentAccount},
         jwtAccess,
     }) {
         
@@ -24,7 +25,7 @@ export const currentCustomer = new Elysia()
         }
         else {
             const parseData = await jwtAccess.verify(token)
-            if (!parseData){
+            if (!parseData || !currentAccount.value){
                 return {
                     msg:"Parse token failed",
                     customer:null
@@ -32,16 +33,18 @@ export const currentCustomer = new Elysia()
             } 
             else {
                 const customer = await FindCustomerByIdRepo(parseData.customerId)
-        
-                if(!customer){
+                const account = await FindAccountBalanceRepo(String(currentAccount.value))
+                if(!customer || !account){
                     return {
                         msg:"ok",
-                        customer: null
+                        customer: null,
+                        account: null
                     }
                 } else {
                     return {
                         msg:"ok",
-                        customer: customer
+                        customer: customer,
+                        account: account
                     }
                 }
 

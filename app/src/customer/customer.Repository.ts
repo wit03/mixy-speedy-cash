@@ -1,3 +1,4 @@
+import { asHookType } from "elysia/dist/utils";
 import { db } from "..";
 import { CustomerRegisterReq } from "./customer.type";
 
@@ -82,6 +83,37 @@ export async function FindCustomerByEmailRepo(email:string) {
                 email:true,
                 password:true,
                 customerId: true,
+            }
+        })
+    } catch (_) {
+        return undefined
+    }
+}
+
+
+
+export async function FindCustomerBySearch(search:string) {
+    try {
+        return await db.customer.findFirst({
+            where:{
+                OR:[
+                    {
+                        firstName:{contains: search},
+                    },
+                    {
+                        lastName:{contains: search}
+                    }
+                ]
+            },
+            select:{
+                customerId: true,
+                firstName: true,
+                lastName: true,
+                dateOfBirth: true,
+                phoneNumber: true,
+                career: true,
+                salary: true,
+                email: true,
             }
         })
     } catch (_) {
