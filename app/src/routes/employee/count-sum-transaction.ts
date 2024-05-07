@@ -1,5 +1,5 @@
 import { Elysia, t } from "elysia";
-import { ManagerReport } from "../../employee/employee.Usecase";
+import { CountAndSumTransactions } from "../../employee/employee.Usecase";
 import { isEmployeeAuthenticated } from "../../middleware/authen";
 
 
@@ -11,21 +11,21 @@ const ValidateManagerReport = {
     },
 }
 
-export const managerReport = new Elysia()
+export const countAndSumTransaction = new Elysia()
     .use(isEmployeeAuthenticated)
-    .get("/manager-report",
-        async function ManagerReportHttpHandler({
+    .get("/agg-transactions",
+        async function CountAndSumTransactionHttpHandler({
             set,
             employeeDecrypt
         }) {
 
-            if(!employeeDecrypt || (employeeDecrypt.position !== "manager" && employeeDecrypt.position !== "owner")){
+            if(!employeeDecrypt){
                 set.status = 401;
                 return {
                     msg: "Unauthorized"
                 }
             }
-            const {error, loanPaymentProfit, totalAccounts, totalCustomers} = await ManagerReport()
+            const {error, countAndSumTransactions} = await CountAndSumTransactions()
             if(error !== undefined){
                 set.status = 400
                 return {
@@ -36,9 +36,7 @@ export const managerReport = new Elysia()
             set.status = 200
             return {
                 msg: "Ok",
-                loanPaymentProfit:loanPaymentProfit, 
-                totalAccounts:totalAccounts, 
-                totalCustomers:totalCustomers
+                countAndSumTransactions:countAndSumTransactions, 
             }
 
         },

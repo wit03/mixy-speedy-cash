@@ -1,5 +1,6 @@
 import { $Enums } from "@prisma/client";
 import { db } from "..";
+import { TransactionSearchCondition } from "../employee/employee.type";
 
 export async function InsertTransactionRepo(senderAccountId:string, recieverAccountId:string,  amount:number, detail: string = "", transactionType:$Enums.TransactionType) {
    try {
@@ -132,6 +133,50 @@ export async function FindLastMoneyOutDependOnTime(accountId:string, time:Date) 
                 transactionDate: true
             }
         });
+    } catch (_) {
+        return undefined
+    }
+}
+
+export async function CountAndSumTransactionRepo(): Promise<{ totalTransactions: number; amount: number } | undefined> {
+    try {
+        const counts = await db.$queryRaw<{totaltransactions: BigInt; amount: BigInt }[]>`
+            SELECT
+                (SELECT COUNT(*) FROM "Transaction") AS totaltransactions,
+                (SELECT SUM("amount") FROM "Transaction") AS amount
+        `;
+        if (counts) {
+            const totalTransactions = Number(counts[0].totaltransactions);
+            const amount = Number(counts[0].amount);
+            return { totalTransactions, amount };
+        } else {
+            return undefined;
+        }
+    } catch (_) {
+        return undefined;
+    }
+}
+
+export async function FindTransactionByConditionRepo(search:string, transactionType:TransactionSearchCondition) {
+    try {
+        let whereCondition: any = {
+        };
+
+        if(transactionType !== "all"){
+            whereCondition.transactionType = transactionType
+        }
+
+        if (search.trim() !== "") {
+            whereCondition.detail = {
+                contains: search
+            };
+        }
+
+        
+        return await db.transaction.findMany({
+            where: whereCondition,
+        });
+
     } catch (_) {
         return undefined
     }

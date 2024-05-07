@@ -101,22 +101,27 @@ model Loan {
   Employee              Employee? @relation(fields: [responsibleEmployeeId], references: [employeeId])
 
   accountId String
-  Account   Account @relation(fields: [accountId], references: [accountId])
+  account   Account @relation(fields: [accountId], references: [accountId])
 
   loanType     LoanType
   loanAmount   Float
   interestRate Float
   loanStatus   LoanStatus
 
-  endDate      DateTime
-  startDate    DateTime      @default(now())
+  endDate      DateTime?
+  startDate    DateTime?     
+  createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now())
 
   loanPayments LoanPayment[]
 }
 
 enum LoanType {
+  // normal is 3% interest 
+  // took 6 month to paid
   normal
+  // special is 3.5% interest 
+  // took 12 month to paid
   special
 }
 
@@ -124,6 +129,7 @@ enum LoanStatus {
   waiting
   onProcess
   inDebt 
+  decline
 }
 
 
@@ -163,8 +169,8 @@ model Transaction {
   sender        String
   accountSender Account @relation("accountSender", fields: [sender], references: [accountId])
 
-  reciever        String?
-  accountReciever Account? @relation("accountReciever", fields: [reciever], references: [accountId])
+  reciever        String
+  accountReciever Account @relation("accountReciever", fields: [reciever], references: [accountId])
 
   transactionType TransactionType @default(transfer)
   amount          Float

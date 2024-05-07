@@ -163,9 +163,46 @@ export async function FindAccountByIdAndCustomer(customerId:string, accountId:st
             }
         })
     } catch (err) {
-        console.log(err)
         return undefined
     }
 }
 
 
+export async function FindManyAccountDataByCustomerId(customerId:string) {
+    try {
+        return await db.account.findMany({
+            where:{
+                customerId: customerId
+            },
+            select:{
+                accountId: true,
+                createdAt: true,
+                balance: true,
+            },
+            orderBy:{
+                createdAt:"desc"
+            }
+        })
+
+    } catch (_) {
+        return undefined
+    }
+}
+
+
+export async function FindAccountBalanceRepo(accountId:string) {
+    try {
+        return await db.account.findFirst({
+            where:{
+                accountId: accountId
+            },
+            select:{
+                balance: true,
+                accountId: true
+                
+            }
+        })
+    } catch (_) {
+        return undefined
+    }
+}
