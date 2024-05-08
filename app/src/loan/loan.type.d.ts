@@ -8,3 +8,5 @@ export interface InsertLoanType {
 }
 
 export type InsertManyLoanPaymentType = Omit<LoanPayment, "loanPaymentId" | "createdAt" | "updatedAt" | "paidDate">;
+
+export type SearchLoanStatus =  "waiting" | "onProcess" | "inDebt" | "decline" | "all"

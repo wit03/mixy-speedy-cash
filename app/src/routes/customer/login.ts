@@ -62,6 +62,7 @@ export const login = new Elysia()
                     httpOnly: false,
                     maxAge: 7 * 86400,
                     path: '/',
+                    domain: "http://localhost:8080/"
                 })
                 // }
                 
