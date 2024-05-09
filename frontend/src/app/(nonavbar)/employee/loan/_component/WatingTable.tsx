@@ -1,8 +1,19 @@
+import { Loan } from "@/app/type/loan";
+import { formatTime } from "@/utils/convertTime";
+import { EmployeeRes } from "../page";
+
 export default function WatingTable({
-
+    loanData,
+    handleUpdateStatus,
+    employees,
+    AssingEmployeeId,
 }: {
-
+    loanData:Loan[];
+    handleUpdateStatus(loanId: string, loanStatus: string, oldType:string, loanType: string): Promise<void>;
+    employees: EmployeeRes[];
+    AssingEmployeeId(loanId: string, employeeId: string): Promise<void>
 }) {
+    
 
     return (
 
@@ -29,9 +40,6 @@ export default function WatingTable({
                                     Type
                                 </th>
                                 <th scope="col" className="px-3 py-4 text-base font-medium text-gray-700 uppercase font-rubik">
-                                    Installment
-                                </th>
-                                <th scope="col" className="px-3 py-4 text-base font-medium text-gray-700 uppercase font-rubik">
                                     Interest
                                 </th>
                                 <th scope="col" className="px-3 py-4 text-base font-medium text-gray-700 uppercase font-rubik">
@@ -44,51 +52,46 @@ export default function WatingTable({
                         </thead>
 
                         <tbody>
-
-                            <tr className="bg-white border-b text-slate-800">
+                        {loanData.length !== 0 && loanData.map((item, i) => (
+                            <tr className="bg-white border-b text-slate-800" key={i}>
                                 <td scope="row" className="px-3 py-4 font-medium ">
                                     <p className="text-sm font-normal">
-                                        Account Number
+                                         {item.account.accountId}
                                     </p>
                                 </td>
 
                                 <td className="px-3 py-4">
                                     <p className="text-sm font-normal">
-                                        Account Name
+                                        {item.account.customer.firstName + " " + item.account.customer.lastName}
                                     </p>
                                 </td>
 
                                 <td className="px-3 py-4">
                                     <p className="text-sm font-normal">
-                                        Requested At
+                                    {formatTime(item.createdAt)}
                                     </p>
                                 </td>
 
                                 <td className="px-3 py-4">
                                     <p className="text-sm font-normal">
-                                        Amount
+                                          {item.loanAmount}
                                     </p>
                                 </td>
 
                                 <td className="px-3 py-4">
                                     <p className="text-sm font-normal">
-                                        Type
+                                        {item.loanType}
                                     </p>
                                 </td>
 
                                 <td className="px-3 py-4">
                                     <p className="text-sm font-normal">
-                                        Installment
-                                    </p>
-                                </td>
-                                <td className="px-3 py-4">
-                                    <p className="text-sm font-normal">
-                                        Interest
+                                        {item.interestRate} %
                                     </p>
                                 </td>
                                 <td className="px-3 py-4">
                                     <div className="flex items-center gap-2 w-fit relative border p-2 rounded-md">
-                                        <select className="appearance-none outline-none ">
+                                    <select onChange={(e:React.ChangeEvent<HTMLSelectElement>) => handleUpdateStatus(item.loanId, e.target.value, item.loanStatus, item.loanType)} value={item.loanStatus}  className="appearance-none outline-none ">
                                             <option value={"waiting"}>Waiting</option>
                                             <option value={"onProcess"}>OnProcess</option>
                                             <option value={"inDebt"}>InDebt</option>
@@ -101,11 +104,25 @@ export default function WatingTable({
                               
                                 <td className="px-3 py-4">
                                     <div className="flex items-center gap-2 w-fit relative border p-2 rounded-md">
-                                        <select className="appearance-none outline-none ">
-                                            <option value={"waiting"}>Waiting</option>
-                                            <option value={"onProcess"}>OnProcess</option>
-                                            <option value={"inDebt"}>InDebt</option>
-                                            <option value={"decline"}>Decline</option>
+                                        <select 
+                                        onChange={(e:React.ChangeEvent<HTMLSelectElement>) => AssingEmployeeId(item.loanId, e.target.value)}
+                                        value={item.responsibleEmployeeId || ""}
+                                        className="appearance-none outline-none max-w-16">
+                                             <option
+                                                   value={""}
+                                                   className="truncate"
+                                                   >
+                                                    Select Employee
+                                                   </option>
+                                            {employees.map((item, i) => (
+                                                   <option
+                                                   key={i}
+                                                   value={item.employeeId}
+                                                   className="truncate"
+                                                   >
+                                                    {item.firstName + " " + item.lastName}
+                                                   </option>
+                                            ))}
                                         </select>
 
                                         <svg fill="#000000" height="12px" width="12px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 330" ><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path id="XMLID_225_" d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393 c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393 s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z"></path> </g></svg>
@@ -113,6 +130,7 @@ export default function WatingTable({
                                 </td>
 
                             </tr>
+                        ))}
                         </tbody>
                     </table>
                 </div>

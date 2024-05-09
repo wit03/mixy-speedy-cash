@@ -1,7 +1,7 @@
 import { $Enums, LoanPayment, LoanType } from "@prisma/client";
 import { DeleteLoanPaymentRepo, FindLoanDataWithLoanIdRepo, FindProfitLoanRepo, InsertManyLoanPayment, ListLoanByTypeRepo, UpdateLoanStatusRepo } from "../loan/loan.repository";
 import { CountAndSumTransactionRepo, FindTransactionByConditionRepo } from "../transaction/transaction.Repository";
-import { CountCustomerAndAccount, FindEmployeeByEmailRepo, FindEmployeeByIdRepo} from "./employee.Repository";
+import { CountCustomerAndAccount, FindEmployeeByEmailRepo, FindEmployeeByIdRepo, ListAllEmployeeRepo} from "./employee.Repository";
 import { InsertEmployeeRepo } from "./employee.Repository";
 import { EmployeeRegisterReq , EmployeeSigninReq, TransactionSearchCondition} from "./employee.type";
 import { DepositBalanceRepo, FindManyAccountDataByCustomerId } from "../account/account.Repository";
@@ -82,6 +82,21 @@ export async function ManagerReport() {
     }
 
 }
+
+export async function ListAllEmployeeUsecase() {
+    const resEmployees = await ListAllEmployeeRepo()
+    if(!resEmployees){
+        return {
+            error:"Failed to list all employees",
+            employees: undefined
+        }
+    }
+    return {
+        error: undefined,
+        employees: resEmployees
+    }
+}
+
 
 export async function CountAndSumTransactions() {
     const resultCountAndSum = await CountAndSumTransactionRepo()
@@ -169,6 +184,8 @@ export async function EmployeeListLoanUsecase(status:SearchLoanStatus) {
             loanId: string;
             loanAmount: number;
             loanStatus: $Enums.LoanStatus;
+            loanType:string;
+            interestRate: number
         }[]
     } = {};
 
@@ -286,8 +303,8 @@ export async function EmployeeApproveLoanUsecase(loanId:string, status:$Enums.Lo
             }
             
                 
-                
             default:
+                console.log(status)
                 const resUpdateLoanDecline = await UpdateLoanStatusRepo(beforeUpdatedData.loanId, status, new Date(), endDate)
                 
                 
@@ -299,16 +316,18 @@ export async function EmployeeApproveLoanUsecase(loanId:string, status:$Enums.Lo
                         loanPayment: undefined
                     }
                 }
+                console.log(resUpdateLoanDecline)
                 return {
-                error: undefined,
-                loan: resUpdateLoanDecline,
-                loanPayment: loanPaymentRes,
-                deposit: resDeposit
-            }
+                    error: undefined,
+                    loan: resUpdateLoanDecline,
+                    loanPayment: null,
+                    deposit: null
+                }
             
     }
 
 }
+
 
 
 

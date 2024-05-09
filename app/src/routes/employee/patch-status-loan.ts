@@ -23,7 +23,7 @@ const ValidateSignin = {
             }
             default:
                 return {
-                    msg: error
+                    msg: error || "Failed to do the action"
                 }
         }
     },
@@ -31,13 +31,12 @@ const ValidateSignin = {
 
 export const approveLoan = new Elysia()
     .use(isEmployeeAuthenticated)
-    .patch("/approve-loan",
+    .patch("/patch-status-loan",
         async function ApproveLoanHttpHandler({
             body,
             set,
             employeeDecrypt,
         }) {
-            
             if(!employeeDecrypt || (employeeDecrypt.position !== "manager" && employeeDecrypt.position !== "owner")){
                 set.status = 401;
                 return {
@@ -56,9 +55,7 @@ export const approveLoan = new Elysia()
                     msg:"Loan Type incorrect type"
                 }
             }
-
             const {error, deposit, loan, loanPayment, } = await EmployeeApproveLoanUsecase(body.loanId, body.status, body.type)  
-            
             if(error !== undefined){
                 set.status = 400;
                 return {

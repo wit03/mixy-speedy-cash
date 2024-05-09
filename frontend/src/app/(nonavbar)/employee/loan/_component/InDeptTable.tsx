@@ -1,9 +1,15 @@
-export default function InDeptTable({
+import { Loan } from "@/app/type/loan";
+import { formatTime } from "@/utils/convertTime";
+import Link from "next/link";
 
+export default function InDeptTable({
+    loanData,
+    handleUpdateStatus
 }: {
+    loanData:Loan[];
+    handleUpdateStatus(loanId: string, loanStatus: string, oldType:string, loanType: string): Promise<void>
 
 }) {
-
     return (
 
         <>
@@ -29,9 +35,6 @@ export default function InDeptTable({
                                     Type
                                 </th>
                                 <th scope="col" className="px-3 py-4 text-base font-medium text-gray-700 uppercase font-rubik">
-                                    Installment
-                                </th>
-                                <th scope="col" className="px-3 py-4 text-base font-medium text-gray-700 uppercase font-rubik">
                                     Interest
                                 </th>
                                 <th scope="col" className="px-3 py-4 text-base font-medium text-gray-700 uppercase font-rubik">
@@ -44,50 +47,46 @@ export default function InDeptTable({
                         </thead>
 
                         <tbody>
+                        {loanData.length !== 0 && loanData.map((item, i ) => (
                             <tr className="bg-white border-b text-slate-800">
                                 <td scope="row" className="px-3 py-4 font-medium ">
                                     <p className="text-sm font-normal">
-                                        Account Number
+                                         {item.account.accountId}
                                     </p>
                                 </td>
 
                                 <td className="px-3 py-4">
                                     <p className="text-sm font-normal">
-                                        Account Name
+                                       {item.account.customer.firstName + " " + item.account.customer.lastName}
                                     </p>
                                 </td>
 
                                 <td className="px-3 py-4">
                                     <p className="text-sm font-normal">
-                                        Requested At
+                                    {formatTime(item.createdAt)}
                                     </p>
                                 </td>
 
                                 <td className="px-3 py-4">
                                     <p className="text-sm font-normal">
-                                        Amount
+                                          {item.loanAmount}
                                     </p>
                                 </td>
 
                                 <td className="px-3 py-4">
                                     <p className="text-sm font-normal">
-                                        Type
+                                      {item.loanType}
                                     </p>
                                 </td>
 
                                 <td className="px-3 py-4">
                                     <p className="text-sm font-normal">
-                                        Installment
-                                    </p>
-                                </td>
-                                <td className="px-3 py-4">
-                                    <p className="text-sm font-normal">
-                                        Interest
+                                      {item.interestRate} %
                                     </p>
                                 </td>
                                 <td className="px-3 py-4">
                                     <div className="flex items-center gap-2 w-fit relative border p-2 rounded-md">
-                                        <select className="appearance-none outline-none ">
+                                    <select onChange={(e:React.ChangeEvent<HTMLSelectElement>) => handleUpdateStatus(item.loanId, e.target.value, item.loanStatus, item.loanType)} value={item.loanStatus}  className="appearance-none outline-none ">
                                             <option value={"waiting"}>Waiting</option>
                                             <option value={"onProcess"}>OnProcess</option>
                                             <option value={"inDebt"}>InDebt</option>
@@ -99,10 +98,16 @@ export default function InDeptTable({
                                 </td>
                               
                                 <td className="px-3 py-4">
+                                <Link
+                                 href={`/employee/loan-payment/${item.loanId}`}
+                                 className="hover:text-blue-500 text-sm font-normal"
+                                 >
                                     View
+                                 </Link>
                                 </td>
 
                             </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>

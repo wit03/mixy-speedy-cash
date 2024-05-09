@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Rubik, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
 
 const interFont = Inter({
   subsets: ['latin'],
@@ -34,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-[#F5F5F5]">
       <body className={`flex flex-col ${interFont.variable} ${rubikFont.variable} ${plexMonoFont.variable} `}>
-        
+        <Toaster />
         {children}
         
         

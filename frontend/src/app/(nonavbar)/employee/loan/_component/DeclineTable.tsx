@@ -1,7 +1,12 @@
+import { Loan } from "@/app/type/loan";
+import { formatTime } from "@/utils/convertTime";
+
 export default function DeclineTable({
-
+    loanData,
+    handleUpdateStatus
 }: {
-
+    loanData:Loan[];
+    handleUpdateStatus(loanId: string, loanStatus: string, oldType:string, loanType: string): Promise<void>
 }) {
 
     return (
@@ -34,68 +39,62 @@ export default function DeclineTable({
                                 <th scope="col" className="px-3 py-4 text-base font-medium text-gray-700 uppercase font-rubik">
                                     Interest
                                 </th>
-                                <th scope="col" className="px-3 py-4 text-base font-medium text-gray-700 uppercase font-rubik">
-                                    Status
-                                </th>
+                            
                             </tr>
                         </thead>
 
                         <tbody>
-                            <tr className="bg-white border-b text-slate-800">
-                                <td scope="row" className="px-3 py-4 font-medium ">
-                                    <p className="text-sm font-normal">
-                                        Account Number
-                                    </p>
-                                </td>
+                          {loanData && loanData.map((item, i ) => (
+                              <tr className="bg-white border-b text-slate-800">
+                              <td scope="row" className="px-3 py-4 font-medium ">
+                                  <p className="text-sm font-normal">
+                                      {item.account.accountId}
+                                  </p>
+                              </td>
 
-                                <td className="px-3 py-4">
-                                    <p className="text-sm font-normal">
-                                        Account Name
-                                    </p>
-                                </td>
+                              <td className="px-3 py-4">
+                                  <p className="text-sm font-normal">
+                                      {item.account.customer.firstName + " " + item.account.customer.lastName}
+                                  </p>
+                              </td>
 
-                                <td className="px-3 py-4">
-                                    <p className="text-sm font-normal">
-                                        Requested At
-                                    </p>
-                                </td>
+                              <td className="px-3 py-4">
+                                  <p className="text-sm font-normal">
+                                     {formatTime(item.createdAt)}
+                                  </p>
+                              </td>
 
-                                <td className="px-3 py-4">
-                                    <p className="text-sm font-normal">
-                                        Amount
-                                    </p>
-                                </td>
+                              <td className="px-3 py-4">
+                                  <p className="text-sm font-normal">
+                                       {item.loanAmount}
+                                  </p>
+                              </td>
 
-                                <td className="px-3 py-4">
-                                    <p className="text-sm font-normal">
-                                        Type
-                                    </p>
-                                </td>
+                              <td className="px-3 py-4">
+                                  <p className="text-sm font-normal">
+                                      {item.loanType}
+                                  </p>
+                              </td>
 
-                                <td className="px-3 py-4">
-                                    <p className="text-sm font-normal">
-                                        Installment
-                                    </p>
-                                </td>
-                                <td className="px-3 py-4">
-                                    <p className="text-sm font-normal">
-                                        Interest
-                                    </p>
-                                </td>
-                                <td className="px-3 py-4">
-                                    <div className="flex items-center gap-2 w-fit relative border p-2 rounded-md">
-                                        <select className="appearance-none outline-none ">
-                                            <option value={"waiting"}>Waiting</option>
-                                            <option value={"onProcess"}>OnProcess</option>
-                                            <option value={"inDebt"}>InDebt</option>
-                                            <option value={"decline"}>Decline</option>
-                                        </select>
-
-                                        <svg fill="#000000" height="12px" width="12px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 330" ><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path id="XMLID_225_" d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393 c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393 s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z"></path> </g></svg>
-                                    </div>
-                                </td>
-                              
-                            </tr>
+                              <td className="px-3 py-4">
+                                  <p className="text-sm font-normal">
+                                     {item.interestRate} %
+                                  </p>
+                              </td>
+                              <td className="px-3 py-4">
+                                  <div className="flex items-center gap-2 w-fit relative border p-2 rounded-md">
+                                  <select onChange={(e:React.ChangeEvent<HTMLSelectElement>) => handleUpdateStatus(item.loanId, e.target.value, item.loanStatus, item.loanType)} value={item.loanStatus}  className="appearance-none outline-none ">
+                                          <option value={"waiting"}>Waiting</option>
+                                          <option value={"onProcess"}>OnProcess</option>
+                                          <option value={"inDebt"}>InDebt</option>
+                                          <option value={"decline"}>Decline</option>
+                                      </select>
+                                      <svg fill="#000000" height="12px" width="12px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 330" ><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path id="XMLID_225_" d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393 c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393 s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z"></path> </g></svg>
+                                  </div>
+                              </td>
+                            
+                          </tr>
+                          ))}
                         </tbody>
                     </table>
                 </div>

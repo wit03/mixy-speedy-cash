@@ -17,6 +17,7 @@ export async function ListLoanByAccountIdRepo(accountId:string) {
                 loanStatus: true,
                 endDate: true,
                 startDate: true,
+                responsibleEmployeeId: true,
             }
         })
     } catch (_) {
@@ -197,6 +198,7 @@ export async function UpdateLoanStatusRepo(loanId:string, status:$Enums.LoanStat
                 endDate: true,
                 loanAmount: true,
                 interestRate: true,
+                loanType: true
             }
         })
 
@@ -259,13 +261,40 @@ export async function ListLoanByTypeRepo(status:SearchLoanStatus) {
                         }
                     }
                 },
+                loanType: true,
                 loanStatus: true,
                 createdAt: true,
                 loanAmount: true,
                 loanId: true,
+                interestRate: true,
+                responsibleEmployeeId: true,
             },
             orderBy:{
                 createdAt: "desc",
+            }
+        })
+    } catch (_) {
+        return undefined
+    }
+}
+
+export async function FindLoanPaymentRepo(loanId:string) {
+    try {
+        return await db.loanPayment.findMany({
+            where:{
+                loanId: loanId,
+            },
+            select:{
+                loanId: true,
+                loanPaymentId: true,
+                paidDate: true,
+                paidStatus: true,
+                createdAt: true,
+                interestPercent: true,
+                paidAmount: true,
+                paymentAmount: true,
+                principalAmount: true,
+                scheduledPaymentDate: true,
             }
         })
     } catch (_) {

@@ -93,3 +93,41 @@ export async function CountCustomerAndAccount(): Promise<{ totalCustomers: numbe
 }
 
 
+
+
+export async function ListAllEmployeeRepo() {
+    try {
+        return await db.employee.findMany({
+            where:{
+                position:"employee"
+            },
+            select:{
+                firstName: true,
+                lastName: true,
+                employeeId: true,
+            }
+        })
+    } catch (_) {
+        return undefined
+    }
+}
+
+export async function AssignEmployeeRepo(loanId:string, employeeId:string) {
+    try {
+        return await db.loan.update({
+            where:{
+                loanId: loanId,
+            },
+            data:{
+                responsibleEmployeeId: employeeId
+            },
+            select:{
+                responsibleEmployeeId: true,
+                loanId: true
+            }
+        })
+
+    } catch (_) {
+        return undefined
+    }
+}
