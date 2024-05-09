@@ -175,6 +175,35 @@ export async function FindTransactionByConditionRepo(search:string, transactionT
         
         return await db.transaction.findMany({
             where: whereCondition,
+            select:{
+                transactionId: true,
+                detail: true,
+                accountReciever:{
+                    select:{
+                        customer:{
+                            select:{
+                                firstName: true,
+                                lastName: true,
+                            }
+                        }
+                    }
+                },
+                accountSender:{
+                    select:{
+                        customer:{
+                            select:{
+                                firstName: true,
+                                lastName: true,
+                            }
+                        }
+                    }
+                },
+                transactionType: true,
+                amount: true,
+                transactionDate: true,
+                updatedAt: true,
+
+            }
         });
 
     } catch (_) {

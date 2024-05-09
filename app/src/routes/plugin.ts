@@ -23,6 +23,7 @@ import { approveLoan } from "./employee/patch-status-loan";
 import { ListEmployee } from "./employee/list-employee";
 import { AssignEmployee } from "./employee/assign-employee";
 import { listLoanPayment } from "./employee/employee-list-loan-payment";
+import { employeeShowCustomerDetail } from "./employee/show-customer-detail";
 
 export const auth = new Elysia({
   prefix: "/customer",
@@ -47,6 +48,7 @@ export const employee = new Elysia({
   .use(ListEmployee)
   .use(AssignEmployee)
   .use(listLoanPayment)
+  .use(employeeShowCustomerDetail)
 
 
 export const transfer = new Elysia({

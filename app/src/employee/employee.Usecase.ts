@@ -330,7 +330,6 @@ export async function EmployeeApproveLoanUsecase(loanId:string, status:$Enums.Lo
 
 
 
-
 function helperCalculateLoanPayment(items: {
     paidAmount: number;
     createdAt: Date;
@@ -361,4 +360,5 @@ function helperCalculateLoanPayment(items: {
     return classifiedObject
 
 }
+
 

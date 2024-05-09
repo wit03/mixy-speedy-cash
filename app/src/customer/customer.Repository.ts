@@ -120,3 +120,36 @@ export async function FindCustomerBySearch(search:string) {
         return undefined
     }
 }
+
+
+export async function EmployeeGetCustomerDetailRepo(customerId:string) {
+    try {
+        return await db.customer.findFirst({
+            where:{
+                customerId: customerId
+            },
+            select:{
+                customerId: true,
+                firstName: true,
+                lastName: true,
+                dateOfBirth: true,
+                phoneNumber: true,
+                career: true,
+                salary: true,
+                email: true,
+                address: true,
+                createdAt: true,
+                customerType: true,
+                account:{
+                    select:{
+                        accountId: true,
+                        createdAt: true,
+                        balance: true                    
+                    }
+                }
+            }
+        })
+    } catch (_) {
+        return undefined
+    }
+}
