@@ -9,11 +9,11 @@ export const currentEmployee = new Elysia()
         "/current-employee",
     async function CurrentUserHttpHandler({
         set,
-        cookie: {auth},
+        cookie: {employeeAuth},
         jwtEmployee
     }) {
         
-        const token:string | undefined = auth?.value || undefined
+        const token:string | undefined = employeeAuth?.value || undefined
         set.status = 200
     
         if(!token || token.length === 0){

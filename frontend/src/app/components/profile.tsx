@@ -1,15 +1,22 @@
 "use client"
-const Profile = () => {
+
+import { CustomerData } from "@/provider/CustomerContext";
+
+const Profile = ({
+    customer
+}:{
+    customer:CustomerData
+}) => {
 
     return (
         <div className="flex flex-row font-rubik justify-center items-center">
             <div className="relative mr-4">
                 <svg className="" xmlns="http://www.w3.org/2000/svg" width="66" height="66" viewBox="0 0 66 66" fill="none">
-                    <circle className="z-10" cx="33" cy="33" r="32" stroke="url(#paint0_linear_5_40)" stroke-width="2" />
+                    <circle className="z-10" cx="33" cy="33" r="32" stroke="url(#paint0_linear_5_40)" strokeWidth="2" />
                     <defs className="z-10">
                         <linearGradient id="paint0_linear_5_40" x1="0" y1="0" x2="72.3508" y2="4.37567" gradientUnits="userSpaceOnUse">
-                            <stop stop-color="#133FDB" />
-                            <stop offset="1" stop-color="#B7004D" stop-opacity="0.3" />
+                            <stop stopColor="#133FDB" />
+                            <stop offset="1" stopColor="#B7004D" stopOpacity="0.3" />
                         </linearGradient>
                     </defs>
                 </svg>
@@ -22,7 +29,7 @@ const Profile = () => {
 
                 <div className="absolute top-[3px] z-50 -right-[0px]">
                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
-                        <circle cx="6.5" cy="6.5" r="5.5" fill="#DB1337" stroke="white" stroke-width="2" />
+                        <circle cx="6.5" cy="6.5" r="5.5" fill="#DB1337" stroke="white" strokeWidth="2" />
                     </svg>
                 </div>
             </div>
@@ -31,7 +38,7 @@ const Profile = () => {
                     Good Morning
                 </div>
                 <div className="text-2xl font-normal">
-                    Jarukit
+                    {customer.firstName}
                 </div>
             </div>
 

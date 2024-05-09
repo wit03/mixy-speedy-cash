@@ -58,7 +58,7 @@ const Transfer = () => {
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center">
                     <Link className="bg-[#CB6F6F] text-white text-lg font-medium p-2 rounded-full" href="/">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" className="w-8 h-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-8 h-8">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                         </svg>
                     </Link>
@@ -67,7 +67,7 @@ const Transfer = () => {
                 <div className="flex items-center">
                     <div className="mr-2 text-lg">Continue</div>
                     <Link className="bg-[#B2B2B2] text-white text-lg font-medium p-2 rounded-full" href="/transfer/amount">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" className="w-8 h-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-8 h-8">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                         </svg>
                     </Link>

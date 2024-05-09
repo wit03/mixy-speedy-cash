@@ -1,3 +1,4 @@
+
 export default function Layout({
   children,
 }: Readonly<{
@@ -5,7 +6,9 @@ export default function Layout({
 }>) {
   return (
         <div className="min-h-screen">
-        {children}
+         
+            {children}
+         
         </div>
   );
 }
