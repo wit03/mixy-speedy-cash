@@ -1,4 +1,4 @@
-import { $Enums, LoanPayment } from "@prisma/client";
+import { $Enums, LoanPayment, LoanType } from "@prisma/client";
 import { DeleteLoanPaymentRepo, FindLoanDataWithLoanIdRepo, FindProfitLoanRepo, InsertManyLoanPayment, ListLoanByTypeRepo, UpdateLoanStatusRepo } from "../loan/loan.repository";
 import { CountAndSumTransactionRepo, FindTransactionByConditionRepo } from "../transaction/transaction.Repository";
 import { CountCustomerAndAccount, FindEmployeeByEmailRepo, FindEmployeeByIdRepo} from "./employee.Repository";
@@ -6,6 +6,7 @@ import { InsertEmployeeRepo } from "./employee.Repository";
 import { EmployeeRegisterReq , EmployeeSigninReq, TransactionSearchCondition} from "./employee.type";
 import { DepositBalanceRepo, FindManyAccountDataByCustomerId } from "../account/account.Repository";
 import { FindCustomerBySearch } from "../customer/customer.Repository";
+import { SearchLoanStatus } from "../loan/loan.type";
 
 export async function EmployeeSignUp(body:EmployeeRegisterReq) {
 
@@ -144,7 +145,7 @@ export async function EmployeeSearchCustomerDetail(search:string) {
 
 
 // for employee to list the loans to make an improvement
-export async function EmployeeListLoanUsecase(status:$Enums.LoanStatus) {
+export async function EmployeeListLoanUsecase(status:SearchLoanStatus) {
 
     const resLoans = await ListLoanByTypeRepo(status)
     if(!resLoans){
@@ -153,9 +154,37 @@ export async function EmployeeListLoanUsecase(status:$Enums.LoanStatus) {
             loans: null
         }
     }
+
+
+    const loanMap: {
+        [loanType:string]:{
+            createdAt: Date;
+            account: {
+                customer: {
+                    firstName: string;
+                    lastName: string;
+                };
+                accountId: string;
+            };
+            loanId: string;
+            loanAmount: number;
+            loanStatus: $Enums.LoanStatus;
+        }[]
+    } = {};
+
+    resLoans.forEach((loan) => {
+        const loanStatus = loan.loanStatus
+        if(!loanMap[loanStatus]){
+            loanMap[loanStatus] = []
+        }
+
+        loanMap[loanStatus].push(loan)
+
+    })
+
     return {
         error: undefined,
-        loans: resLoans
+        loans: loanMap
     }
 }
 

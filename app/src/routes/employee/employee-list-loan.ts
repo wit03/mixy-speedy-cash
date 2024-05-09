@@ -1,8 +1,6 @@
 import { Elysia, t } from "elysia";
-import { EmployeeListLoanUsecase, ListTransactionByCondition } from "../../employee/employee.Usecase";
+import { EmployeeListLoanUsecase } from "../../employee/employee.Usecase";
 import { isEmployeeAuthenticated } from "../../middleware/authen";
-import { ListLoanByTypeRepo } from "../../loan/loan.repository";
-
 
 const ValidateManagerReport = {
     query: t.Object({
@@ -32,7 +30,7 @@ export const listLoan = new Elysia()
                     msg: "Unauthorized"
                 }
             }
-            else if(!status || (status !== "waiting" && status !== "onProcess" && status !== "inDebt" && status !== "decline")){
+            else if(!status || (status !== "waiting" && status !== "onProcess" && status !== "inDebt" && status !== "decline" && status !== "all")){
                 set.status = 400
                 return {
                     msg: "status is required or wrong format"

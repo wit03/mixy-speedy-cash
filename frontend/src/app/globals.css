@@ -3,3 +3,18 @@
 @tailwind utilities;
 
 
+.scrollbar-small::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+    background: inherit;
+}
+  
+.scrollbar-medium::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background: inherit;
+}
+  
+.scrollbar-thumb::-webkit-scrollbar-thumb {
+    background-color: #4E15DA;
+}

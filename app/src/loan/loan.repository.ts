@@ -1,6 +1,6 @@
 import { $Enums, LoanPayment } from "@prisma/client";
 import { db } from "..";
-import { InsertLoanType, InsertManyLoanPaymentType } from "./loan.type";
+import { InsertLoanType, InsertManyLoanPaymentType, SearchLoanStatus } from "./loan.type";
 
 
 export async function ListLoanByAccountIdRepo(accountId:string) {
@@ -234,12 +234,19 @@ export async function FindProfitLoanRepo(time:Date) {
     }
 }
 
-export async function ListLoanByTypeRepo(status:$Enums.LoanStatus) {
+export async function ListLoanByTypeRepo(status:SearchLoanStatus) {
     try {
+
+        let whereStatement = {}
+
+        if(status !== "all"){
+            whereStatement = {
+                loanStatus: status   
+            }
+        }
+
         return await db.loan.findMany({
-            where:{
-                loanStatus: status
-            },
+            where: whereStatement,
             select:{
                 account:{
                     select:{
