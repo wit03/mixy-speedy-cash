@@ -1,6 +1,6 @@
 import { $Enums, LoanPayment } from "@prisma/client";
 import { db } from "..";
-import { InsertLoanType, InsertManyLoanPaymentType } from "./loan.type";
+import { InsertLoanType, InsertManyLoanPaymentType, SearchLoanStatus } from "./loan.type";
 
 
 export async function ListLoanByAccountIdRepo(accountId:string) {
@@ -66,14 +66,34 @@ export async function ListLoanPaymentRepo(loanId:string) {
     }
 }
 
-export async function InsertLoanRepo(body: InsertLoanType, endDate: Date, accountId: string) {
+export async function FindLoanDataWithLoanIdRepo(loanId:string) {
+    try {
+        return await db.loan.findFirst({
+            where:{
+                loanId: loanId
+            },
+            select:{
+                loanId: true,
+                loanStatus: true,
+                startDate: true,
+                endDate: true,
+                loanAmount: true,
+                interestRate: true,
+                accountId: true
+            }
+        })
+    } catch (_) {
+        return undefined
+    }
+}
+
+export async function InsertLoanRepo(body: InsertLoanType, accountId: string) {
     try {
         return await db.loan.create({
             data:{
-                endDate: endDate,
                 interestRate: body.interestRate,
                 loanAmount: body.loanAmount,
-                loanStatus: "onProcess",
+                loanStatus: "waiting",
                 loanType: body.loanType,
                 accountId: accountId,
             },
@@ -129,7 +149,7 @@ export async function DeleteLoanPaymentRepo(loanId:string) {
     }
 }
 
-
+// for customer paying loan
 export async function UpdateLoanPayment(loanPaymentId: string, loanId:string, paidAmount:number, paidDate:string | null, paidStatus:$Enums.PaidStatus) {
     try {
         return await db.loanPayment.update({
@@ -151,6 +171,103 @@ export async function UpdateLoanPayment(loanPaymentId: string, loanId:string, pa
                 paidStatus: true,
             }
         })       
+    } catch (_) {
+        return undefined
+    }
+}
+
+
+// for employee approvement loan
+export async function UpdateLoanStatusRepo(loanId:string, status:$Enums.LoanStatus, startDate:Date | null, endDate:Date | null) {
+    try {
+        
+        return await db.loan.update({
+            where:{
+                loanId: loanId,
+            },
+            data:{
+                loanStatus: status,
+                startDate: startDate,
+                endDate: endDate
+            },
+            select:{
+                loanId: true,
+                loanStatus: true,
+                startDate: true,
+                endDate: true,
+                loanAmount: true,
+                interestRate: true,
+            }
+        })
+
+    } catch (_) {
+        return undefined
+    }
+}
+
+// for manager report
+export async function FindProfitLoanRepo(time:Date) {
+    try {
+        return await db.loanPayment.findMany({
+            where: {
+              AND: [
+                { 
+                    createdAt: {
+                       gte: time.toISOString(),
+                    }
+                },
+                {
+                    paidAmount:{
+                        not: 0,
+                    }
+                }
+              ]
+            },
+            select:{
+                paidAmount: true,
+                createdAt: true,
+            }
+          });
+
+    } catch (_) {
+        return undefined
+    }
+}
+
+export async function ListLoanByTypeRepo(status:SearchLoanStatus) {
+    try {
+
+        let whereStatement = {}
+
+        if(status !== "all"){
+            whereStatement = {
+                loanStatus: status   
+            }
+        }
+
+        return await db.loan.findMany({
+            where: whereStatement,
+            select:{
+                account:{
+                    select:{
+                        accountId: true,
+                        customer:{
+                            select:{
+                                firstName: true,
+                                lastName: true,
+                            }
+                        }
+                    }
+                },
+                loanStatus: true,
+                createdAt: true,
+                loanAmount: true,
+                loanId: true,
+            },
+            orderBy:{
+                createdAt: "desc",
+            }
+        })
     } catch (_) {
         return undefined
     }

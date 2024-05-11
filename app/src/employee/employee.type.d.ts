@@ -1,4 +1,4 @@
-import { EmployeeType } from "@prisma/client";
+import { $Enums, EmployeeType } from "@prisma/client";
 
 export interface Employee {
     EmployeeId: string;
@@ -24,9 +24,13 @@ export interface EmployeeRegisterReq {
     phoneNumber:string;
     address: string;
     salary:number;
+    position: $Enums.Position
 }
+
 
 export interface EmployeeSigninReq {
     email:string;
     password:string;
 }
+
+export type TransactionSearchCondition =  "loan" | "transfer" | "all"

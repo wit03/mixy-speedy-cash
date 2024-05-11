@@ -39,7 +39,7 @@ export const addAccount = new Elysia()
                 set.status = 400;
                 return {
                     msg:error || "create new account failed",
-                    account: undefined
+                    account: null
                 }
             }            
 

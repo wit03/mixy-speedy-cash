@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import Register1 from "./_component/Register1";
 import Register2 from "./_component/Register2";
@@ -26,35 +26,24 @@ const Register = () => {
         Register
       </div>
 
-      {page === 1 && (
-        <div className="flex h-full">
-          <Register1 onNextButtonClick={handleNextButtonClick} />
-        </div>
-      )}
-
-      {page === 2 && (
-        <div className="flex h-full">
-          <Register2
-            onNextButtonClick={handleNextButtonClick}
-            onPreviousButtonClick={handlePreviousButtonClick}
-          />
-        </div>
-      )}
-
-      {page === 3 && (
-        <div className="flex h-full">
-          <Register3
-            onNextButtonClick={handleNextButtonClick}
-            onPreviousButtonClick={handlePreviousButtonClick}
-          />
-        </div>
-      )}
-
-      {page === 4 && (
-        <div className="flex h-full">
-          <Register4 />
-        </div>
-      )}
+      <div className={page === 1 ? "flex h-full" : "hidden"}>
+        <Register1 onNextButtonClick={handleNextButtonClick} />
+      </div>
+      <div className={page === 2 ? "flex h-full" : "hidden"}>
+        <Register2
+          onNextButtonClick={handleNextButtonClick}
+          onPreviousButtonClick={handlePreviousButtonClick}
+        />
+      </div>
+      <div className={page === 3 ? "flex h-full" : "hidden"}>
+        <Register3
+          onNextButtonClick={handleNextButtonClick}
+          onPreviousButtonClick={handlePreviousButtonClick}
+        />
+      </div>
+      <div className={page === 4 ? "flex h-full" : "hidden"}>
+        <Register4 />
+      </div>
     </div>
   );
 };

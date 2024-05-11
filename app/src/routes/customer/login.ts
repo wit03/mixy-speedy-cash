@@ -42,7 +42,7 @@ export const login = new Elysia()
                 set.status = 401;
                 return {
                     msg:error || "Email or password is incorrect",
-                    customer: undefined
+                    customer: null
                 }
             }
             if (customer) {
@@ -54,7 +54,7 @@ export const login = new Elysia()
                     set.status = 401;
                     return {
                         msg: "Get oldest account failed",
-                        customer: undefined,
+                        customer: null,
                     }
                 }
                 currentAccount.set({
@@ -62,6 +62,7 @@ export const login = new Elysia()
                     httpOnly: false,
                     maxAge: 7 * 86400,
                     path: '/',
+                    domain: "http://localhost:8080/"
                 })
                 // }
                 
@@ -81,7 +82,7 @@ export const login = new Elysia()
             else {
                 return {
                     msg: "no data found",
-                    customer: undefined
+                    customer: null
                 }
             }
         },

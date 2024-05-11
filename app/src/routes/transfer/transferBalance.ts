@@ -38,18 +38,24 @@ export const transferBalance = new Elysia()
             if (!customerDecrypt || !customerDecrypt.customerId || !currentAccount.value) {
                 set.status = 401
                 return {
-                    msg: "Unauthorized"
+                    msg: "Unauthorized",
+                    balanceLeft: null,
+                    senderData: null,
+                    recieverData: null,
                 }
             }
-
+            
             const { customerId: senderCustomerId } = customerDecrypt
             const { amount, reciever: recieverAccountId, pin } = body
-
+            
             const { error, senderData, recieverData } = await HandleTransferBalance(senderCustomerId, recieverAccountId, currentAccount.value.toString(), amount, pin)
             if (error !== undefined || senderData === undefined || recieverData === undefined) {
                 set.status = 400
                 return {
-                    msg: error || "failed to transfer the money"
+                    msg: error || "failed to transfer the money",
+                    balanceLeft: null,
+                    senderData: null,
+                    recieverData: null,
                 }
             }
             set.status = 200

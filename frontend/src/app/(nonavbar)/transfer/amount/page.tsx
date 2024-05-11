@@ -6,9 +6,10 @@ import Link from "next/link"
 import Balance from "../../../components/balance"
 import ReceiverCard from "./../_components/receiver"
 import AddrField from "./../_components/addrField"
+import AmountField from "../_components/amountField"
 
 const Transfer = () => {
-    const [receiver, setReceiver] = useState<number>()
+    const [Amount, setAmount] = useState<number>()
 
     const favoriteList = [
         {
@@ -38,17 +39,18 @@ const Transfer = () => {
             <div className="flex flex-col">
                 <h1 className="text-xl font-medium my-4 text-[#333333] mx-auto">Transfer</h1>
                 <div className="text-medium text-lg text-[#8B9193]">From</div>
-                <div className="my-6">
+                <div className="my-4">
                     <Balance />
                 </div>
-                <div className="text-medium text-lg text-[#8B9193] mb-2">To</div>
+                <div className="text-medium text-lg text-[#8B9193] mb-4">To</div>
 
                 <div className="w-full bg-white rounded-2xl text-center py-16">
                     Receiver Card
                 </div>
 
-                <div className="text-medium text-lg text-[#8B9193] mb-2">Amount</div>
-                
+                <div className="text-medium text-lg text-[#8B9193] mt-4">Amount</div>
+                <AmountField setAmount={setAmount} Amount={Amount} />
+
             </div>
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center">

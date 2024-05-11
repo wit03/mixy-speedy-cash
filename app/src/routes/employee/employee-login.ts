@@ -1,5 +1,5 @@
 import { Elysia, t } from "elysia";
-import { jwtAccessSetup } from "../setup";
+import { jwtAccessSetup, jwtEmployeeSetup } from "../setup";
 import { EmployeeSignIn } from "../../employee/employee.Usecase";
 import { EmployeeSigninReq } from "../../employee/employee.type";
 
@@ -14,24 +14,28 @@ const ValidateSignin = {
             minLength: 2,
         }),
     }),
-    error({ code }: { code: string }) {
+    error({ code,error }: { code: string, error:any }) {
         switch (code) {
             case 'P2002':
                 return {
-                    error: 'Email must be unique'
+                    msg: 'Email must be unique'
+            }
+            default:
+                return {
+                    msg: error
                 }
         }
     },
 }
 
 export const employeeLogin = new Elysia()
-    .use(jwtAccessSetup)
+    .use(jwtEmployeeSetup)
     .post("/sign-in",
         async function SignInHttpHandler({
             body,
             set,
-            cookie: { auth, currentAccount },
-            jwtAccess,
+            cookie: { employeeAuth },
+            jwtEmployee
         }) {
 
             const {employee, error} = await EmployeeSignIn(body as EmployeeSigninReq)
@@ -39,18 +43,18 @@ export const employeeLogin = new Elysia()
                 set.status = 401;
                 return {
                     msg:error || "Email or password is incorrect",
-                    employee: undefined
+                    employee: null
                 }
             }
             if (employee) {
                 
                 set.status = 200;
-                // auth.set({
-                //     value: await jwtAccess.sign(employee),
-                //     httpOnly: false,
-                //     maxAge: 7 * 86400,
-                //     path: '/',
-                // })
+                employeeAuth.set({
+                    value: await jwtEmployee.sign(employee),
+                    httpOnly: false,
+                    maxAge: 7 * 86400,
+                    path: '/',
+                })
                 
                 return {
                     msg: "ok",

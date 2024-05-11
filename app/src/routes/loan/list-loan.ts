@@ -16,9 +16,7 @@ export const ListsLoan = new Elysia()
     .get("/list-loans",
         async function ListsLoan({
             set,
-            cookie: { currentAccount, auth },
-            customerDecrypt,
-
+            cookie: { currentAccount },
         }) {
 
             const {error, listLoan} = await ListLoans(String(currentAccount.value))
@@ -26,7 +24,7 @@ export const ListsLoan = new Elysia()
                 set.status = 400
                 return {
                     msg:error || "List loan payment failed",
-                    loans: undefined,
+                    loans: null,
                 }
             }
 

@@ -50,14 +50,12 @@ export const CreateLoan = new Elysia()
                 }
             }
             
-            const {error, loan, loanPayment, resDeposit} = await InsertLoanUsecase(body as InsertLoanType, String(currentAccount.value), customerDecrypt.customerId)
+            const {error, loan} = await InsertLoanUsecase(body as InsertLoanType, String(currentAccount.value), customerDecrypt.customerId)
             if(error !== undefined){
                 set.status = 400
                 return {
                     msg:error || "",
-                    loan: undefined,
-                    loanPayment: undefined,
-                    deposit: undefined,
+                    loan: null,
                 }
             }
             else {
@@ -65,8 +63,6 @@ export const CreateLoan = new Elysia()
                 return {
                     msg:"Ok",
                     loan: loan,
-                    loanPayment: loanPayment,
-                    deposit: resDeposit,
                 }
             }
 

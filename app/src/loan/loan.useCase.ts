@@ -14,83 +14,65 @@ export async function InsertLoanUsecase(body: InsertLoanType, accountId:string, 
         return {
             error: "unathorized",
             loan: undefined,
-            loanPayment: undefined,
-            resDeposit: undefined
+            // loanPayment: undefined,
         }
     }
 
 
     const nextMonth = new Date();
     // calculate end month of the loan
-    let endMonth = new Date()
-    endMonth.setDate(endMonth.getDate() + (body.installmentLength * 30))
-    const loanRes = await InsertLoanRepo(body, endMonth, accountId)
+    // let endMonth = new Date()
+    // endMonth.setDate(endMonth.getDate() + (body.installmentLength * 30))
+    const loanRes = await InsertLoanRepo(body, accountId)
     if(loanRes === undefined) {
         return {
             error: "Failed to create loan",
             loan: undefined,
-            loanPayment: undefined,
-            resDeposit: undefined
+            // loanPayment: undefined,
         }
     }
     
-    // calculate how much each loan payment should be paid
-    const loanPayments:Omit<LoanPayment, "loanPaymentId" | "createdAt" | "updatedAt" | "paidDate">[] = []
-    const interestPercent = body.interestRate; 
-    const loanAmount = body.loanAmount;
-    const paymentAmount = (loanAmount * 3) / 100
-    // nextMonth.setMonth(nextMonth.getMonth() + 1);
-    nextMonth.setDate(nextMonth.getDate() + 30);
+    // // calculate how much each loan payment should be paid
+    // const loanPayments:Omit<LoanPayment, "loanPaymentId" | "createdAt" | "updatedAt" | "paidDate">[] = []
+    // const interestPercent = body.interestRate; 
+    // const loanAmount = body.loanAmount;
+    // const paymentAmount = (loanAmount * 3) / 100
+    // // nextMonth.setMonth(nextMonth.getMonth() + 1);
+    // nextMonth.setDate(nextMonth.getDate() + 30);
 
-    for (let i = 0; i < body.installmentLength; i++) {
-        loanPayments.push({
-            interestPercent: interestPercent, 
-            loanId: loanRes.loanId,
-            paidAmount: 0,
-            paymentAmount: paymentAmount,
-            principalAmount: body.loanAmount,
-            scheduledPaymentDate: new Date(nextMonth),
-            paidStatus: "onProcess",
-        })
-        nextMonth.setDate(nextMonth.getDate() + 30);    
-    }
+    // for (let i = 0; i < body.installmentLength; i++) {
+    //     loanPayments.push({
+    //         interestPercent: interestPercent, 
+    //         loanId: loanRes.loanId,
+    //         paidAmount: 0,
+    //         paymentAmount: paymentAmount,
+    //         principalAmount: body.loanAmount,
+    //         scheduledPaymentDate: new Date(nextMonth),
+    //         paidStatus: "onProcess",
+    //     })
+    //     nextMonth.setDate(nextMonth.getDate() + 30);    
+    // }
 
-    loanPayments.forEach(element => { 
-        console.log(element.scheduledPaymentDate!.toDateString())
-    });
 
-    // insert loan payment
-    const loanPaymentRes = await InsertManyLoanPayment(loanPayments)
-    // if insert loan payment failed we going to delete loan repo
-    if(loanPaymentRes === undefined){
-        await DeleteLoanRepo(accountId)
-        return {
-            error: "Failed to create loan",
-            loan: undefined,
-            resDeposit: undefined,
-            loanPayment: undefined
-        }
-    }
+    // // insert loan payment
+    // const loanPaymentRes = await InsertManyLoanPayment(loanPayments)
+    // // if insert loan payment failed we going to delete loan repo
+    // if(loanPaymentRes === undefined){
+    //     await DeleteLoanRepo(accountId)
+    //     return {
+    //         error: "Failed to create loan",
+    //         loan: undefined,
+    //         resDeposit: undefined,
+    //         loanPayment: undefined
+    //     }
+    // }
     
-    // โอนเงิน
-    const resDeposit =  await DepositBalanceRepo(accountId, body.loanAmount)
-    // if failed to add balance to account we going to delete the loan and loan payment
-    if(resDeposit === undefined){
-        await DeleteLoanRepo(accountId)
-        await DeleteLoanPaymentRepo(accountId)
-        return {
-            error: "Failed to create loan",
-            loan: undefined,
-            loanPayment: undefined,
-            resDeposit: undefined
-        }
-    }
+
     
     return {
         error: undefined,
         loan: loanRes,
-        loanPayment: loanPaymentRes,
-        resDeposit: resDeposit
+        // loanPayment: loanPaymentRes,
     }
 }
 

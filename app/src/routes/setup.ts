@@ -22,3 +22,21 @@ export const jwtAccessSetup = new Elysia({
       exp: "7d",
     })
 );
+
+export const jwtEmployeeSetup = new Elysia({
+    name: "jwtEmployee",
+  }).use(
+    jwt({
+      name: "jwtEmployee",
+      schema: t.Object({
+        employeeId: t.String(),
+        position: t.String(),
+        lastName: t.String(),
+        firstName: t.String(),
+        email: t.String(),
+        phoneNumber: t.String(),
+      }),
+      secret: process.env.JWT_SECRET as string,
+      exp: "7d",
+    })
+);

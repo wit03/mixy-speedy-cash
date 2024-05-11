@@ -31,8 +31,8 @@ model Customer {
 
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @default(now())
-  Account       Account[]
-  Notifications Notification[]
+  account       Account[]
+  notifications Notification[]
 }
 
 enum CustomerType {
@@ -79,8 +79,8 @@ model Account {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @default(now())
 
-  AccountSender   Transaction[] @relation("AccountSender")
-  AccountReciever Transaction[] @relation("AccountReciever")
+  accountSender   Transaction[] @relation("accountSender")
+  accountReciever Transaction[] @relation("accountReciever")
   Loans           Loan[]
 }
 
@@ -101,22 +101,27 @@ model Loan {
   Employee              Employee? @relation(fields: [responsibleEmployeeId], references: [employeeId])
 
   accountId String
-  Account   Account @relation(fields: [accountId], references: [accountId])
+  account   Account @relation(fields: [accountId], references: [accountId])
 
   loanType     LoanType
   loanAmount   Float
   interestRate Float
   loanStatus   LoanStatus
 
-  endDate      DateTime
-  startDate    DateTime      @default(now())
+  endDate      DateTime?
+  startDate    DateTime?     
+  createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now())
 
-  LoanPayments LoanPayment[]
+  loanPayments LoanPayment[]
 }
 
 enum LoanType {
+  // normal is 3% interest 
+  // took 6 month to paid
   normal
+  // special is 3.5% interest 
+  // took 12 month to paid
   special
 }
 
@@ -124,6 +129,7 @@ enum LoanStatus {
   waiting
   onProcess
   inDebt 
+  decline
 }
 
 
@@ -161,10 +167,10 @@ model Transaction {
   transactionId String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   detail        String
   sender        String
-  AccountSender Account @relation("AccountSender", fields: [sender], references: [accountId])
+  accountSender Account @relation("accountSender", fields: [sender], references: [accountId])
 
-  reciever        String?
-  AccountReciever Account? @relation("AccountReciever", fields: [reciever], references: [accountId])
+  reciever        String
+  accountReciever Account @relation("accountReciever", fields: [reciever], references: [accountId])
 
   transactionType TransactionType @default(transfer)
   amount          Float
@@ -180,10 +186,10 @@ enum TransactionType {
 model Notification {
   notiId           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   reciever         String   @db.Uuid
-  CustomerReciever Customer @relation(fields: [reciever], references: [customerId])
+  customerReciever Customer @relation(fields: [reciever], references: [customerId])
 
   createdBy       String   @db.Uuid // employee
-  EmployeeCreated Employee @relation(fields: [createdBy], references: [employeeId])
+  employeeCreated Employee @relation(fields: [createdBy], references: [employeeId])
 
   text        String
   read        Boolean

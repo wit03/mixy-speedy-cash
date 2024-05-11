@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { Checkbox } from "@headlessui/react";
 import { useState } from "react";
 
@@ -25,6 +24,12 @@ const Register3 = ({ onPreviousButtonClick, onNextButtonClick }) => {
   const [enabled1, setEnabled1] = useState(false);
   const [enabled2, setEnabled2] = useState(false);
   const [enabled3, setEnabled3] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const allInputsFilled = email && password && confirmPassword && enabled1 && enabled2 && enabled3;
+
   return (
     <>
       <div className="flex flex-col h-full w-full justify-between">
@@ -49,57 +54,63 @@ const Register3 = ({ onPreviousButtonClick, onNextButtonClick }) => {
             <input
               type="text"
               className="self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             Password
             <input
               type="password"
               className="self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             Confirm Password
             <input
               type="password"
               className="self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
 
           <div className="flex flex-col mt-9 gap-4">
-            <div className="flex">
-            <Checkbox
-              checked={enabled1}
-              onChange={setEnabled1}
-              className="flex justify-center items-center group min-w-8 w-8 h-7 rounded-md bg-[#DED4F5] p-1"
-            >
-              <CheckIcon/>
-            </Checkbox>
-            <label className="text-black font-rubik text-base font-normal leading-4 mx-2">
-            I have confirmed that all the information  inputted is legitimate and true
-            </label>
+            <div className="flex items-center">
+              <Checkbox
+                checked={enabled1}
+                onChange={setEnabled1}
+                className="flex justify-center items-center group min-w-8 w-8 h-7 rounded-md bg-[#DED4F5] p-1"
+              >
+                <CheckIcon/>
+              </Checkbox>
+              <label className="text-black font-rubik text-base font-normal leading-4 mx-2">
+                I have confirmed that all the information inputted is legitimate and true
+              </label>
             </div>
 
-            <div className="flex">
-            <Checkbox
-              checked={enabled2}
-              onChange={setEnabled2}
-              className="flex justify-center items-center group min-w-8 w-8 h-7 rounded-md bg-[#DED4F5] p-1"
-            >
-              <CheckIcon/>
-            </Checkbox>
-            <label className="text-black font-rubik text-base font-normal leading-4 mx-2">
-            I agreed to the terms and conditions
-            </label>
+            <div className="flex items-center">
+              <Checkbox
+                checked={enabled2}
+                onChange={setEnabled2}
+                className="flex justify-center items-center group min-w-8 w-8 h-7 rounded-md bg-[#DED4F5] p-1"
+              >
+                <CheckIcon/>
+              </Checkbox>
+              <label className="text-black font-rubik text-base font-normal leading-4 mx-2">
+                I agreed to the terms and conditions
+              </label>
             </div>
 
-            <div className="flex">
-            <Checkbox
-              checked={enabled3}
-              onChange={setEnabled3}
-              className="flex justify-center items-center group min-w-8 w-8 h-7 rounded-md bg-[#DED4F5] p-1"
-            >
-              <CheckIcon/>
-            </Checkbox>
-            <label className="text-black font-rubik text-base font-normal leading-4 mx-2">
-            I am the one who got profitable from this account
-            </label>
+            <div className="flex items-center">
+              <Checkbox
+                checked={enabled3}
+                onChange={setEnabled3}
+                className="flex justify-center items-center group min-w-8 w-8 h-7 rounded-md bg-[#DED4F5] p-1"
+              >
+                <CheckIcon/>
+              </Checkbox>
+              <label className="text-black font-rubik text-base font-normal leading-4 mx-2">
+                I am the one who got profitable from this account
+              </label>
             </div>
           </div>
         </div>
@@ -114,13 +125,13 @@ const Register3 = ({ onPreviousButtonClick, onNextButtonClick }) => {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="2"
+                strokeWidth="2"
                 stroke="currentColor"
                 className="w-8 h-8"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
                 />
               </svg>
@@ -130,20 +141,21 @@ const Register3 = ({ onPreviousButtonClick, onNextButtonClick }) => {
           <div className="flex items-center">
             <div className="mr-2 text-lg">Register</div>
             <button
-              className="bg-[#AABAE8] text-white text-lg font-medium p-2 rounded-full"
-              onClick={onNextButtonClick}
+              className={`bg-[#AABAE8] text-white text-lg font-medium p-2 rounded-full ${allInputsFilled ? "" : "cursor-not-allowed opacity-50"}`}
+              onClick={allInputsFilled ? onNextButtonClick : null}
+              disabled={!allInputsFilled}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="2"
+                strokeWidth="2"
                 stroke="currentColor"
                 className="w-8 h-8"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M6 18 18 6M6 6l12 12"
                 />
               </svg>

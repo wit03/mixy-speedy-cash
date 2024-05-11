@@ -1,6 +1,6 @@
 import { Elysia } from "elysia";
 import { isAuthenticated } from "../../middleware/authen";
-import { FindReport } from "../../transaction/transaction.Usecase";
+import { FindReportUsecase } from "../../transaction/transaction.Usecase";
 
 
 export const report = new Elysia()
@@ -19,14 +19,14 @@ export const report = new Elysia()
                 }
             }
 
-            const {error, moneyIn, moneyOut, moneyInLastSixMonth, moneyOutLastSixMonth} = await FindReport(customerDecrypt.customerId, currentAccount.value.toString())
+            const {error, moneyIn, moneyOut, moneyInLastSixMonth, moneyOutLastSixMonth} = await FindReportUsecase(customerDecrypt.customerId, currentAccount.value.toString())
             if(error !== undefined){
                 set.status = 400
                 return {
                     msg: error || "Failed to get moneyIn moneyOut data",
-                    moneyIn: undefined,
-                    moneyOut: undefined,
-                    lastSixMonth: undefined
+                    moneyIn: null,
+                    moneyOut: null,
+                    lastSixMonth: null
                 }
             }
             

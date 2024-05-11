@@ -1,8 +1,29 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 const Register2 = ({ onPreviousButtonClick, onNextButtonClick }) => {
+  const [salary, setSalary] = useState("");
+  const [career, setCareer] = useState("");
+  const [company, setCompany] = useState("");
+  const [allInputsFilled, setAllInputsFilled] = useState(false);
+
+  const checkAllInputsFilled = () => {
+    if (salary.trim() !== "" && career.trim() !== "" && company.trim() !== "") {
+      setAllInputsFilled(true);
+    } else {
+      setAllInputsFilled(false);
+    }
+  };
+
+  const handleNextButtonClick = () => {
+    if (allInputsFilled) {
+      onNextButtonClick();
+    } else {
+      alert("Please fill in all the inputs before proceeding.");
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col h-full w-full justify-between">
@@ -27,20 +48,37 @@ const Register2 = ({ onPreviousButtonClick, onNextButtonClick }) => {
             <input
               type="text"
               className="self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
+              value={salary}
+              onChange={(e) => {
+                setSalary(e.target.value);
+                checkAllInputsFilled();
+              }}
             />
             Career
             <input
               type="text"
               className="self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
+              value={career}
+              onChange={(e) => {
+                setCareer(e.target.value);
+                checkAllInputsFilled();
+              }}
             />
             Company
             <input
               type="text"
               className="self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
+              value={company}
+              onChange={(e) => {
+                setCompany(e.target.value);
+                checkAllInputsFilled();
+              }}
             />
           </div>
         </div>
 
+        <div>
+          <span className={`flex justify-center ${allInputsFilled ? "hidden" : "text-red-500 mb-1"}`}>Please input all the required information.</span>
         <div className="flex justify-between items-center mb-10 font-rubik">
           <div className="flex items-center">
             <button
@@ -67,8 +105,9 @@ const Register2 = ({ onPreviousButtonClick, onNextButtonClick }) => {
           <div className="flex items-center">
             <div className="mr-2 text-lg">Next</div>
             <button
-              className="bg-[#B2B2B2] text-white text-lg font-medium p-2 rounded-full"
-              onClick={onNextButtonClick}
+              className={`bg-[#B2B2B2] text-white text-lg font-medium p-2 rounded-full ${allInputsFilled ? "" : "cursor-not-allowed opacity-50"}`}
+              onClick={handleNextButtonClick}
+              disabled={!allInputsFilled}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -87,6 +126,7 @@ const Register2 = ({ onPreviousButtonClick, onNextButtonClick }) => {
             </button>
           </div>
         </div>
+      </div>
       </div>
     </>
   );

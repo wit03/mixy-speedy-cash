@@ -29,7 +29,7 @@ export const ListLoanPayments = new Elysia()
                 set.status = 400
                 return {
                     msg:error || "List loan payment failed",
-                    loanPayments: undefined,
+                    loanPayments: null,
                 }
             }
 

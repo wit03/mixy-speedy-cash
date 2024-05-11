@@ -17,6 +17,9 @@ dependencies:
   elysia:
     specifier: latest
     version: 1.0.15(@sinclair/typebox@0.32.27)
+  nanoid:
+    specifier: ^5.0.7
+    version: 5.0.7
 
 devDependencies:
   bun-types:
@@ -171,6 +174,12 @@ packages:
 
   /jose@4.15.5:
     resolution: {integrity: sha512-jc7BFxgKPKi94uOvEmzlSWFFe2+vASyXaKUpdQKatWAESU2MWjDfFf0fdfc83CDKcA5QecabZeNLyfhe3yKNkg==}
+    dev: false
+
+  /nanoid@5.0.7:
+    resolution: {integrity: sha512-oLxFY2gd2IqnjcYyOXD8XGCftpGtZP2AbHbOkthDkvRywH5ayNtPVy9YlOPcHckXzbLTCHpkb7FB+yuxKV13pQ==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
     dev: false
 
   /prisma@5.13.0:

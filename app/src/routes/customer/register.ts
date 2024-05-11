@@ -82,8 +82,8 @@ export const register = new Elysia()
                 set.status = 400;
                 return {
                     msg: error || "Register failed",
-                    customer: undefined,
-                    account: undefined
+                    customer: null,
+                    account: null
                 }
             }
 
@@ -91,7 +91,8 @@ export const register = new Elysia()
                 set.status = 400;
                 return {    
                     msg: "Create account failed",
-                    customer: undefined,
+                    customer: null,
+                    account: null
                 }
             }
             currentAccount.set({
