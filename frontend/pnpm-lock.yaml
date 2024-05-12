@@ -26,6 +26,9 @@ dependencies:
   react-number-format:
     specifier: ^5.3.4
     version: 5.3.4(react-dom@18.3.1)(react@18.3.1)
+  react-pin-field:
+    specifier: ^3.1.5
+    version: 3.1.5(react-dom@18.3.1)(react@18.3.1)
 
 devDependencies:
   '@types/js-cookie':
@@ -2356,6 +2359,27 @@ packages:
       react-dom: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
     dependencies:
       prop-types: 15.8.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    dev: false
+
+  /react-pin-field@3.1.5(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-0WqQkLP3SdBEI08ykZxRNAPnZLEZ7iOm/EE/MNQuFmJAYcUfeNbjc7KB2VvcE/b1iWnS/spmFHpd9eSxvJJQ+g==}
+    peerDependencies:
+      react: ^18.2.0
+      react-dom: ^18.2.0
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-use-bireducer: 1.1.1(react-dom@18.3.1)(react@18.3.1)
+    dev: false
+
+  /react-use-bireducer@1.1.1(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-FysDYTxA9TQnzt4HURQBvB2FdFqyNytjIGzvzj3qv7YlOkcDnkJQPNlzcC7RbfDiepxdtbxCgovvLGm/DHjzUA==}
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18
+      react-dom: ^16.8 || ^17 || ^18
+    dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
     dev: false

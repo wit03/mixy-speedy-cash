@@ -1,5 +1,4 @@
 "use client"
-import Image from "next/image";
 import Profile from "../components/profile";
 import Balance from "../components/balance";
 import Transactions from "../components/transactions";
@@ -8,7 +7,6 @@ import { CustomerContextType, useCustomer } from "@/provider/CustomerContext";
 export default function Home() {
 
   const {customerState}:CustomerContextType = useCustomer?.()!;
-
   return (
     <div className="flex flex-col items-start mx-6 mt-14 mb-6">
     {customerState.customer && customerState.account ? 

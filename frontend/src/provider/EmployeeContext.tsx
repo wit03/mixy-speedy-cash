@@ -2,7 +2,7 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { makeRequest } from '@/hook/makeRequets';
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 
 
 const EmployeeContext = createContext<EmployeeContextType | null>(null);
@@ -40,6 +40,8 @@ interface GlobalState {
 
 export const EmployeeProvider = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter()
+    const pathName = usePathname();
+
     const [globalState, setGlobalState] = useState<GlobalState>({
  
         employee:undefined
@@ -59,12 +61,15 @@ export const EmployeeProvider = ({ children }: { children: React.ReactNode }) =>
     
 
     useEffect(() => {
-        const employeeAuth:string | undefined = Cookies.get('employeeAuth');
-        
-        // console.log(typeof(employeeAuth) === "string", typeof(globalState.employee) !== "object")
-        if (typeof employeeAuth === "string" && typeof(globalState.employee) !== "object") {
-          LoadData();
-        }
+       if(!pathName.includes("/login")){
+
+          const employeeAuth:string | undefined = Cookies.get('employeeAuth');
+           
+           // console.log(typeof(employeeAuth) === "string", typeof(globalState.employee) !== "object")
+          if (typeof employeeAuth === "string" && typeof(globalState.employee) !== "object") {
+            LoadData();
+          }
+       }
 
     }, [globalState.employee])
     
