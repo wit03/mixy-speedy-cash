@@ -1,11 +1,16 @@
+// @ts-nocheck
 "use client";
 
 import React, { useState } from "react";
-//@ts-ignore
-const Register2 = ({ onPreviousButtonClick, onNextButtonClick }) => {
-  const [salary, setSalary] = useState<number>(10000);
-  const [career, setCareer] = useState("software engineer");
-  const [company, setCompany] = useState("mixy company");
+const Register2 = ({ onPreviousButtonClick, onNextButtonClick,
+  salary,
+  setSalary,
+  career,
+  setCareer,
+  company,
+  setCompany,
+}) => {
+
   const [allInputsFilled, setAllInputsFilled] = useState(false);
 
   const checkAllInputsFilled = () => {

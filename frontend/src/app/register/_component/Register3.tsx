@@ -1,9 +1,14 @@
+//@ts-nocheck
 "use client";
 
 import { Checkbox } from "@headlessui/react";
 import { useState } from "react";
-//@ts-ignore
-const Register3 = ({ onPreviousButtonClick, onNextButtonClick }) => {
+const Register3 = ({ onPreviousButtonClick, onNextButtonClick,
+   email,
+  setEmail,
+  password,
+  setPassword
+}) => {
   const CheckIcon = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -24,8 +29,7 @@ const Register3 = ({ onPreviousButtonClick, onNextButtonClick }) => {
   const [enabled1, setEnabled1] = useState(false);
   const [enabled2, setEnabled2] = useState(false);
   const [enabled3, setEnabled3] = useState(false);
-  const [email, setEmail] = useState("mark@gmail.com");
-  const [password, setPassword] = useState("123");
+
   const [confirmPassword, setConfirmPassword] = useState("123");
 
   const allInputsFilled = email && password && confirmPassword && enabled1 && enabled2 && enabled3;
