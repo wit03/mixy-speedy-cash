@@ -37,7 +37,7 @@ const Loan = () => {
         Reports
       </h1>
 
-      <div className="flex flex-row gap-4 mt-[1.5rem]">
+      <div className="flex flex-row gap-4 mt-4">
         <div className="flex justify-between flex-col w-1/2 bg-[#F8E192] h-20 rounded-lg p-3 text-gray-700 font-rubik text-base font-normal drop-shadow-md">
           Money In
           <div className="font-rubik text-base font-medium">+ $3,456.98</div>
