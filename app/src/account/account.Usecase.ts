@@ -8,19 +8,26 @@ export async function HandleTransferBalance(senderCustomerId:string, recieverAcc
     if(!currentAccountData){
         return {
             error:"Can't find your account data",
-            senderData: undefined
+            senderData: undefined,
+            recieverData: undefined,
+            transactionData: undefined,
         }
     }
     else if(currentAccountData.balance < amount){
         return {
             error:"Your account can't make a transfer, not enough money",
-            senderData: undefined
+            senderData: undefined,
+            recieverData: undefined,
+            transactionData: undefined,
+
         }
     }
     else if(!await Bun.password.verify(pin, currentAccountData.pin, "bcrypt")){
         return {
             error:"Pin is wrong",
-            senderData: undefined
+            senderData: undefined,
+            recieverData: undefined,
+            transactionData: undefined,
         }
     }
 
@@ -30,7 +37,9 @@ export async function HandleTransferBalance(senderCustomerId:string, recieverAcc
     if(!resultWithDrawSender){
         return {
             error:"Withdraw sender balance failed",
-            senderData: undefined
+            senderData: undefined,
+            recieverData: undefined,
+            transactionData: undefined,
         }
     }
     
@@ -49,6 +58,7 @@ export async function HandleTransferBalance(senderCustomerId:string, recieverAcc
             error:"Deposit reciever balance failed",
             senderData: undefined,
             recieverData: undefined,
+            transactionData: undefined,
         }
     }
     
@@ -72,6 +82,7 @@ export async function HandleTransferBalance(senderCustomerId:string, recieverAcc
             error:"Create transaction failed",
             senderData: undefined,
             recieverData: undefined,
+            transactionData: undefined,
         }
     }
     
@@ -85,6 +96,7 @@ export async function HandleTransferBalance(senderCustomerId:string, recieverAcc
         error: undefined, 
         senderData:resultWithDrawSender,
         recieverData: resultDepositReciever,
+        transactionData: resultTransaction,
     }
     
 }

@@ -59,7 +59,7 @@ export const CustomerProvider = ({ children }: { children: React.ReactNode }) =>
             "phoneNumber": "0948652696",
             "address": "99/73 sirithorn",
             "createdAt": "2024-05-04T16:41:53.538Z"
-        },
+        }, 
         "account": {
             "balance": 8000,
             "accountId": "294112511"

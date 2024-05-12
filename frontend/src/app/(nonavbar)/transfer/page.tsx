@@ -8,10 +8,9 @@ import ReceiverCard from "./_components/receiver"
 import AddrField from "./_components/addrField"
 import { CustomerContextType, useCustomer } from "@/provider/CustomerContext"
 import { useRouter } from 'next/navigation'
-import { makeRequest } from "@/hook/makeRequets"
 
 const Transfer = () => {
-    const [receiver, setReceiver] = useState<string | undefined>(undefined)
+    const [reciever, setReceiver] = useState<string | undefined>("718108911")
     const {customerState}:CustomerContextType = useCustomer?.()!;
 
     const router = useRouter()
@@ -45,7 +44,6 @@ const Transfer = () => {
             addr: 324254566
         },
     ]
-    console.log(receiver);
     
     
 
@@ -72,7 +70,7 @@ const Transfer = () => {
                     />
                 </div>
                 <div className="text-medium text-lg text-[#8B9193] mb-2">To</div>
-                <AddrField setAddr={setReceiver} Addr={receiver} />
+                <AddrField setAddr={setReceiver} Addr={reciever} />
             </div>
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center">
@@ -84,13 +82,13 @@ const Transfer = () => {
                     <div className="ml-2 text-lg">Cancel</div>
                 </div>
                 <div className="flex items-center">
-                    <div className={`${receiver === undefined || receiver![11] === " " ? "text-gray-400" : "text-gray-800"} mr-2 text-lg `}>Continue</div>
+                    <div className={`${reciever === undefined || reciever![11] === " " ? "text-gray-400" : "text-gray-800"} mr-2 text-lg `}>Continue</div>
                     <Link 
-                    className={`${receiver === undefined || receiver![11] === " " ? "bg-[#B2B2B2]" : " bg-green-600 hover:bg-green-600/90"} text-white text-lg font-medium p-2 rounded-full`} 
+                    className={`${reciever === undefined || reciever![11] === " " ? "bg-[#B2B2B2]" : " bg-green-600 hover:bg-green-600/90"} text-white text-lg font-medium p-2 rounded-full`} 
                     href={{
                         pathname: "/transfer/amount",
                         query:{
-                            receiver: receiver
+                            reciever: reciever
                         }
                     }}
                     >
