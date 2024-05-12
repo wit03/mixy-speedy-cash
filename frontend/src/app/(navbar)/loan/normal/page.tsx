@@ -31,7 +31,12 @@ const LoanInformation = () => {
                     </ol>
                 </div>
             </div>
-            <button type="button" className="mt-[21px] relative w-full h-[37px] bg-gradient-to-r from-[#a6c1ee] to-[rgba(122,93,186,0.2)] border border-solid border-ded4f5 box-border rounded-md text-white text-14 tracking-0.02 font-bold text-center inline-block">Applying Loan</button>
+            <button type="button"
+             className="mt-[21px] relative w-full h-[37px] bg-gradient-to-r from-[#a6c1ee] to-[rgba(122,93,186,0.2)] border border-solid border-ded4f5 box-border rounded-md text-white text-14 tracking-0.02 font-bold text-center inline-block">
+                <Link href="/loan/normal/confirm">
+                Applying Loan
+                </Link>
+            </button>
         </div >
     )
 }

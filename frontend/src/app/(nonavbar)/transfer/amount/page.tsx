@@ -1,7 +1,7 @@
 "use client"
 import PinField from "react-pin-field";
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 
 import Balance from "../../../components/balance"
@@ -39,6 +39,13 @@ interface TransactionData {
     transactionDate: string;
     updatedAt:       string;
 }
+interface AccountData {
+    accountId: string;
+    customer: {
+        firstName: string;
+        lastName: string;
+    };
+}
 
 
 const Transfer = () => {
@@ -46,6 +53,29 @@ const Transfer = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
     const reciever = searchParams.get('reciever')
+    const [recieverData, setRecieverData] = useState<AccountData | undefined>(undefined)
+    async function GetReciever() {
+        const {data, error, status} = await makeRequest
+        <{
+            msg:      string;
+            account:    AccountData
+        }>
+        (`http://localhost:3000/account/account-name?accountId=${reciever}`, {
+            method:"GET",
+        })
+
+        if(!data?.account || error){
+            router.push("/transfer")
+        }
+        else {
+            setRecieverData(data.account)
+        }
+
+    }
+    useEffect(() => {
+        GetReciever()
+    }, [reciever])
+    
 
     if (!customerState.account || !customerState.customer) {
         router.push("/")
@@ -172,9 +202,13 @@ const Transfer = () => {
                         </div>
                         <div className="text-medium text-lg text-[#8B9193] mb-4">To</div>
 
-                        <div className="w-full bg-white rounded-2xl text-center py-16">
-                            Receiver Card
+                        {recieverData && 
+                        <div className="flex flex-col gap-4 w-full bg-white rounded-2xl text-center py-16">
+                            <h6 className="text-xl font-medium text-gray-800">{recieverData.accountId.slice(0, 3)}-{recieverData.accountId.slice(3, 6)}-{recieverData.accountId.slice(6)}</h6>
+                            <h6 className="text-xl font-medium text-gray-800">{recieverData.customer.firstName + " " + recieverData.customer.lastName}</h6>
                         </div>
+                        
+                        }
 
                         <div className="text-medium text-lg text-[#8B9193] mt-4">Amount</div>
                         <AmountField setAmount={setAmount} Amount={Amount} />

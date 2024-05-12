@@ -207,3 +207,25 @@ export async function FindAccountBalanceRepo(accountId:string) {
         return undefined
     }
 }
+
+
+export async function FindAccountNameRepo(accountId:string) {
+    try {
+        return await db.account.findFirst({
+            where:{
+                accountId: accountId
+            },
+            select:{
+                accountId:true,
+                customer:{
+                    select:{
+                        firstName: true,
+                        lastName: true,
+                    }
+                }
+            }
+        })
+    } catch (_) {
+        return undefined
+    }
+}

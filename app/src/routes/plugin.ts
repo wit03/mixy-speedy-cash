@@ -24,6 +24,7 @@ import { ListEmployee } from "./employee/list-employee";
 import { AssignEmployee } from "./employee/assign-employee";
 import { listLoanPayment } from "./employee/employee-list-loan-payment";
 import { employeeShowCustomerDetail } from "./employee/show-customer-detail";
+import { findAccountName } from "./account/find-account-name";
 
 export const auth = new Elysia({
   prefix: "/customer",
@@ -32,10 +33,10 @@ export const auth = new Elysia({
   .use(register)
   .use(currentCustomer)
   .use(report)
-
-export const employee = new Elysia({
-  prefix: "/employee",
-})
+  
+  export const employee = new Elysia({
+    prefix: "/employee",
+  })
   .use(employeeRegister)
   .use(employeeLogin)
   .use(currentEmployee)
@@ -49,19 +50,20 @@ export const employee = new Elysia({
   .use(AssignEmployee)
   .use(listLoanPayment)
   .use(employeeShowCustomerDetail)
-
-
-export const transfer = new Elysia({
-  prefix:"/transfer",
-})
-.use(transferBalance)
-
-export const accounts = new Elysia({
-  prefix:"/account",
-})
+  
+  
+  export const transfer = new Elysia({
+    prefix:"/transfer",
+  })
+  .use(transferBalance)
+  
+  export const accounts = new Elysia({
+    prefix:"/account",
+  })
   .use(listAccounts)
   .use(addAccount)
-
+  .use(findAccountName)
+  
 
 export const transaction = new Elysia({
   prefix:"/transaction",
