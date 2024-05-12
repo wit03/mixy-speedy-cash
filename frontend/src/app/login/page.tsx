@@ -3,15 +3,74 @@ import { useState } from "react"
 import PasswordInput from './_component/PasswordInput';
 import UsernameInput from "./_component/UsernameInput";
 import Link from "next/link";
+import { makeRequest } from "@/hook/makeRequets";
+import { AuthAccount, AuthCustomer } from "../register/page";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { CustomerContextType, useCustomer } from "@/provider/CustomerContext";
+import { Circular } from "../components/Loading/Circular";
 
 export default function Page(){
 
-    const [email, setEmail] = useState<string>("")
-    const [password, setPassword] = useState<string>("")
+  const router = useRouter()
+  const {setCustomerState}:CustomerContextType = useCustomer?.()!;
 
+    const [email, setEmail] = useState<string>("mark@gmail.com")
+    const [password, setPassword] = useState<string>("123")
+    const [loading, setLoading] = useState<boolean>(false)
+    async function handleSubmit(e:React.FormEvent<HTMLFormElement>) {
+      e.preventDefault()
+      
+      const {data, error, status} = await makeRequest<{  
+        msg:      string;
+        customer: AuthCustomer;
+        account:  AuthAccount;
+      }>("http://localhost:3000/customer/sign-in", {
+          method:"POST",
+          data:{
+              email:email,
+              password:password
+          }
+      })
+      if(!data?.customer || error || status !== 200){
+        setLoading(false)
+        toast.error(data?.msg || "Failed to create your user or account")
+        return
+      }
+      else {
+        setLoading(false)
+        toast.success("Login done, redirecting to home in 1.5 seconds")
+        setTimeout(() => {
+          router.push("/")
+        }, 1500);
+        const {account, customer} = data
+        setCustomerState({
+          account:{
+            accountId: account.accountId,
+            balance: account.balance,
+          },
+          customer:{
+            address: customer.address,
+            createdAt: customer.createdAt,
+            customerId: customer.customerId,
+            customerType: customer.customerType,
+            dateOfBirth: customer.dateOfBirth,
+            email: customer.email,
+            firstName: customer.firstName,
+            lastName: customer.lastName,
+            phoneNumber: customer.phoneNumber,
+          }
+        })
+        return
+      }
+
+  }
 
     return (
       <div className="flex flex-col h-screen items-center justify-center gap-y-[1rem] pb-14">
+          <Circular
+          loading={loading}
+          />
         <svg id="bg" className="absolute top-0 right-0" xmlns="http://www.w3.org/2000/svg" width="124" height="126" viewBox="0 0 124 126" fill="none">
           <circle cx="100" cy="26" r="100" fill="#F8E192"/>
         </svg>
@@ -23,7 +82,7 @@ export default function Page(){
           <div className="absolute h-[5rem] w-[5rem] bg-[#A694CF] rounded-full top-0 right-0 z-20"></div>
         </div>
         <h6 className="text-black font-rubik text-2xl font-semibold">WMPT</h6>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="flex flex-col w-[20rem] gap-3.5 ">
             <label className="relative text-16 tracking-0.02 font-rubik text-black text-left">Email</label>
             <div className="w-full relative">

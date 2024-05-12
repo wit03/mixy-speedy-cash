@@ -77,6 +77,7 @@ export const login = new Elysia()
                 return {
                     msg: "ok",
                     customer: customer,
+                    account: account
                 }
             }
             else {

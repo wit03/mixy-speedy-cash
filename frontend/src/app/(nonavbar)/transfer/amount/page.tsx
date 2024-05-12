@@ -13,6 +13,33 @@ import toast from "react-hot-toast"
 import { makeRequest } from "@/hook/makeRequets"
 import { Circular } from "@/app/components/Loading/Circular";
 import { formatTime } from "@/utils/convertTime";
+interface RecieverData {
+    accountId: string;
+    customer:  CustomerType;
+}
+
+interface CustomerType {
+    firstName: string;
+    lastName:  string;
+}
+
+interface SenderData {
+    accountId: string;
+    balance:   number;
+    customer:  CustomerType;
+}
+
+interface TransactionData {
+    transactionId:   string;
+    detail:          string;
+    sender:          string;
+    reciever:        string;
+    transactionType: string;
+    amount:          number;
+    transactionDate: string;
+    updatedAt:       string;
+}
+
 
 const Transfer = () => {
     const { customerState }: CustomerContextType = useCustomer?.()!;
@@ -20,36 +47,84 @@ const Transfer = () => {
     const searchParams = useSearchParams()
     const reciever = searchParams.get('reciever')
 
-    const [Amount, setAmount] = useState<string>()
-    const [index, setIndex] = useState<number>(0)
-    const [loading, setLoading] = useState<boolean>(false);
-    const [step, setStep] = useState<"amount" | "pin" | "success">("pin")
-    
-    const pinRef: React.MutableRefObject<null> = useRef(null)
-    
-    let balance = 1000
     if (!customerState.account || !customerState.customer) {
         router.push("/")
     }
 
-    async function TransferMoney(pin: string) {
-        console.log(reciever)
-        setLoading(true)
-        // const {data, error, status} = await makeRequest<{msg:string}>("http://localhost:3000/transfer/transfer-balance", {
-        //     method:"POST",
-        //     data:{
-        //         reciever:reciever?.replace("-", ""),
-        //         amount: Number(Amount?.replace(",", "")),
-        //         pin: pin
-        //     }
-        // })
+    const pinRef: React.MutableRefObject<null> = useRef(null)
+    const [Amount, setAmount] = useState<string>()
+    const [index, setIndex] = useState<number>(0)
+    const [loading, setLoading] = useState<boolean>(false);
+    const [step, setStep] = useState<"amount" | "pin" | "success">("amount")
+    const [resTransfer, setResTransfer] = useState<{ 
+        balanceLeft:   number;
+        senderData:    SenderData | undefined;
+        recieverData:  RecieverData | undefined;
+        transactionData: TransactionData | undefined;
+    }>({
+        // balanceLeft: -1,
+        // senderData: undefined,
+        // recieverData: undefined,
+        // transactionData: undefined,
+        "balanceLeft": 990,
+        "senderData": {
+            "accountId": "105111122",
+            "balance": 990,
+            "customer": {
+                "firstName": "kasidit",
+                "lastName": "something"
+            }
+        },
+        "recieverData": {
+            "accountId": "718108911",
+            "customer": {
+                "firstName": "mix2",
+                "lastName": "jateassavapirom"
+            }
+        },
+        "transactionData": {
+            "transactionId": "dddbfee9-8966-45aa-a84a-23142f472b3f",
+            "detail": "Tranfer money from 105111122 to 718108911",
+            "sender": "105111122",
+            "reciever": "718108911",
+            "transactionType": "transfer",
+            "amount": 10,
+            "transactionDate": "2024-05-12T15:24:41.629Z",
+            "updatedAt": "2024-05-12T15:24:41.629Z"
+        }
+    })
+    
 
-        // if(!data || error || status !== 200){
-        //     setLoading(false)
-        //     toast.error("Failed to get loans data")
-        //     return
-        // }
+
+    async function TransferMoney(pin: string) {
+        setLoading(true)
+        const {data, error, status} = await makeRequest<{
+            msg:           string;
+            balanceLeft:   number;
+            senderData:    SenderData;
+            recieverData:  RecieverData;
+            transactionData: TransactionData;
+        }>("http://localhost:3000/transfer/transfer-balance", {
+            method:"POST",
+            data:{
+                reciever:reciever?.replace("-", ""),
+                amount: Number(Amount?.replace(",", "")),
+                pin: pin
+            }
+        })
+
+        if(!data || error || status !== 200){
+            setLoading(false)
+            toast.error("Failed to get loans data")
+            return
+        }
         setStep("success")
+        setResTransfer({
+            balanceLeft: data.balanceLeft,
+            recieverData: data.recieverData, 
+            senderData: data.senderData,
+            transactionData: data.transactionData
+        })
         toast.success("Success transfer money")
         setLoading(false)
     }
@@ -158,7 +233,8 @@ const Transfer = () => {
                         <div className="flex items-center mx-auto gap-3">
                             <PinField
                                 className="h-12 w-12
-                                    relative text-gray-800 text-center outline-purple-500 text-sm decoration-[#a5a5a5] rounded-md bg-[#f5f5f5] border-4 border-solid border-[#8351F433] box-border shadow-md tracking-0.02 font-rubik sm:text-sm focus:ring-purple-600"
+                                text-3xl text-gray-800 font-bold
+                                relative text-center outline-purple-500 decoration-[#a5a5a5] rounded-md bg-[#f5f5f5] border-4 border-solid border-[#8351F433] box-border shadow-md tracking-0.02 font-rubik sm:text-sm focus:ring-purple-600"
                                 ref={pinRef}
                                 length={6}
                                 validate={/^[0-9]$/}
@@ -215,34 +291,35 @@ const Transfer = () => {
             }
 
 
-            {step === "success" &&
-                <div className="flex flex-col items-center gap-8 mt-10 w-[50vh] mx-auto">
+            {step === "success" && resTransfer.recieverData && resTransfer.transactionData && resTransfer.senderData &&
+                <div className="flex flex-col items-center gap-8 my-4 w-full min-w-[50vw] mx-auto px-2">
                     <h6 className='text-2xl font-medium'>Transfer Successful</h6>
-                    <div className="flex  flex-col gap-6 w-full bg-white rounded-lg py-6 px-4">
+                    <div className="flex flex-col gap-6 w-full bg-white rounded-lg py-6 px-4">
                         <div className="flex flex-col gap-4 items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="49" height="49" viewBox="0 0 49 49" fill="none">
                                 <circle cx="24.5" cy="24.5" r="24.5" fill="#372A54" />
                                 <path d="M24.6181 4.32007C30.0016 4.32007 35.1645 6.45863 38.9712 10.2653C42.7779 14.072 44.9164 19.2349 44.9164 24.6184C44.9164 30.0018 42.7779 35.1648 38.9712 38.9715C35.1645 42.7781 30.0016 44.9167 24.6181 44.9167C19.2347 44.9167 14.0717 42.7781 10.2651 38.9715C6.45839 35.1648 4.31982 30.0018 4.31982 24.6184C4.31982 19.2349 6.45839 14.072 10.2651 10.2653C14.0717 6.45863 19.2347 4.32007 24.6181 4.32007ZM22.0895 28.6229L17.5804 24.1109C17.4188 23.9493 17.2269 23.821 17.0157 23.7336C16.8045 23.6461 16.5781 23.601 16.3495 23.601C16.1209 23.601 15.8945 23.6461 15.6833 23.7336C15.4721 23.821 15.2802 23.9493 15.1185 24.1109C14.7921 24.4374 14.6087 24.8802 14.6087 25.3419C14.6087 25.8036 14.7921 26.2463 15.1185 26.5728L20.86 32.3143C21.0212 32.4768 21.213 32.6058 21.4243 32.6938C21.6355 32.7818 21.8621 32.8271 22.091 32.8271C22.3199 32.8271 22.5465 32.7818 22.7577 32.6938C22.969 32.6058 23.1608 32.4768 23.3219 32.3143L35.211 20.4224C35.3748 20.2614 35.5051 20.0696 35.5944 19.858C35.6837 19.6464 35.7302 19.4193 35.7313 19.1896C35.7324 18.9599 35.6879 18.7323 35.6006 18.5199C35.5133 18.3075 35.3847 18.1145 35.2224 17.952C35.0601 17.7895 34.8673 17.6607 34.6549 17.5731C34.4426 17.4855 34.2151 17.4409 33.9854 17.4416C33.7557 17.4424 33.5285 17.4887 33.3168 17.5778C33.1051 17.6668 32.9131 17.7969 32.752 17.9605L22.0895 28.6229Z" fill="#A694CF" />
                             </svg>
 
-                            <h6 className="w-full  text-center border-b-2 border-gray-200 pb-4 text-lg font-normal text-gray-800">{formatTime(new Date().toString())}</h6>
+                            <h6 className="w-full  text-center border-b-2 border-gray-200 pb-4 text-lg font-normal text-gray-800">{formatTime(resTransfer.transactionData?.transactionDate)}</h6>
 
                         </div>
 
                         <div className="flex flex-col gap-2">
-                            <h6 className="text-lg font-normal text-gray-800">Kwinyarut</h6>
-                            <h6 className="text-lg font-normal text-gray-800">XXX</h6>
+                            <h6 className="text-lg font-normal text-gray-800">{resTransfer.senderData.customer.firstName + " " + resTransfer.senderData.customer.lastName}</h6>
+                            <h6 className="text-lg font-normal text-gray-800">{resTransfer.senderData.accountId.slice(0, 3)}-{resTransfer.senderData.accountId.slice(3, 6)}-{resTransfer.senderData.accountId.slice(6)}</h6>
 
-                            <svg fill="#000000" height="32px" width="32px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 330"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path id="XMLID_24_" d="M216.358,271.76c-2.322-5.605-7.792-9.26-13.858-9.26H180V15c0-8.284-6.716-15-15-15 c-8.284,0-15,6.716-15,15v247.5h-22.5c-6.067,0-11.537,3.655-13.858,9.26c-2.321,5.605-1.038,12.057,3.252,16.347l37.5,37.5 C157.322,328.536,161.161,330,165,330s7.678-1.464,10.607-4.394l37.5-37.5C217.396,283.816,218.68,277.365,216.358,271.76z"></path> </g></svg>
+                            <svg fill="#000000" height="32px" width="32px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 330"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path id="XMLID_24_" d="M216.358,271.76c-2.322-5.605-7.792-9.26-13.858-9.26H180V15c0-8.284-6.716-15-15-15 c-8.284,0-15,6.716-15,15v247.5h-22.5c-6.067,0-11.537,3.655-13.858,9.26c-2.321,5.605-1.038,12.057,3.252,16.347l37.5,37.5 C157.322,328.536,161.161,330,165,330s7.678-1.464,10.607-4.394l37.5-37.5C217.396,283.816,218.68,277.365,216.358,271.76z"></path> </g></svg>
 
-                            <h6 className="text-lg font-normal text-gray-800">Chitsanupong Jate</h6>
-                            <h6 className="text-lg font-normal text-gray-800">XXX</h6>
+                            <h6 className="text-lg font-normal text-gray-800">{resTransfer.recieverData.customer.firstName + " " + resTransfer.recieverData.customer.lastName}</h6>
+                            <h6 className="text-lg font-normal text-gray-800">{resTransfer.recieverData.accountId.slice(0, 3)}-{resTransfer.recieverData.accountId.slice(3, 6)}-{resTransfer.recieverData.accountId.slice(6)}</h6>
+
                         </div>
 
                         <div className="flex flex-col items-center gap-4 border-b-2 border-gray-200 pb-4">
                             <h6 className="text-2xl font-semibold text-gray-800">Amount</h6>
                             <div className="flex gap-2 items-center">
-                                <h6 className="text-2xl font-semibold text-gray-800">{balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}</h6>
+                                <h6 className="text-2xl font-semibold text-gray-800">{resTransfer.transactionData.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</h6>
                                 <h6 className="text-lg font-normal text-gray-800">Baht</h6>
                             </div>
                         </div>
@@ -254,13 +331,13 @@ const Transfer = () => {
                             </div>
                             <div className="flex items-center flex-wrap gap-2">
                                 <h6 className="text-lg font-normal text-gray-500">Bill ID: </h6>
-                                <h6 className="text-lg font-normal text-gray-800">128390128390</h6>
+                                <h6 className="text-base font-light text-gray-800">{resTransfer.transactionData.transactionId}</h6>
                             </div>
                         </div>
                     </div>
                     <div className="w-full flex justify-start items-center flex-wrap gap-2">
-                        <h6 className="text-lg font-normal text-gray-500">Bill ID: </h6>
-                        <h6 className="text-lg font-normal text-gray-800">128390128390</h6>
+                        <h6 className="text-lg font-normal text-gray-500">Available Balance : </h6>
+                        <h6 className="text-lg font-normal text-gray-800">{resTransfer.balanceLeft.toLocaleString('en-US', { minimumFractionDigits: 2 })}</h6>
                     </div>
                    <div className="flex flex-col gap-2 w-full">
                    <Link 

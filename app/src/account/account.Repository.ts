@@ -102,7 +102,8 @@ export async function FindOldestAccountIdByCustomerId(customerId: string) {
                 createdAt: "desc"
             },
             select: {
-                accountId: true
+                accountId: true,
+                balance: true,
             }
         })
     } catch (_) {

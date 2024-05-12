@@ -42,6 +42,7 @@ export const transferBalance = new Elysia()
                     balanceLeft: null,
                     senderData: null,
                     recieverData: null,
+                    transactionData: null,
                 }
             }
             
@@ -57,6 +58,7 @@ export const transferBalance = new Elysia()
                     balanceLeft: null,
                     senderData: null,
                     recieverData: null,
+                    transactionData: null,
                 }
             }
             set.status = 200
@@ -65,7 +67,7 @@ export const transferBalance = new Elysia()
                 balanceLeft: senderData.balance,
                 senderData: senderData,
                 recieverData: recieverData,
-                transactionId: transactionData,
+                transactionData: transactionData,
             }
 
 

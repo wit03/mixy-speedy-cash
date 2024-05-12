@@ -5,7 +5,8 @@ import { useState, useRef, useEffect } from "react";
 
 const Register4 = ({
   pin,
-  setPin
+  setPin,
+  handleRegister,
 }) => {
   const [activeIdentityIndex, setActiveIdentityIndex] = useState(0);
   const [isPINSubmitted, setIsPINSubmitted] = useState(false);
@@ -44,6 +45,7 @@ const Register4 = ({
   useEffect(() => {
     if (pin.every((value) => value !== "")) {
       setIsPINSubmitted(true);
+      handleRegister()
     } else {
       setIsPINSubmitted(false);
     }
