@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-
+//@ts-ignore
 const Register2 = ({ onPreviousButtonClick, onNextButtonClick }) => {
-  const [salary, setSalary] = useState("");
-  const [career, setCareer] = useState("");
-  const [company, setCompany] = useState("");
+  const [salary, setSalary] = useState<number>(10000);
+  const [career, setCareer] = useState("software engineer");
+  const [company, setCompany] = useState("mixy company");
   const [allInputsFilled, setAllInputsFilled] = useState(false);
 
   const checkAllInputsFilled = () => {
-    if (salary.trim() !== "" && career.trim() !== "" && company.trim() !== "") {
+    if (salary !== 0 && career.trim() !== "" && company.trim() !== "") {
       setAllInputsFilled(true);
     } else {
       setAllInputsFilled(false);
@@ -46,11 +46,11 @@ const Register2 = ({ onPreviousButtonClick, onNextButtonClick }) => {
           <div className="flex flex-col font-rubik text-base gap-3">
             Salary
             <input
-              type="text"
+              type="number"
               className="self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
               value={salary}
               onChange={(e) => {
-                setSalary(e.target.value);
+                setSalary(Number(e.target.value));
                 checkAllInputsFilled();
               }}
             />

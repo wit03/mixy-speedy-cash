@@ -10,16 +10,16 @@ const prefix = [
   { id: 3, prefix: "Miss", unavailable: false },
   { id: 4, prefix: "Ms.", unavailable: false },
 ];
-
+//@ts-ignore
 const Register1 = ({ onNextButtonClick }) => {
   const [selectedPrefix, setSelectedPrefix] = useState(prefix[0]);
   const [identity, setIdentity] = useState(new Array(13).fill(""));
   const [activeIdentityIndex, setActiveIdentityIndex] = useState(0);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [firstName, setFirstName] = useState("chitsanupong");
+  const [lastName, setLastName] = useState("jateassavapirom");
   const [dob, setDob] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("0948652696");
+  const [address, setAddress] = useState("Pathumthani lumkukka kuay");
   const [allInputsFilled, setAllInputsFilled] = useState(false);
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>(Array(13).fill(null));
