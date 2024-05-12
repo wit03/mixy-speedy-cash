@@ -3251,27 +3251,6 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
     dev: false
 
-  /react-pin-field@3.1.5(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-0WqQkLP3SdBEI08ykZxRNAPnZLEZ7iOm/EE/MNQuFmJAYcUfeNbjc7KB2VvcE/b1iWnS/spmFHpd9eSxvJJQ+g==}
-    peerDependencies:
-      react: ^18.2.0
-      react-dom: ^18.2.0
-    dependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-use-bireducer: 1.1.1(react-dom@18.3.1)(react@18.3.1)
-    dev: false
-
-  /react-use-bireducer@1.1.1(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-FysDYTxA9TQnzt4HURQBvB2FdFqyNytjIGzvzj3qv7YlOkcDnkJQPNlzcC7RbfDiepxdtbxCgovvLGm/DHjzUA==}
-    peerDependencies:
-      react: ^16.8 || ^17 || ^18
-      react-dom: ^16.8 || ^17 || ^18
-    dependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-    dev: false
-
   /react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
     engines: {node: '>=0.10.0'}

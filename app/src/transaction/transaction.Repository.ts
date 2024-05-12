@@ -1,7 +1,6 @@
 import { $Enums } from "@prisma/client";
 import { db } from "..";
 import { TransactionSearchCondition } from "../employee/employee.type";
-import { TransactionSearchCondition } from "../employee/employee.type";
 
 export async function InsertTransactionRepo(senderAccountId:string, recieverAccountId:string,  amount:number, detail: string = "", transactionType:$Enums.TransactionType) {
    try {
@@ -21,12 +20,8 @@ export async function InsertTransactionRepo(senderAccountId:string, recieverAcco
 
 
 export async function FindManyTransactionsFromAccount(limit: number, skip: number, accountId:string) {
-export async function FindManyTransactionsFromAccount(limit: number, skip: number, accountId:string) {
     try {
         return await db.transaction.findMany({
-            where:{
-                sender: accountId
-            },
             where:{
                 sender: accountId
             },
@@ -38,7 +33,6 @@ export async function FindManyTransactionsFromAccount(limit: number, skip: numbe
                 transactionDate: true,
                 transactionId: true,
                 accountSender:{
-                accountSender:{
                     select:{
                         customer:{
                             select:{
@@ -48,7 +42,6 @@ export async function FindManyTransactionsFromAccount(limit: number, skip: numbe
                         }
                     }
                 },
-                accountReciever:{
                 accountReciever:{
                     select:{
                         customer:{
@@ -60,9 +53,6 @@ export async function FindManyTransactionsFromAccount(limit: number, skip: numbe
                     }
                 },
             },
-            orderBy:{
-                transactionDate: "desc"
-            }
             orderBy:{
                 transactionDate: "desc"
             }
