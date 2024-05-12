@@ -42,8 +42,13 @@ export const transferBalance = new Elysia()
                     balanceLeft: null,
                     senderData: null,
                     recieverData: null,
+                    msg: "Unauthorized",
+                    balanceLeft: null,
+                    senderData: null,
+                    recieverData: null,
                 }
             }
+            
             
             const { customerId: senderCustomerId } = customerDecrypt
             const { amount, reciever: recieverAccountId, pin } = body
@@ -52,6 +57,10 @@ export const transferBalance = new Elysia()
             if (error !== undefined || senderData === undefined || recieverData === undefined || transactionData === undefined) {
                 set.status = 400
                 return {
+                    msg: error || "failed to transfer the money",
+                    balanceLeft: null,
+                    senderData: null,
+                    recieverData: null,
                     msg: error || "failed to transfer the money",
                     balanceLeft: null,
                     senderData: null,

@@ -7,6 +7,10 @@ import { EmployeeRegisterReq , EmployeeSigninReq, TransactionSearchCondition} fr
 import { DepositBalanceRepo, FindManyAccountDataByCustomerId } from "../account/account.Repository";
 import { FindCustomerBySearch } from "../customer/customer.Repository";
 import { SearchLoanStatus } from "../loan/loan.type";
+import { EmployeeRegisterReq , EmployeeSigninReq, TransactionSearchCondition} from "./employee.type";
+import { DepositBalanceRepo, FindManyAccountDataByCustomerId } from "../account/account.Repository";
+import { FindCustomerBySearch } from "../customer/customer.Repository";
+import { SearchLoanStatus } from "../loan/loan.type";
 
 export async function EmployeeSignUp(body:EmployeeRegisterReq) {
 

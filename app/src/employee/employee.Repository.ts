@@ -7,6 +7,7 @@ export async function InsertEmployeeRepo(body: EmployeeRegisterReq) {
             data: {
                 email: body.email,
                 position: body.position,
+                position: body.position,
                 password: body.password,
                 firstName: body.firstName,
                 lastName: body.lastName,

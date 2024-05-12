@@ -1,6 +1,7 @@
 import { $Enums, LoanPayment } from "@prisma/client";
 import { db } from "..";
 import { InsertLoanType, InsertManyLoanPaymentType, SearchLoanStatus } from "./loan.type";
+import { InsertLoanType, InsertManyLoanPaymentType, SearchLoanStatus } from "./loan.type";
 
 
 export async function ListLoanByAccountIdRepo(accountId:string) {
@@ -89,11 +90,34 @@ export async function FindLoanDataWithLoanIdRepo(loanId:string) {
 }
 
 export async function InsertLoanRepo(body: InsertLoanType, accountId: string) {
+export async function FindLoanDataWithLoanIdRepo(loanId:string) {
+    try {
+        return await db.loan.findFirst({
+            where:{
+                loanId: loanId
+            },
+            select:{
+                loanId: true,
+                loanStatus: true,
+                startDate: true,
+                endDate: true,
+                loanAmount: true,
+                interestRate: true,
+                accountId: true
+            }
+        })
+    } catch (_) {
+        return undefined
+    }
+}
+
+export async function InsertLoanRepo(body: InsertLoanType, accountId: string) {
     try {
         return await db.loan.create({
             data:{
                 interestRate: body.interestRate,
                 loanAmount: body.loanAmount,
+                loanStatus: "waiting",
                 loanStatus: "waiting",
                 loanType: body.loanType,
                 accountId: accountId,
@@ -150,6 +174,7 @@ export async function DeleteLoanPaymentRepo(loanId:string) {
     }
 }
 
+// for customer paying loan
 // for customer paying loan
 export async function UpdateLoanPayment(loanPaymentId: string, loanId:string, paidAmount:number, paidDate:string | null, paidStatus:$Enums.PaidStatus) {
     try {
