@@ -52,7 +52,7 @@ const Register3 = ({ onPreviousButtonClick, onNextButtonClick }) => {
           <div className="flex flex-col font-rubik text-base gap-3">
             Email
             <input
-              type="text"
+              type="email"
               className="self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

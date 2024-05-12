@@ -256,7 +256,7 @@ const Register1 = ({ onNextButtonClick }) => {
           <span className={`flex justify-center ${allInputsFilled ? "hidden" : "text-red-500 mb-1"}`}>Please input all the required information.</span>
         <div className="flex justify-between items-center mb-10 font-rubik">
           <div className="flex items-center">
-            <Link className="bg-[#CB6F6F] text-white text-lg font-medium p-2 rounded-full" href="/">
+            <Link className="bg-[#CB6F6F] text-white text-lg font-medium p-2 rounded-full" href="/login">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
