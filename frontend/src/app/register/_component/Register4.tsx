@@ -1,9 +1,12 @@
+//@ts-nocheck
 "use client";
 
 import { useState, useRef, useEffect } from "react";
 
-const Register4 = () => {
-  const [identity, setIdentity] = useState(new Array(6).fill(""));
+const Register4 = ({
+  pin,
+  setPin
+}) => {
   const [activeIdentityIndex, setActiveIdentityIndex] = useState(0);
   const [isPINSubmitted, setIsPINSubmitted] = useState(false);
 
@@ -14,20 +17,20 @@ const Register4 = () => {
     index: number
   ) => {
     const { value } = e.target;
-    const newIdentity = [...identity];
+    const newIdentity = [...pin];
     newIdentity[index] = value.substring(value.length - 1);
 
     if (!value) setActiveIdentityIndex(index - 1);
     else setActiveIdentityIndex(index + 1);
 
-    setIdentity(newIdentity);
+    setPin(newIdentity);
   };
 
   const handleOnKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     index: number
   ) => {
-    if (e.key === "Backspace" && !identity[index]) {
+    if (e.key === "Backspace" && !pin[index]) {
       const previousIndex = index > 0 ? index - 1 : index;
       setActiveIdentityIndex(previousIndex);
       inputRefs.current[previousIndex]?.focus();
@@ -39,12 +42,12 @@ const Register4 = () => {
   }, [activeIdentityIndex]);
 
   useEffect(() => {
-    if (identity.every((value) => value !== "")) {
+    if (pin.every((value) => value !== "")) {
       setIsPINSubmitted(true);
     } else {
       setIsPINSubmitted(false);
     }
-  }, [identity]);
+  }, [pin]);
 
 
   return (
@@ -85,7 +88,7 @@ const Register4 = () => {
               </svg>
             </div>
             <div className="flex gap-2">
-              {identity.map((data, i) => (
+              {pin.map((data, i) => (
                 <input
                   key={i}
                   className="w-[calc(100%/6)] h-12 rounded-lg border-4 border-[rgba(24,43,166,0.15)] text-center"

@@ -9,6 +9,7 @@ export default function Page(){
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
 
+
     return (
       <div className="flex flex-col h-screen items-center justify-center gap-y-[1rem] pb-14">
         <svg id="bg" className="absolute top-0 right-0" xmlns="http://www.w3.org/2000/svg" width="124" height="126" viewBox="0 0 124 126" fill="none">

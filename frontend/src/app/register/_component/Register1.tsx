@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import React, { useState, useRef, useEffect, Fragment } from "react";
@@ -10,16 +11,25 @@ const prefix = [
   { id: 3, prefix: "Miss", unavailable: false },
   { id: 4, prefix: "Ms.", unavailable: false },
 ];
+const Register1 = ({ 
+  onNextButtonClick,
+  identity,
+  setIdentity,
+  activeIdentityIndex,
+  setActiveIdentityIndex,
+  firstName,
+  setFirstName,
+  lastName,
+  setLastName,
+  dob,
+  setDob,
+  phoneNumber,
+  setPhoneNumber,
+  address,
+  setAddress,
 
-const Register1 = ({ onNextButtonClick }) => {
+}) => {
   const [selectedPrefix, setSelectedPrefix] = useState(prefix[0]);
-  const [identity, setIdentity] = useState(new Array(13).fill(""));
-  const [activeIdentityIndex, setActiveIdentityIndex] = useState(0);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [dob, setDob] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
   const [allInputsFilled, setAllInputsFilled] = useState(false);
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>(Array(13).fill(null));
