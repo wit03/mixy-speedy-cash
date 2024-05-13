@@ -8,6 +8,9 @@ dependencies:
   '@elysiajs/cookie':
     specifier: ^0.8.0
     version: 0.8.0(elysia@1.0.15)
+  '@elysiajs/cors':
+    specifier: ^1.0.2
+    version: 1.0.2(elysia@1.0.15)
   '@elysiajs/jwt':
     specifier: ^1.0.2
     version: 1.0.2(elysia@1.0.15)
@@ -40,6 +43,14 @@ packages:
       '@types/cookie-signature': 1.1.2
       cookie: 0.5.0
       cookie-signature: 1.2.1
+      elysia: 1.0.15(@sinclair/typebox@0.32.27)
+    dev: false
+
+  /@elysiajs/cors@1.0.2(elysia@1.0.15):
+    resolution: {integrity: sha512-2X+wes5M2SdSaI4lGp0YBbTK35y9TtjjjFMjmQNjMonUXxtOrAR7cA0lsSIvHQ8UTd9z+mMBn7NyBhWaKxq0jA==}
+    peerDependencies:
+      elysia: '>= 1.0.2'
+    dependencies:
       elysia: 1.0.15(@sinclair/typebox@0.32.27)
     dev: false
 

@@ -18,7 +18,8 @@
     "react-flatpickr": "^3.10.13",
     "react-hot-toast": "^2.4.1",
     "react-number-format": "^5.3.4",
-    "react-pin-field": "^3.1.5"
+    "react-pin-field": "^3.1.5",
+    "recharts": "^2.12.7"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",

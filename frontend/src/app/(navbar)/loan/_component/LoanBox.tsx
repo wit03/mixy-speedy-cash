@@ -7,7 +7,7 @@ interface LoanProps {
   imageSrc: string;
 }
 
-const LoanComponent: React.FC<LoanProps> = ({ title, interestRate, maximumLoan, imageSrc }) => {
+const LoanBox: React.FC<LoanProps> = ({ title, interestRate, maximumLoan, imageSrc }) => {
   return (
     <div className="flex border-2 rounded-3 bg-[rgba(122,138,237,0.15)] hover:border-[#9747ff] box-border items-center justify-center space-x-10 font-rubik w-full my-3">
       <div className="object-fill w-[144px]">
@@ -25,4 +25,4 @@ const LoanComponent: React.FC<LoanProps> = ({ title, interestRate, maximumLoan, 
   )
 }
 
-export default LoanComponent
+export default LoanBox
