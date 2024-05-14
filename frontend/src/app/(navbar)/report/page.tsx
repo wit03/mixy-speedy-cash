@@ -8,7 +8,6 @@ const BarChart = dynamic(() => import('recharts').then(mod => mod.BarChart), {
 });
 
 
-
 const rangeData = [
   {
     month: "JAN",
