@@ -1,14 +1,54 @@
+"use client"
+import { makeRequest } from "@/hook/makeRequets";
 import { CustomerContextType, useCustomer } from "@/provider/CustomerContext";
 import { formatTime } from "@/utils/convertTime";
+import { useEffect, useState } from "react";
+
+
+interface LoanPayment {
+    loanId:               string;
+    loanPaymentId:        string;
+    scheduledPaymentDate: string;
+    principalAmount:      number;
+    paymentAmount:        number;
+    interestPercent:      number;
+    paidAmount:           number;
+    paidDate:             null;
+    paidStatus:           "paid" | "inDept" | "onProcess";
+    createdAt:            string;
+}
+
+
 
 export default function page({
 
 }:{
     
 })  {
-    // const { customerState }: CustomerContextType = useCustomer?.()!;
+    const { customerState }: CustomerContextType = useCustomer?.()!;
 
-    let balance = 5000;
+    const [state, setState] = useState<{loanPayments: LoanPayment[]}>({
+        loanPayments: []
+    })
+
+    async function handleGetAllLoanPayment() {
+        const { data, error, status } = await makeRequest<{
+            msg:          string;
+            loanPayments:LoanPayment[];
+        }>("http://localhost:3000/loan/list-customer-loan-payments", {
+            method: "GET",
+        })
+
+        if(data?.loanPayments){
+            setState(prev => ({...prev, loanPayments: data.loanPayments}))
+        }
+
+    }
+
+    useEffect(() => {
+      handleGetAllLoanPayment()
+    }, [])
+    
 
 return (
 
@@ -33,7 +73,7 @@ return (
             <div className="flex justify-end gap-4">
                 <div className="flex flex-col gap-2">
                     <h6 className="text-lg font-normal text-gray-600">Debt Balance</h6>
-                    <h6 className="text-2xl font-medium text-gray-800">{balance.toLocaleString('en-US', {minimumFractionDigits: 2})}</h6>
+                    <h6 className="text-2xl font-medium text-gray-800">{customerState.account?.balance.toLocaleString('en-US', {minimumFractionDigits: 2})}</h6>
                 </div>
             </div>
         </div>
@@ -41,8 +81,9 @@ return (
         <div className="flex flex-col gap-4 p-4">
             <h6 className="text-xl font-normal text-gray-800">Schedule to be paid</h6>
             <div className="flex flex-col  gap-4">
-                <div className="flex gap-3 justify-around p-4 bg-white">
-                    
+               <div className="flex flex-col gap-4">
+                {state.loanPayments.map((item, i) => (
+                    <div className="flex gap-3 justify-around p-4 bg-white" key={i}>
                     <div className="min-w-[3rem]  min-h-[3rem] relative rounded-full self-center bg-[#E4DFF1]">
                         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -50,18 +91,19 @@ return (
                             </svg>
                         </div>
                     </div>
-
                     <div className="flex flex-col gap-0.5">
                         <h6 className="text-sm font-normal text-gray-800">Amount to be paid</h6>
-                        <h6 className="text-lg font-normal text-[#9747FF]">{balance.toLocaleString('en-US', {minimumFractionDigits: 2})}</h6>
-                        <h6 className="text-sm font-normal text-gray-600">Due date at {formatTime(new Date().toString())}</h6>
+                        <h6 className="text-lg font-normal text-[#9747FF]">{item.paymentAmount.toLocaleString('en-US', {minimumFractionDigits: 2})}</h6>
+                        <h6 className="text-sm font-normal text-gray-600">Due date at {formatTime(item.scheduledPaymentDate)}</h6>
                     </div>
-
+   
                     <button className="p-4 border border-[#A694CF] hover:bg-purple-600 hover:text-white text-gray-800 rounded-md">
                         <h6 className="text-xl font-normal ">Pay</h6>
                     </button>
-
+   
                 </div>
+                ))}
+               </div>
             </div>
         </div>
 

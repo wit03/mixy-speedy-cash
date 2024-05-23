@@ -7,10 +7,6 @@ import { EmployeeRegisterReq , EmployeeSigninReq, TransactionSearchCondition} fr
 import { DepositBalanceRepo, FindManyAccountDataByCustomerId } from "../account/account.Repository";
 import { FindCustomerBySearch } from "../customer/customer.Repository";
 import { SearchLoanStatus } from "../loan/loan.type";
-import { EmployeeRegisterReq , EmployeeSigninReq, TransactionSearchCondition} from "./employee.type";
-import { DepositBalanceRepo, FindManyAccountDataByCustomerId } from "../account/account.Repository";
-import { FindCustomerBySearch } from "../customer/customer.Repository";
-import { SearchLoanStatus } from "../loan/loan.type";
 
 export async function EmployeeSignUp(body:EmployeeRegisterReq) {
 
@@ -256,7 +252,7 @@ export async function EmployeeApproveLoanUsecase(loanId:string, status:$Enums.Lo
             const loanPayments:Omit<LoanPayment, "loanPaymentId" | "createdAt" | "updatedAt" | "paidDate">[] = []
             const interestPercent = resUpdateLoan.interestRate; 
             const loanAmount = resUpdateLoan.loanAmount;
-            const paymentAmount = (loanAmount * 3) / 100
+            const paymentAmount = (loanAmount * 0.03)
             // nextMonth.setMonth(nextMonth.getMonth() + 1);
             nextMonth.setDate(nextMonth.getDate() + 30);
 

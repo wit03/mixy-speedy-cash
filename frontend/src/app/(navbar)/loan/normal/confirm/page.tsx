@@ -41,13 +41,13 @@ export default function page({
     const [loading, setLoading] = useState<boolean>(false)
     const [state, setState] = useState({
         loanAmount: 0,
-        step: 1
+        step: 0
     })
 
 
     async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault()
-        if (state.loanAmount <= 100) {
+        if (state.loanAmount < 100) {
             toast.error("Loan amount should not be less than 100")
             return
         }
@@ -72,6 +72,7 @@ export default function page({
         }
         else {
             toast.success("Success to create loan, please wait for employee to consider your loan")
+            setState(prev => ({...prev, step: 1}))
             setLoading(false)
             return
         }

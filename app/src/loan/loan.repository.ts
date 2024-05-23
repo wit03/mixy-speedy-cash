@@ -67,6 +67,39 @@ export async function ListLoanPaymentRepo(loanId:string) {
     }
 }
 
+export async function ListCustomerLoanPaymentRepo(accountId:string) {
+    try {
+        return await db.loan.findMany({
+            where:{
+                accountId: accountId
+            },
+            select:{
+                loanPayments:{
+                    select:{
+                        loanId: true,
+                        loanPaymentId: true,
+                        scheduledPaymentDate: true,
+                        principalAmount: true,
+                        paymentAmount: true,
+                        interestPercent: true,
+                        paidAmount: true,
+                        paidDate: true,
+                        paidStatus: true,
+                        createdAt: true,
+                        
+                    }
+                }
+            },
+            orderBy: {
+                "endDate": "asc"
+            }            
+        })
+    } catch (_) {
+        return undefined
+    }
+}
+
+
 export async function FindLoanDataWithLoanIdRepo(loanId:string) {
     try {
         return await db.loan.findFirst({

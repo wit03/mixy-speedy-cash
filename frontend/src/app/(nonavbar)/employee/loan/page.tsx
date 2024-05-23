@@ -146,7 +146,7 @@ export default function page({
             toast.error("Failed to assign employee")
             return 
         }
-
+        
         const {data, error, status} = await makeRequest<{msg:string, loan:{loanId:string, responsibleEmployeeId:string}}>("http://localhost:3000/employee/assign-employee", {
             method:"POST",
             data:{

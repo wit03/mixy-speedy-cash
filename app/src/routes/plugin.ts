@@ -25,6 +25,7 @@ import { AssignEmployee } from "./employee/assign-employee";
 import { listLoanPayment } from "./employee/employee-list-loan-payment";
 import { employeeShowCustomerDetail } from "./employee/show-customer-detail";
 import { findAccountName } from "./account/find-account-name";
+import { ListCustomerLoanPayments } from "./loan/list-customer-loan-payment";
 
 export const auth = new Elysia({
   prefix: "/customer",
@@ -78,4 +79,5 @@ export const loan = new Elysia({
 .use(ListsLoan)
 .use(ListLoanPayments)
 .use(CustomerPayLoan)
+.use(ListCustomerLoanPayments)
 

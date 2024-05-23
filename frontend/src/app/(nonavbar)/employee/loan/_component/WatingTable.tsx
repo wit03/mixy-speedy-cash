@@ -91,7 +91,9 @@ export default function WatingTable({
                                 </td>
                                 <td className="px-3 py-4">
                                     <div className="flex items-center gap-2 w-fit relative border p-2 rounded-md">
-                                    <select onChange={(e:React.ChangeEvent<HTMLSelectElement>) => handleUpdateStatus(item.loanId, e.target.value, item.loanStatus, item.loanType)} value={item.loanStatus}  className="appearance-none outline-none ">
+                                    <select 
+                                    disabled={!item.responsibleEmployeeId}
+                                    onChange={(e:React.ChangeEvent<HTMLSelectElement>) => handleUpdateStatus(item.loanId, e.target.value, item.loanStatus, item.loanType)} value={item.loanStatus}  className="appearance-none outline-none ">
                                             <option value={"waiting"}>Waiting</option>
                                             <option value={"onProcess"}>OnProcess</option>
                                             <option value={"inDebt"}>InDebt</option>

@@ -2,7 +2,7 @@ SELECT t.sender, t.receiver, c.email, t.amount, t."transactionDate" FROM "Transa
 
 
 # On table account to list customer email from account
-SELECT a."accountId", cus.email, cus."customerId"
+SELECT a."accountId", cus.email, cus."customerId", a.balance
 FROM "Account" AS a
 JOIN "Customer" AS cus ON a."customerId" = cus."customerId";
 

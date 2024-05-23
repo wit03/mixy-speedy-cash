@@ -152,7 +152,9 @@ const Transfer = () => {
             </Dialog>
         </Transition>
 
-        <div className="flex flex-col justify-between mx-6 mt-8 mb-6 font-rubik min-h-[calc(100vh-32px-24px)]">
+     
+        <div className="flex flex-col justify-between mx-6 mt-8 mb-6 font-rubik min-h-[calc(100vh-32px-24px)] relative">
+
             <div className="flex flex-col">
                 <h1 className="text-xl font-medium my-4 text-[#333333] mx-auto">Transfer</h1>
                 <div className="flex items-center justify-between">
