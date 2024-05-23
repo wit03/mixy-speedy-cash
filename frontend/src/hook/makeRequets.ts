@@ -20,7 +20,7 @@ export async function makeRequest<T>(url:string, options:AxiosRequestConfig): Pr
       return { error: null, data: res.data, status:res.status };
     }
     else {
-      return { error: res, data:null, status:res.status ? res.status : -1 };
+      return { error: res, data:res.data, status:res.status ? res.status : -1 };
     }
    } catch (error: any) {
     return { error: error.response, data:null, status:error?.response?.status ? error.response?.status :  400 };

@@ -58,15 +58,11 @@ export const login = new Elysia()
                     }
                 }
                 currentAccount.set({
-                    value: account?.accountId,
+                    value: account.accountId,
                     httpOnly: false,
                     maxAge: 7 * 86400,
                     path: '/',
-                    domain: "http://localhost:8080/"
                 })
-                // }
-                
-                set.status = 200;
                 auth.set({
                     value: await jwtAccess.sign(customer),
                     httpOnly: false,
@@ -74,6 +70,7 @@ export const login = new Elysia()
                     path: '/',
                 })
                 
+                set.status = 200;
                 return {
                     msg: "ok",
                     customer: customer,
