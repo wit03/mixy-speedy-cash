@@ -27,7 +27,6 @@ export async function CustomerSignUp(body:CustomerRegisterReq) {
         return {customer:undefined, error:"Register customer failed"}
     }
     else {
-
         // if create account failed delete customer
         const resAccount =  await InsertAccountRepo(resCustomer.customerId, body.pin, "deposit", 1000)
         if(!resAccount || !resAccount.accountId){

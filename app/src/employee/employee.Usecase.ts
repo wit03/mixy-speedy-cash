@@ -304,9 +304,7 @@ export async function EmployeeApproveLoanUsecase(loanId:string, status:$Enums.Lo
             
                 
             default:
-                console.log(status)
                 const resUpdateLoanDecline = await UpdateLoanStatusRepo(beforeUpdatedData.loanId, status, new Date(), endDate)
-                
                 
                 if(!resUpdateLoanDecline){
                     return {
@@ -316,7 +314,6 @@ export async function EmployeeApproveLoanUsecase(loanId:string, status:$Enums.Lo
                         loanPayment: undefined
                     }
                 }
-                console.log(resUpdateLoanDecline)
                 return {
                     error: undefined,
                     loan: resUpdateLoanDecline,

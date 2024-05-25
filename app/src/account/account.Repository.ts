@@ -151,6 +151,22 @@ export async function FindManyAccountRepo(limit: number, skip: number) {
     }
 }
 
+export async function FindCustomerManyAccountsRepo(customerId:string) {
+    try {
+        return await db.account.findMany({
+            where:{
+                customerId: customerId
+            },
+            select: {
+                accountId: true,
+                createdAt: true,
+            }
+        })
+    } catch (_) {
+        return undefined
+    }
+}
+
 export async function FindAccountByIdAndCustomer(customerId:string, accountId:string) {
     try {
         return await db.account.findFirst({

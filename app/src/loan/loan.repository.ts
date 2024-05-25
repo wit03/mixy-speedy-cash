@@ -71,10 +71,15 @@ export async function ListCustomerLoanPaymentRepo(accountId:string) {
     try {
         return await db.loan.findMany({
             where:{
-                accountId: accountId
+                accountId: accountId,
             },
             select:{
                 loanPayments:{
+                    where:{
+                        paidStatus: {
+                            notIn: ['paid']
+                        }
+                    },
                     select:{
                         loanId: true,
                         loanPaymentId: true,
@@ -86,7 +91,6 @@ export async function ListCustomerLoanPaymentRepo(accountId:string) {
                         paidDate: true,
                         paidStatus: true,
                         createdAt: true,
-                        
                     }
                 }
             },

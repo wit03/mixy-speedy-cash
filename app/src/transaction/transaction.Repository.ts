@@ -18,12 +18,14 @@ export async function InsertTransactionRepo(senderAccountId:string, recieverAcco
    }
 }
 
-
 export async function FindManyTransactionsFromAccount(limit: number, skip: number, accountId:string) {
     try {
         return await db.transaction.findMany({
             where:{
-                sender: accountId
+                OR:[
+                    {sender: accountId},
+                    {reciever: accountId},
+                ]
             },
             skip: skip,
             take: limit,
@@ -32,26 +34,8 @@ export async function FindManyTransactionsFromAccount(limit: number, skip: numbe
                 detail: true,
                 transactionDate: true,
                 transactionId: true,
-                accountSender:{
-                    select:{
-                        customer:{
-                            select:{
-                                firstName: true,
-                                lastName: true,
-                            }
-                        }
-                    }
-                },
-                accountReciever:{
-                    select:{
-                        customer:{
-                            select:{
-                                firstName: true,
-                                lastName: true,
-                            }
-                        }
-                    }
-                },
+                sender: true,
+                reciever: true,
             },
             orderBy:{
                 transactionDate: "desc"
@@ -210,3 +194,4 @@ export async function FindTransactionByConditionRepo(search:string, transactionT
         return undefined
     }
 }
+

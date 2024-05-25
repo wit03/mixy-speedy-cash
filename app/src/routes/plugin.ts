@@ -26,6 +26,8 @@ import { listLoanPayment } from "./employee/employee-list-loan-payment";
 import { employeeShowCustomerDetail } from "./employee/show-customer-detail";
 import { findAccountName } from "./account/find-account-name";
 import { ListCustomerLoanPayments } from "./loan/list-customer-loan-payment";
+import { listCustomerAccounts } from "./account/list-customer-accounts";
+import { changeAccount } from "./account/change-account";
 
 export const auth = new Elysia({
   prefix: "/customer",
@@ -64,6 +66,8 @@ export const auth = new Elysia({
   .use(listAccounts)
   .use(addAccount)
   .use(findAccountName)
+  .use(listCustomerAccounts)
+  .use(changeAccount)
   
 
 export const transaction = new Elysia({

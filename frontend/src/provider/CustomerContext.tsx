@@ -47,23 +47,23 @@ export interface CustomerGlobalType {
 
 export const CustomerProvider = ({ children }: { children: React.ReactNode }) => {
     const [customerState, setCustomerState] = useState<CustomerGlobalType>({
-        // customer:undefined,
-        // account: undefined
-        "customer": {
-            "customerId": "cc2c3721-856a-4061-87bc-3f7295ccb03e",
-            "customerType": "personal",
-            "email": "dummy@gmail.com",
-            "firstName": "mix1",
-            "lastName": "jateassavapirom",
-            "dateOfBirth": "2024-04-29T18:49:21.000Z",
-            "phoneNumber": "0948652696",
-            "address": "99/73 sirithorn",
-            "createdAt": "2024-05-04T16:41:53.538Z"
-        }, 
-        "account": {
-            "balance": 8000,
-            "accountId": "294112511"
-        }
+        customer:undefined,
+        account: undefined
+        // "customer": {
+        //     "customerId": "cc2c3721-856a-4061-87bc-3f7295ccb03e",
+        //     "customerType": "personal",
+        //     "email": "dummy@gmail.com",
+        //     "firstName": "mix1",
+        //     "lastName": "jateassavapirom",
+        //     "dateOfBirth": "2024-04-29T18:49:21.000Z",
+        //     "phoneNumber": "0948652696",
+        //     "address": "99/73 sirithorn",
+        //     "createdAt": "2024-05-04T16:41:53.538Z"
+        // }, 
+        // "account": {
+        //     "balance": 8000,
+        //     "accountId": "294112511"
+        // }
         })
 
 

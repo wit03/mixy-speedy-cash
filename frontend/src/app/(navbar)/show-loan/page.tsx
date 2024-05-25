@@ -2,6 +2,7 @@
 import { makeRequest } from "@/hook/makeRequets";
 import { CustomerContextType, useCustomer } from "@/provider/CustomerContext";
 import { formatTime } from "@/utils/convertTime";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 
@@ -57,7 +58,7 @@ return (
             <h6 className="font-rubik text-2xl text-white font-medium">My Personal Loan</h6>
         </div>
 
-        <div className="bg-white  lg:w-2/3 flex justify-center flex-col mx-4 lg:m-0 p-3 lg:p-6">
+        <div className="bg-white  lg:w-2/3 lg:mx-auto flex justify-center flex-col mx-4 lg:m-0 p-3 lg:p-6">
             <div className="flex items-center gap-4">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                     <path d="M15 22L13.59 23.41L16.17 26H4V8H2V26C2 27.103 2.897 28 4 28H16.17L13.59 30.59L15 32L20 27L15 22Z" fill="#A694CF"/>
@@ -97,9 +98,11 @@ return (
                         <h6 className="text-sm font-normal text-gray-600">Due date at {formatTime(item.scheduledPaymentDate)}</h6>
                     </div>
    
-                    <button className="p-4 border border-[#A694CF] hover:bg-purple-600 hover:text-white text-gray-800 rounded-md">
+                    <Link
+                    href={`/payloan/${item.loanId}/${item.loanPaymentId}?amount=${item.paymentAmount}`}
+                    className="p-4 border border-[#A694CF] hover:bg-purple-600 hover:text-white text-gray-800 rounded-md self-center">
                         <h6 className="text-xl font-normal ">Pay</h6>
-                    </button>
+                    </Link>
    
                 </div>
                 ))}
