@@ -57,21 +57,21 @@ const Register3 = ({ onPreviousButtonClick, onNextButtonClick,
             Email
             <input
               type="email"
-              className="self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
+              className="pl-2 self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             Password
             <input
               type="password"
-              className="self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
+              className="pl-2 self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
             Confirm Password
             <input
               type="password"
-              className="self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
+              className="pl-2 self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
@@ -122,7 +122,7 @@ const Register3 = ({ onPreviousButtonClick, onNextButtonClick,
         <div className="flex justify-between items-center mb-10 font-rubik">
           <div className="flex items-center">
             <button
-              className="bg-[#B2B2B2] text-white text-lg font-medium p-2 rounded-full"
+              className="bg-[#CB6F6F] text-white text-lg font-medium p-2 rounded-full"
               onClick={onPreviousButtonClick}
             >
               <svg
@@ -145,11 +145,11 @@ const Register3 = ({ onPreviousButtonClick, onNextButtonClick,
           <div className="flex items-center">
             <div className="mr-2 text-lg">Register</div>
             <button
-              className={`bg-[#AABAE8] text-white text-lg font-medium p-2 rounded-full ${allInputsFilled ? "" : "cursor-not-allowed opacity-50"}`}
+              className={` text-white text-lg font-medium p-2 rounded-full ${allInputsFilled ? "bg-green-600" : "bg-[#B2B2B2] cursor-not-allowed opacity-50"}`}
               onClick={allInputsFilled ? onNextButtonClick : null}
               disabled={!allInputsFilled}
             >
-              <svg
+            <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -160,7 +160,7 @@ const Register3 = ({ onPreviousButtonClick, onNextButtonClick,
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M6 18 18 6M6 6l12 12"
+                  d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
                 />
               </svg>
             </button>

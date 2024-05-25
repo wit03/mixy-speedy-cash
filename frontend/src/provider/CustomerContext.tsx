@@ -91,7 +91,6 @@ export const CustomerProvider = ({ children }: { children: React.ReactNode }) =>
         }
     }
 
-    console.log(customerState)
 
   return (
     

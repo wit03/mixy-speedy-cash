@@ -46,12 +46,13 @@ const ValidateSignUp = {
         }),
     }),
     error({ code, set, error }: {code:string, set:Context["set"], error:any}) {
+        console.log(error)
         switch (code) {
             case 'P2002':
                 set.status = 422
                 return {
                     msg: 'Email must be unique'
-            }
+                }
             default: return {
                 msg:error
             }

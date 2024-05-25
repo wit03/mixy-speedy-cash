@@ -141,7 +141,7 @@ export async function CountAndSumTransactionRepo(): Promise<{ totalTransactions:
     }
 }
 
-export async function FindTransactionByConditionRepo(search:string, transactionType:TransactionSearchCondition) {
+export async function FindTransactionByConditionRepo(search:string, transactionType:TransactionSearchCondition, transactionId:string) {
     try {
         let whereCondition: any = {
         };
@@ -155,7 +155,10 @@ export async function FindTransactionByConditionRepo(search:string, transactionT
                 contains: search
             };
         }
-
+        
+        if(transactionId.trim() !== ""){
+            whereCondition.transactionId = transactionId
+        }
         
         return await db.transaction.findMany({
             where: whereCondition,

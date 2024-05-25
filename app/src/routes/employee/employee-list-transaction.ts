@@ -6,6 +6,7 @@ import { isEmployeeAuthenticated } from "../../middleware/authen";
 const ValidateManagerReport = {
     query: t.Object({
         search: t.Optional(t.String({ default: "", })),
+        transactionId: t.Optional(t.String({ default: "", })),
         type: t.Optional(t.String({
             default: "loan"
         }))
@@ -23,9 +24,9 @@ export const listTransactionWithCondition = new Elysia()
         async function listTransactionWithConditionHttpHandler({
             set,
             employeeDecrypt,
-            query:{search, type}
+            query:{search, type, transactionId}
         }) {
-            if(!employeeDecrypt || (employeeDecrypt.position !== "manager" && employeeDecrypt.position !== "owner")){
+            if(!employeeDecrypt){
                 set.status = 401;
                 return {
                     msg: "Unauthorized"
@@ -38,7 +39,7 @@ export const listTransactionWithCondition = new Elysia()
                 }
             }
 
-            const {error, transactions} = await ListTransactionByCondition(search!, type)
+            const {error, transactions} = await ListTransactionByCondition(search!, type, transactionId!)
             if(error !== undefined){
                 set.status = 400
                 return {

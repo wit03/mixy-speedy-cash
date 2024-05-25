@@ -98,7 +98,9 @@ const Register = () => {
 
     if(!data?.customer || error || status !== 201){
       setLoading(false)
-      toast.error(data?.msg || "Failed to create your user or account")
+      toast.error(error?.data.msg + ", maybe email is already have been taken" || "Failed to create your user or account")
+      setPage(1)
+      setPin(new Array(6).fill(""))
       return
     }
     else {

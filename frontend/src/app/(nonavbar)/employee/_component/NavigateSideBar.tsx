@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 
 export default function NavigateSideBar({
@@ -11,6 +12,8 @@ export default function NavigateSideBar({
     children:React.ReactNode;
     check?: boolean;
 })  {
+
+
 
 return (
 

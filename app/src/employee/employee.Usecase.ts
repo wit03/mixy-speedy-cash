@@ -115,9 +115,9 @@ export async function CountAndSumTransactions() {
 
 
 
-export async function ListTransactionByCondition(search:string, type:TransactionSearchCondition) {
+export async function ListTransactionByCondition(search:string, type:TransactionSearchCondition, transactionId:string) {
     
-    const resTransaction = await FindTransactionByConditionRepo(search, type)
+    const resTransaction = await FindTransactionByConditionRepo(search, type, transactionId)
 
     if(resTransaction === undefined){
         return {

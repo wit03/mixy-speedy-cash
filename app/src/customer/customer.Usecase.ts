@@ -24,7 +24,7 @@ export async function CustomerSignUp(body:CustomerRegisterReq) {
 
     // if no data return an error
     if(!resCustomer || !resCustomer.customerId){
-        return {customer:undefined, error:"Register customer failed"}
+        return {customer:undefined, error:"Email must be unique"}
     }
     else {
         // if create account failed delete customer

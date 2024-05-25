@@ -28,6 +28,7 @@ import { findAccountName } from "./account/find-account-name";
 import { ListCustomerLoanPayments } from "./loan/list-customer-loan-payment";
 import { listCustomerAccounts } from "./account/list-customer-accounts";
 import { changeAccount } from "./account/change-account";
+import { listLoanReponsible } from "./employee/employee-list-responsible";
 
 export const auth = new Elysia({
   prefix: "/customer",
@@ -53,6 +54,7 @@ export const auth = new Elysia({
   .use(AssignEmployee)
   .use(listLoanPayment)
   .use(employeeShowCustomerDetail)
+  .use(listLoanReponsible)
   
   
   export const transfer = new Elysia({

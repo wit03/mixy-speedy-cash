@@ -43,7 +43,6 @@ export const EmployeeProvider = ({ children }: { children: React.ReactNode }) =>
     const pathName = usePathname();
 
     const [globalState, setGlobalState] = useState<GlobalState>({
- 
         employee:undefined
         // "employee": {
         //     "employeeId": "0755a314-ba02-4db4-bb51-b537320bcf2a",
@@ -58,7 +57,6 @@ export const EmployeeProvider = ({ children }: { children: React.ReactNode }) =>
         // }
     })
 
-    
 
     useEffect(() => {
        if(!pathName.includes("/login")){
@@ -86,7 +84,6 @@ export const EmployeeProvider = ({ children }: { children: React.ReactNode }) =>
         }
     }
 
-    console.log(globalState)    
 
   return (
     

@@ -346,3 +346,37 @@ export async function FindLoanPaymentRepo(loanId:string) {
         return undefined
     }
 }
+
+export async function FindResponsibleEmployeeLoanRepo(employeeId:string) {
+    try {
+        return await db.loan.findMany({
+            where:{
+                responsibleEmployeeId: employeeId,
+                loanStatus: {
+                    equals: "onProcess"
+                }
+            },
+            select:{
+                accountId: true,
+                loanId: true,
+                loanType: true,
+                loanAmount : true,
+                createdAt: true,    
+                account: {
+                    select:{
+                        customer:{
+                            select:{
+                                firstName: true,
+                                lastName: true,
+                                phoneNumber: true,
+                                email: true,
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    } catch (_) {
+        return undefined
+    }
+}

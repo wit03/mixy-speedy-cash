@@ -32,7 +32,6 @@ export async function InsertCustomerRepo(body:CustomerRegisterReq){
         }
     })
   } catch (error) {
-    console.log(error)
     return undefined
   }  
 }

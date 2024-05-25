@@ -194,7 +194,7 @@ const Register1 = ({
               </div>
               <input
                 type="text"
-                className="self-center w-full h-10 ml-2 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
+                className="self-center w-full h-10 ml-2 pl-2 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
                 value={firstName}
                 onChange={(e) => {
                   setFirstName(e.target.value);
@@ -205,7 +205,7 @@ const Register1 = ({
             Lastname
             <input
               type="text"
-              className="self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
+              className="self-center w-full pl-2 h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
               value={lastName}
               onChange={(e) => {
                 setLastName(e.target.value);
@@ -216,7 +216,7 @@ const Register1 = ({
             <input
               type="date"
               max={sixteenYearsAgo.toISOString().split("T")[0]}
-              className="self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
+              className="pl-2 self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
               value={dob}
               onChange={(e) => {
                 setDob(e.target.value);
@@ -243,7 +243,7 @@ const Register1 = ({
             <input
               type="tel"
               inputMode="numeric"
-              className="self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
+              className="pl-2 self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
               value={phoneNumber}
               onChange={(e) => {
                 setPhoneNumber(e.target.value);
@@ -252,7 +252,7 @@ const Register1 = ({
             />
             Address
             <textarea
-              className="text-start w-full h-20 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
+              className="pl-2 text-start w-full h-20 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
               value={address}
               onChange={(e) => {
                 setAddress(e.target.value);
@@ -283,7 +283,7 @@ const Register1 = ({
           <div className="flex items-center">
             <div className="mr-2 text-lg">Next</div>
             <button
-              className={`bg-[#B2B2B2] text-white text-lg font-medium p-2 rounded-full ${allInputsFilled ? "" : "cursor-not-allowed opacity-50"}`}
+              className={` text-white text-lg font-medium p-2 rounded-full ${allInputsFilled ? "bg-green-600" : "bg-[#B2B2B2] cursor-not-allowed opacity-50"}`}
               onClick={handleNextButtonClick}
               disabled={!allInputsFilled}
             >

@@ -52,7 +52,7 @@ const Register2 = ({ onPreviousButtonClick, onNextButtonClick,
             Salary
             <input
               type="number"
-              className="self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
+              className="pl-2 self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
               value={salary}
               onChange={(e) => {
                 setSalary(Number(e.target.value));
@@ -62,7 +62,7 @@ const Register2 = ({ onPreviousButtonClick, onNextButtonClick,
             Career
             <input
               type="text"
-              className="self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
+              className="pl-2 self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
               value={career}
               onChange={(e) => {
                 setCareer(e.target.value);
@@ -72,7 +72,7 @@ const Register2 = ({ onPreviousButtonClick, onNextButtonClick,
             Company
             <input
               type="text"
-              className="self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
+              className="pl-2 self-center w-full h-10 rounded-md border-4 border-[rgba(24,43,166,0.15)]"
               value={company}
               onChange={(e) => {
                 setCompany(e.target.value);
@@ -87,7 +87,7 @@ const Register2 = ({ onPreviousButtonClick, onNextButtonClick,
         <div className="flex justify-between items-center mb-10 font-rubik">
           <div className="flex items-center">
             <button
-              className="bg-[#B2B2B2] text-white text-lg font-medium p-2 rounded-full"
+              className="bg-[#CB6F6F] text-white text-lg font-medium p-2 rounded-full"
               onClick={onPreviousButtonClick}
             >
               <svg
@@ -110,7 +110,7 @@ const Register2 = ({ onPreviousButtonClick, onNextButtonClick,
           <div className="flex items-center">
             <div className="mr-2 text-lg">Next</div>
             <button
-              className={`bg-[#B2B2B2] text-white text-lg font-medium p-2 rounded-full ${allInputsFilled ? "" : "cursor-not-allowed opacity-50"}`}
+              className={` text-white text-lg font-medium p-2 rounded-full ${allInputsFilled ? "bg-green-600" : "bg-[#B2B2B2] cursor-not-allowed opacity-50"}`}
               onClick={handleNextButtonClick}
               disabled={!allInputsFilled}
             >

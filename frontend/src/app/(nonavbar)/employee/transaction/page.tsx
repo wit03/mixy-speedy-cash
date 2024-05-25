@@ -36,14 +36,16 @@ export default function page({
     
 })  {
 
-    const [state, setState] = useState<{search:string, searchType:"transfer" | "all" | "loan", transactions: Transaction[]}>({
+    const [state, setState] = useState<{search:string, searchType:"transfer" | "all" | "loan", transactions: Transaction[], transactionId:string}>({
         search:"",
         searchType: "all",
         transactions: [],
+        transactionId: "",
+
     })
 
     async function GetTransaction() {
-        const {data, error} = await makeRequest<{msg:string, transactions:Transaction[]}>(`http://localhost:3000/employee/list-transaction?type=${state.searchType}&search=${state.search}`, {
+        const {data, error} = await makeRequest<{msg:string, transactions:Transaction[]}>(`http://localhost:3000/employee/list-transaction?type=${state.searchType}&search=${state.search}&transactionId=${state.transactionId}`, {
             method:"GET"
         })
         if(!data || !data.transactions || error){
@@ -85,7 +87,12 @@ return (
                     </select>
                 </div>
 
-
+                <input
+                    value={state.transactionId}
+                    onChange={(e:React.ChangeEvent<HTMLInputElement>) => setState(prev => ({...prev, transactionId:e.target.value}))}
+                    className="p-3 rounded-md outline-purple-300 placeholder:text-sm placeholder:font-normal"
+                    placeholder="Search for transactionID"
+                    />
                 <button 
                 onClick={handleSearch}
                 className="flex items-center gap-1 bg-purple-400 px-4 py-2 text-white rounded-lg hover:bg-purple-400/80 w-fit">
