@@ -49,7 +49,7 @@ interface AccountData {
 
 
 const Transfer = () => {
-    const { customerState }: CustomerContextType = useCustomer?.()!;
+    const { customerState, LoadData }: CustomerContextType = useCustomer?.()!;
     const router = useRouter()
     const searchParams = useSearchParams()
     const reciever = searchParams.get('reciever')
@@ -65,6 +65,7 @@ const Transfer = () => {
         })
 
         if(!data?.account || error){
+            toast.error(error?.data.msg || "Account Id is not exist")
             router.push("/transfer")
         }
         else {
@@ -142,7 +143,6 @@ const Transfer = () => {
                 pin: pin
             }
         })
-        console.log(data, error)
         if(!data  || error || status !== 200){
             setLoading(false)
             if(error?.data.msg) {
@@ -160,6 +160,7 @@ const Transfer = () => {
             senderData: data.senderData,
             transactionData: data.transactionData
         })
+        await LoadData()
         toast.success("Success transfer money")
         setLoading(false)
     }
@@ -232,8 +233,12 @@ const Transfer = () => {
                         </div>
                         <div
                             onClick={() => {
+                                
                                 if (!Amount) {
                                     toast.error("You need to give an amount first")
+                                }
+                                else if(Number(Amount?.replace(",", "")) > customerState.account!.balance){
+                                    toast.error("Your balance doesn't enough to transfer")
                                 }
                                 else {
                                     setStep("pin")

@@ -166,7 +166,7 @@ export default function Home() {
     const { data, error, status } = await makeRequest<{
       msg:          string;
       transactions: TransactionAccount[];
-    }>(`http://localhost:3000/transaction/list-transactions?limit=${"50"}&skip=${"0"}` , {
+    }>(`http://localhost:3000/transaction/list-transactions?limit=${"10"}&skip=${"0"}` , {
       method: "GET",
     })
     setLoading(false)

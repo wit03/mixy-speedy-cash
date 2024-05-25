@@ -25,7 +25,7 @@ export const findAccountName = new Elysia()
             if(!account){
                 set.status = 400
                 return {
-                    msg:"Failed to get acconut data",
+                    msg:"Failed to get account data, may be accountID is not exist",
                     account: null
                 }
             }

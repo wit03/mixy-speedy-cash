@@ -35,11 +35,11 @@ export default function page({
 
 }: {
 
-    }) {
+}) {
     const { loanId, loanPaymentId } = useParams<{ loanId: string, loanPaymentId: string }>()
     const searchParams = useSearchParams()
     const amountPayment = searchParams.get("amount")
-    const { customerState }: CustomerContextType = useCustomer?.()!;
+    const { customerState, LoadData }: CustomerContextType = useCustomer?.()!;
     const pinRef: React.MutableRefObject<null> = useRef(null)
     const [state, setState] = useState<{
         step: string;
@@ -99,6 +99,7 @@ export default function page({
             return
         }
         setState(prev => ({ ...prev, step: "success", resLoan: {loanPayment: data.loanPayment, transaction:data.transaction} }))
+        await LoadData()
         toast.success("Paid Loan Success")
     }
 

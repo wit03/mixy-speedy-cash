@@ -117,7 +117,12 @@ export async function FindLoanDataWithLoanIdRepo(loanId:string) {
                 endDate: true,
                 loanAmount: true,
                 interestRate: true,
-                accountId: true
+                accountId: true,
+                account:{
+                    select:{
+                        customerId: true
+                    }
+                }
             }
         })
     } catch (_) {

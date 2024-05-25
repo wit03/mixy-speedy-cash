@@ -83,6 +83,15 @@ function helperCalculateTransaction(items: {
 }[]) {
  
     const map = new Map();
+    const now = new Date();
+    for (let i = 5; i >= 0; i--) {
+        const month = now.getMonth() + 1 - i;
+        const year = now.getFullYear();
+        const adjustedMonth = ((month - 1 + 12) % 12) + 1;
+        const adjustedYear = month <= 0 ? year - 1 : year;
+        const key = `${adjustedYear}-${adjustedMonth}`;
+        map.set(key, 0);
+    }
 
     items!.forEach(item => {
         const transactionDate = new Date(item.transactionDate);

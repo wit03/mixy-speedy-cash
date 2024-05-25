@@ -11,6 +11,7 @@ const CustomerContext = createContext<CustomerContextType | null>(null);
 export interface CustomerContextType {
     customerState: CustomerGlobalType;
     setCustomerState: React.Dispatch<React.SetStateAction<CustomerGlobalType>>;
+    LoadData: () => Promise<void>;
 }
   
 
@@ -90,6 +91,7 @@ export const CustomerProvider = ({ children }: { children: React.ReactNode }) =>
         }
     }
 
+    console.log(customerState)
 
   return (
     
@@ -97,6 +99,7 @@ export const CustomerProvider = ({ children }: { children: React.ReactNode }) =>
     value={{
       customerState,
       setCustomerState,
+      LoadData,
     }}>
       {children}
     </CustomerContext.Provider>

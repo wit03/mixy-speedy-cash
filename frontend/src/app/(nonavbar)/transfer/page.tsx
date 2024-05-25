@@ -128,7 +128,7 @@ const Transfer = () => {
                     <DialogPanel className="max-h-screen overflow-y-auto w-full max-w-md rounded-xl p-6 bg-white">
                     <DialogTitle as="div" className="flex justify-between text-xl font-medium text-gray-800">
                         <h6>Contact</h6>
-                        <h6 onClick={() => setOpen(false)}>X</h6>
+                        <h6 className="cursor-pointer" onClick={() => setOpen(false)}>X</h6>
                     </DialogTitle>
                     <div className="flex flex-col gap-2 p-1">
                         {contact && contact.map((item, i) => (

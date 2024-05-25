@@ -1,12 +1,13 @@
 import { $Enums, LoanPayment, LoanType } from "@prisma/client";
 import { DeleteLoanPaymentRepo, FindLoanDataWithLoanIdRepo, FindProfitLoanRepo, InsertManyLoanPayment, ListLoanByTypeRepo, UpdateLoanStatusRepo } from "../loan/loan.repository";
-import { CountAndSumTransactionRepo, FindTransactionByConditionRepo } from "../transaction/transaction.Repository";
+import { CountAndSumTransactionRepo, FindTransactionByConditionRepo, InsertTransactionRepo } from "../transaction/transaction.Repository";
 import { CountCustomerAndAccount, FindEmployeeByEmailRepo, FindEmployeeByIdRepo, ListAllEmployeeRepo} from "./employee.Repository";
 import { InsertEmployeeRepo } from "./employee.Repository";
 import { EmployeeRegisterReq , EmployeeSigninReq, TransactionSearchCondition} from "./employee.type";
-import { DepositBalanceRepo, FindManyAccountDataByCustomerId } from "../account/account.Repository";
+import { DepositBalanceRepo, FindManyAccountDataByCustomerId, WithdrawBalanceRepo } from "../account/account.Repository";
 import { FindCustomerBySearch } from "../customer/customer.Repository";
 import { SearchLoanStatus } from "../loan/loan.type";
+import { bankAccountId } from "../utils/bank";
 
 export async function EmployeeSignUp(body:EmployeeRegisterReq) {
 
@@ -295,6 +296,31 @@ export async function EmployeeApproveLoanUsecase(loanId:string, status:$Enums.Lo
                     deposit: undefined
                 }
             }
+
+
+            const resultTransaction = await InsertTransactionRepo(bankAccountId, beforeUpdatedData.accountId, beforeUpdatedData.loanAmount, `Tranfer money from ${bankAccountId} to ${beforeUpdatedData.accountId}`, "transfer")
+            if(!resultTransaction){
+                // if create transaction is failed
+                // decrement balance reciever
+                // increment balance sender
+                const [resWithDraw, resDeposit] = await Promise.all([
+                    WithdrawBalanceRepo(beforeUpdatedData.account.customerId, beforeUpdatedData.loanAmount, beforeUpdatedData.accountId),
+                    DepositBalanceRepo(bankAccountId, beforeUpdatedData.loanAmount)
+                ]);
+                
+                
+                if(!resWithDraw || !resDeposit){
+                    console.error("fatal error here transfer failed and can't increment balance sender and can't decrement balance reciever")
+                }
+                
+                return {
+                    error:"Create transaction failed",
+                    senderData: undefined,
+                    recieverData: undefined,
+                    transactionData: undefined,
+                }
+            }
+
             return {
                 error: undefined,
                 loan: resUpdateLoan,
