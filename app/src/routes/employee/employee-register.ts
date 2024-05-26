@@ -60,7 +60,7 @@ export const employeeRegister = new Elysia()
             cookie: { employeeAuth },
             jwtEmployee
         }) {
-            if (body.position == "employee" || body.position == "manager" || body.position == "owner") {
+            if (body.position == "employee" || body.position == "manager") {
                 set.status = 201;
                 const { employee, error } = await EmployeeSignUp(body as EmployeeRegisterReq)
                 if (error || !employee) {

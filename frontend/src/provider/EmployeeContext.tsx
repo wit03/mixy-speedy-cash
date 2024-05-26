@@ -10,6 +10,7 @@ const EmployeeContext = createContext<EmployeeContextType | null>(null);
 export interface EmployeeContextType {
     globalState: GlobalState;
     setGlobalState: React.Dispatch<React.SetStateAction<GlobalState>>;
+    LoadData: () => Promise<void>
 }
   
 
@@ -91,6 +92,7 @@ export const EmployeeProvider = ({ children }: { children: React.ReactNode }) =>
     value={{
       globalState,
       setGlobalState,
+      LoadData
     }}>
       {children}
     </EmployeeContext.Provider>

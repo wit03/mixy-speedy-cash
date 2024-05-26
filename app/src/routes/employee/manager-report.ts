@@ -25,20 +25,36 @@ export const managerReport = new Elysia()
                     msg: "Unauthorized"
                 }
             }
-            const {error, loanPaymentProfit, totalAccounts, totalCustomers} = await ManagerReport()
+            const {error, 
+                loanPaymentProfit, 
+                totalAccounts, 
+                totalCustomers, 
+                totalEmployees, 
+                totalLoans, 
+                totalLoansIndebt, 
+                totalLoansProcess,
+                latestLoanPaid
+            } = await ManagerReport()
+            
+            
             if(error !== undefined){
                 set.status = 400
                 return {
                     msg: error || "Failed to get manager report"
                 }
             }
-
+            
             set.status = 200
             return {
                 msg: "Ok",
                 loanPaymentProfit:loanPaymentProfit, 
-                totalAccounts:totalAccounts, 
-                totalCustomers:totalCustomers
+                totalAccounts:totalAccounts || 0, 
+                totalCustomers:totalCustomers || 0,
+                totalEmployees: totalEmployees || 0,
+                totalLoans: totalLoans || 0,
+                totalLoansIndebt: totalLoansIndebt || 0,
+                totalLoansProcess: totalLoansProcess || 0,
+                latestLoanPaid: latestLoanPaid
             }
 
         },

@@ -73,17 +73,43 @@ export async function FindEmployeeByEmailRepo(email: string) {
 }
 
 
-export async function CountCustomerAndAccount(): Promise<{ totalCustomers: number; totalAccounts: number } | undefined> {
+export async function CountCustomerAndAccount(): Promise<{ 
+    totalCustomers: number; 
+    totalAccounts: number; 
+    totalEmployees: number;
+    totalLoans:Number,
+    totalLoansProcess:Number,
+    totalLoansIndebt:Number,
+} | undefined> {
     try {
-        const counts = await db.$queryRaw<{totalcustomers:BigInt, totalaccounts:BigInt}[]>`
+        const counts = await db.$queryRaw<{
+            totalcustomers:BigInt, 
+            totalaccounts:BigInt, 
+            totalemployee:BigInt,
+            totalloans:BigInt,
+            totalloansprocess:BigInt,
+            totalloansindebt:BigInt,
+        }[]>`
             SELECT
                 (SELECT COUNT(*) FROM "Customer") AS totalcustomers,
-                (SELECT COUNT(*) FROM "Account") AS totalaccounts
+                (SELECT COUNT(*) FROM "Account") AS totalaccounts,
+                (SELECT COUNT(*) FROM "Employee") AS totalemployees,
+                (SELECT COUNT(*) FROM "Loan") AS totalloans,
+                (SELECT COUNT(*) FROM "Loan" AS l
+                    WHERE l."loanStatus" = 'onProcess'
+                ) AS totalloansprocess,
+                (SELECT COUNT(*) FROM "Loan" AS l
+                    WHERE l."loanStatus" = 'inDebt'
+                ) AS totalloansindebt
         `;
         if (counts) {
             const totalCustomers = Number(counts[0].totalcustomers);
             const totalAccounts = Number(counts[0].totalaccounts);
-            return { totalCustomers, totalAccounts };
+            const totalEmployees = Number(counts[0].totalemployee);
+            const totalLoans = Number(counts[0].totalloans);
+            const totalLoansProcess = Number(counts[0].totalloansprocess);
+            const totalLoansIndebt = Number(counts[0].totalloansindebt);
+            return { totalCustomers, totalAccounts, totalEmployees, totalLoans, totalLoansProcess, totalLoansIndebt };
         } else {
             return undefined;
         }

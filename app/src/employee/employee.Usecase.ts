@@ -1,5 +1,5 @@
 import { $Enums, LoanPayment, LoanType } from "@prisma/client";
-import { DeleteLoanPaymentRepo, FindLoanDataWithLoanIdRepo, FindProfitLoanRepo, InsertManyLoanPayment, ListLoanByTypeRepo, UpdateLoanStatusRepo } from "../loan/loan.repository";
+import { DeleteLoanPaymentRepo, FindLatestLoanPaidRepo, FindLoanDataWithLoanIdRepo, FindProfitLoanRepo, InsertManyLoanPayment, ListLoanByTypeRepo, UpdateLoanStatusRepo } from "../loan/loan.repository";
 import { CountAndSumTransactionRepo, FindTransactionByConditionRepo, InsertTransactionRepo } from "../transaction/transaction.Repository";
 import { CountCustomerAndAccount, FindEmployeeByEmailRepo, FindEmployeeByIdRepo, ListAllEmployeeRepo} from "./employee.Repository";
 import { InsertEmployeeRepo } from "./employee.Repository";
@@ -54,15 +54,20 @@ export async function ManagerReport() {
             totalAccounts: null,
             totalCustomers: null,
             loanPaymentProfit: null,
+            totalEmployees: null,
+            totalLoans: null,
+            totalLoansIndebt: null,
+            totalLoansProcess: null,
+            latestLoanPaid: null,
         }
     }
-
-    const {totalAccounts, totalCustomers} = resultCount
-
+    
+    const {totalAccounts, totalCustomers, totalEmployees, totalLoans, totalLoansIndebt, totalLoansProcess} = resultCount
+    
     // for calculating last 6 month
     const startDate = new Date();
-    startDate.setMonth(startDate.getMonth() - 6);
-
+    startDate.setMonth(startDate.getMonth() - 12);
+    
     const resLoanPaymentProfit = await FindProfitLoanRepo(startDate)
     if(!resLoanPaymentProfit){
         return {
@@ -70,16 +75,42 @@ export async function ManagerReport() {
             totalAccounts: null,
             totalCustomers: null,
             loanPaymentProfit: null,
+            totalEmployees: null,
+            totalLoans: null,
+            totalLoansIndebt: null,
+            totalLoansProcess: null,
+            latestLoanPaid: null,
         }
     }
-
+    
+    const resLatestLoanPaid = await FindLatestLoanPaidRepo()
+    if(!resLatestLoanPaid){
+        return {
+            error: "Failed to find profit loan",
+            totalAccounts: null,
+            totalCustomers: null,
+            loanPaymentProfit: null,
+            totalEmployees: null,
+            totalLoans: null,
+            totalLoansIndebt: null,
+            totalLoansProcess: null,
+            latestLoanPaid: null,
+        }
+    }
+    // const findLatestLoanPaid = await 
+    
     const loanPaymentProfit = helperCalculateLoanPayment(resLoanPaymentProfit)
-
+    
     return {
         error: undefined,
         totalAccounts: totalAccounts, 
         totalCustomers: totalCustomers,
-        loanPaymentProfit: loanPaymentProfit
+        loanPaymentProfit: loanPaymentProfit,
+        totalEmployees: totalEmployees,
+        totalLoans: totalLoans,
+        totalLoansIndebt: totalLoansIndebt,
+        totalLoansProcess: totalLoansProcess,
+        latestLoanPaid: resLatestLoanPaid,
     }
 
 }
@@ -351,19 +382,26 @@ export async function EmployeeApproveLoanUsecase(loanId:string, status:$Enums.Lo
 
 }
 
-
-
 function helperCalculateLoanPayment(items: {
     paidAmount: number;
     createdAt: Date;
 }[]) {
  
     const map = new Map();
+    const now = new Date();
+    for (let i = 11; i >= 0; i--) {
+        const month = now.getMonth() + 1 - i;
+        const year = now.getFullYear();
+        const adjustedMonth = ((month - 1 + 12) % 12) + 1;
+        const adjustedYear = month <= 0 ? year - 1 : year;
+        const key = `${adjustedYear}-${adjustedMonth}`;
+        map.set(key, 0);
+    }
 
     items!.forEach(item => {
-        const transactionDate = new Date(item.createdAt);
-        const month = transactionDate.getMonth() + 1;
-        const year = transactionDate.getFullYear();
+        const createdAt = new Date(item.createdAt);
+        const month = createdAt.getMonth() + 1;
+        const year = createdAt.getFullYear();
         
         const key = `${year}-${month}`;
 
@@ -383,5 +421,4 @@ function helperCalculateLoanPayment(items: {
     return classifiedObject
 
 }
-
 

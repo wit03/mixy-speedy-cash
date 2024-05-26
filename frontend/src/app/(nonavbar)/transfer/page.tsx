@@ -162,7 +162,7 @@ const Transfer = () => {
                     <div 
                     onClick={handleGetContact}
                     className="
-                   bg-gradient-to-r from-[#a6c1ee] to-[rgba(127,84,222,0.2)] hover:opacity-90 rounded-lg px-4 py-2 cursor-pointer
+                   bg-gradient-to-r from-[#a6c1ee] to-[rgba(127,84,222,0.2)] hover:opacity-90 rounded-lg px-3 py-2 cursor-pointer
                     text-medium text-lg text-white">
                         All Contact
                     </div>

@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const LoanInformation = () => {
     return (
-        <div className="flex flex-col m-4 font-rubik items-start mx-6 mt-14 mb-6">
+        <div className="flex flex-col m-4 font-rubik items-start mx-6 mt-14 ">
             <svg className="absolute top-0 right-0" xmlns="http://www.w3.org/2000/svg" width="124" height="126" viewBox="0 0 124 126" fill="none"><circle cx="100" cy="26" r="100" fill="#F8E192"></circle></svg>
             <svg className="absolute bottom-20 left-0 z-0" xmlns="http://www.w3.org/2000/svg" width="128" height="200" viewBox="0 0 128 200" fill="none"><circle cx="28" cy="100" r="100" fill="#2FCBFC4D" /></svg>
             <Link href="/loan" aria-label="Back to Home Page">

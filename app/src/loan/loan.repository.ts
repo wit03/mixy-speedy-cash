@@ -7,7 +7,8 @@ export async function ListLoanByAccountIdRepo(accountId:string) {
     try {
         return await db.loan.findMany({
             where:{
-                accountId: accountId
+                accountId: accountId,
+                loanStatus: "onProcess"
             },
             select:{
                 loanId: true,
@@ -47,7 +48,7 @@ export async function ListLoanPaymentRepo(loanId:string) {
     try {
         return await db.loanPayment.findMany({
             where:{
-                loanId: loanId
+                loanId: loanId,
             },
             select:{
                 loanId: true,
@@ -273,6 +274,49 @@ export async function FindProfitLoanRepo(time:Date) {
             select:{
                 paidAmount: true,
                 createdAt: true,
+            }
+          });
+
+    } catch (_) {
+        return undefined
+    }
+}
+
+// for manager report
+export async function FindLatestLoanPaidRepo() {
+    try {
+        return await db.loanPayment.findMany({
+            where: {
+                paidStatus: "paid"
+            },
+            select:{
+                loanPaymentId: true,
+                paidAmount: true,
+                createdAt: true,
+                Loan:{
+                    select:{
+                        accountId: true,
+                        Employee:{
+                            select:{
+                                firstName: true,
+                                lastName: true,
+                            }
+                        },
+                        startDate: true,
+                        endDate: true,
+                        loanType: true,
+                        account:{
+                            select:{
+                                customer:{
+                                    select:{
+                                        firstName: true,
+                                        lastName: true,
+                                    }
+                                },
+                            }
+                        },
+                    }
+                }
             }
           });
 

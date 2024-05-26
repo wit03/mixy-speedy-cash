@@ -26,7 +26,6 @@ export const ListCustomerLoanPayments = new Elysia()
                 }
             }
             const data = await ListCustomerLoanPaymentRepo(String(currentAccount.value))
-            console.log(currentAccount.value)
             if (!data){
                 set.status = 400
                 return {

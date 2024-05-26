@@ -6,6 +6,7 @@ import UsernameInput from "./_component/UsernameInput"
 import PasswordInput from "./_component/PasswordInput"
 import toast from "react-hot-toast"
 import { useRouter } from 'next/navigation'
+import { EmployeeContextType, useEmployee } from "@/provider/EmployeeContext"
 
 export default function page({
 
@@ -13,6 +14,7 @@ export default function page({
     
 })  {
     const router = useRouter();
+    const { globalState, LoadData }:EmployeeContextType  = useEmployee?.()!;
 
     const [state, setState] = useState({
         email:"owner@gmail.com",
@@ -30,16 +32,18 @@ export default function page({
             }
         })
 
-
-        router.push('/employee');
-        
-        toast.success("Login success");
+        await LoadData()
+        setTimeout(() => {
+          router.push('/employee/responsible');
+        }, 1500);
+        toast.success("Login success, redirecting you in 1.5 seconds");
 
     }
 
 return (
-
+  <div className="w-full ">
     <div className="flex flex-col h-screen items-center justify-center gap-y-[1rem] pb-14">
+      
     <svg id="bg" className="absolute top-0 right-0" xmlns="http://www.w3.org/2000/svg" width="124" height="126" viewBox="0 0 124 126" fill="none">
       <circle cx="100" cy="26" r="100" fill="#F8E192"/>
     </svg>
@@ -72,6 +76,7 @@ return (
         </div>
       </form>
   </div>
+    </div>
 
     )
 

@@ -7,16 +7,14 @@ import { useEffect, useState } from "react";
 
 
 interface LoanPayment {
-    loanId:               string;
-    loanPaymentId:        string;
-    scheduledPaymentDate: string;
-    principalAmount:      number;
-    paymentAmount:        number;
-    interestPercent:      number;
-    paidAmount:           number;
-    paidDate:             null;
-    paidStatus:           "paid" | "inDept" | "onProcess";
-    createdAt:            string;
+    loanId:                string;
+    loanType:              string;
+    loanAmount:            number;
+    interestRate:          number;
+    loanStatus:            string;
+    endDate:               null | string;
+    startDate:             null | string;
+    responsibleEmployeeId: null | string;
 }
 
 
@@ -28,20 +26,20 @@ export default function page({
 })  {
     const { customerState }: CustomerContextType = useCustomer?.()!;
 
-    const [state, setState] = useState<{loanPayments: LoanPayment[]}>({
-        loanPayments: []
+    const [state, setState] = useState<{loans: LoanPayment[]}>({
+        loans: []
     })
 
     async function handleGetAllLoanPayment() {
         const { data, error, status } = await makeRequest<{
             msg:          string;
-            loanPayments:LoanPayment[];
-        }>("http://localhost:3000/loan/list-customer-loan-payments", {
+            loans:LoanPayment[];
+        }>("http://localhost:3000/loan/list-loans", {
             method: "GET",
         })
 
-        if(data?.loanPayments){
-            setState(prev => ({...prev, loanPayments: data.loanPayments}))
+        if(data?.loans){
+            setState(prev => ({...prev, loans: data.loans}))
         }
 
     }
@@ -83,23 +81,18 @@ return (
             <h6 className="text-xl font-normal text-gray-800">Schedule to be paid</h6>
             <div className="flex flex-col  gap-4">
                <div className="flex flex-col gap-4">
-                {state.loanPayments.map((item, i) => (
+                {state.loans.map((item, i) => (
                     <div className="flex gap-3 justify-around p-4 bg-white" key={i}>
-                    <div className="min-w-[3rem]  min-h-[3rem] relative rounded-full self-center bg-[#E4DFF1]">
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M12 12C10.35 12 8.9375 11.4125 7.7625 10.2375C6.5875 9.0625 6 7.65 6 6C6 4.35 6.5875 2.9375 7.7625 1.7625C8.9375 0.5875 10.35 0 12 0C13.65 0 15.0625 0.5875 16.2375 1.7625C17.4125 2.9375 18 4.35 18 6C18 7.65 17.4125 9.0625 16.2375 10.2375C15.0625 11.4125 13.65 12 12 12ZM0 24V19.8C0 18.95 0.219 18.169 0.657 17.457C1.095 16.745 1.676 16.201 2.4 15.825C3.95 15.05 5.525 14.469 7.125 14.082C8.725 13.695 10.35 13.501 12 13.5C13.65 13.499 15.275 13.693 16.875 14.082C18.475 14.471 20.05 15.052 21.6 15.825C22.325 16.2 22.9065 16.744 23.3445 17.457C23.7825 18.17 24.001 18.951 24 19.8V24H0Z" fill="#A694CF"/>
-                            </svg>
-                        </div>
-                    </div>
+                   
                     <div className="flex flex-col gap-0.5">
-                        <h6 className="text-sm font-normal text-gray-800">Amount to be paid</h6>
-                        <h6 className="text-lg font-normal text-[#9747FF]">{item.paymentAmount.toLocaleString('en-US', {minimumFractionDigits: 2})}</h6>
-                        <h6 className="text-sm font-normal text-gray-600">Due date at {formatTime(item.scheduledPaymentDate)}</h6>
+                        <h6 className="text-sm font-normal text-gray-400">LoanID: {item.loanId}</h6>
+                        <h6 className="text-sm font-normal text-gray-800">Priciple loan amount</h6>
+                        <h6 className="text-lg font-normal text-[#9747FF]">{item.loanAmount.toLocaleString('en-US', {minimumFractionDigits: 2})}</h6>
+                        {item.endDate && <h6 className="text-sm font-normal text-gray-600">Due date at {formatTime(item.endDate)}</h6>}
                     </div>
    
                     <Link
-                    href={`/payloan/${item.loanId}/${item.loanPaymentId}?amount=${item.paymentAmount}`}
+                    href={`/show-loan/${item.loanId}`}
                     className="p-4 border border-[#A694CF] hover:bg-purple-600 hover:text-white text-gray-800 rounded-md self-center">
                         <h6 className="text-xl font-normal ">Pay</h6>
                     </Link>

@@ -1,11 +1,17 @@
 "use client"
-const AccountInfo = () => {
+
+const AccountInfo = (
+    //@ts-ignore
+    {setState}
+) => {
     return (
         <>
+            <div className="" onClick={() => setState(0)}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 absolute top-8 left-8">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
             </svg>
 
+            </div>
                 <div className="flex-col bg-[#A694CF] w-full h-[20rem] flex justify-center items-center font-rubik text-2xl font-bold gap-2.5">
                     My account
                     <div className="rounded-full w-36 h-36 bg-white flex justify-center items-center">
@@ -56,7 +62,7 @@ const AccountInfo = () => {
                 </div>
 
                 <div className="flex justify-center items-center mt-24">
-                    <button className="self-center w-24 h-10 rounded-md bg-gray-300 border border-black">Log Out</button>
+                    <button className="self-center w-24 h-10 rounded-md bg-gray-300 border border-black">Submit</button>
                 </div>
         </>
     )

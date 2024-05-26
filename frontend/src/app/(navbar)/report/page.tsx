@@ -25,32 +25,7 @@ export interface Sum {
   amount: number;
 }
 
-const rangeData = [
-  {
-    month: "JAN",
-    money: 350,
-  },
-  {
-    month: "FEB",
-    money: 480,
-  },
-  {
-    month: "MAR",
-    money: 275,
-  },
-  {
-    month: "APR",
-    money: 300,
-  },
-  {
-    month: "MAY",
-    money: 550,
-  },
-  {
-    month: "JUN",
-    money: 300,
-  },
-];
+
 const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 
 

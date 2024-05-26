@@ -44,10 +44,9 @@ export default function page({
         step: 0
     })
 
-
     async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault()
-        if (state.loanAmount < 100) {
+        if (state.loanAmount < 100 || state.loanAmount > 50000) {
             toast.error("Loan amount should not be less than 100")
             return
         }
@@ -164,7 +163,7 @@ export default function page({
             }
 
             {state.step === 1 &&
-                <div className="flex flex-col min-h-[calc(100vh-32px-24px)] items-center justify-center overflow-hidden">
+                <div className="flex min-h-[calc(100vh-5rem)] flex-col items-center justify-center overflow-hidden">
                     <svg id="bg" className="absolute top-0 right-0" xmlns="http://www.w3.org/2000/svg" width="124" height="126" viewBox="0 0 124 126" fill="none">
                         <circle cx="100" cy="26" r="100" fill="#F8E192" />
                     </svg>

@@ -32,7 +32,6 @@ model Customer {
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @default(now())
   account       Account[]
-  notifications Notification[]
 }
 
 enum CustomerType {
@@ -82,6 +81,7 @@ model Account {
   accountSender   Transaction[] @relation("accountSender")
   accountReciever Transaction[] @relation("accountReciever")
   Loans           Loan[]
+  notifications Notification[]
 }
 
 enum AccountType {
@@ -186,7 +186,7 @@ enum TransactionType {
 model Notification {
   notiId           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   reciever         String   @db.Uuid
-  customerReciever Customer @relation(fields: [reciever], references: [customerId])
+  customerReciever Account @relation(fields: [reciever], references: [accountId])
 
   createdBy       String   @db.Uuid // employee
   employeeCreated Employee @relation(fields: [createdBy], references: [employeeId])
