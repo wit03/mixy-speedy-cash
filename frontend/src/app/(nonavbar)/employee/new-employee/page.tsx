@@ -40,7 +40,7 @@ export default function page({
         dateOfBirth: "",
         phoneNumber: "",
         address: "",
-        position: "",
+        position: "employee",
         salary: 0,
         // email: "mixxy@gmail.com",
         // password: "123",
@@ -52,7 +52,6 @@ export default function page({
         // position: "employee",
         // salary: 1000,
     })
-
     async function handleCreateEmployee(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault()
         const { address, dateOfBirth, email, firstName, lastName, password, phoneNumber, position, salary } = state

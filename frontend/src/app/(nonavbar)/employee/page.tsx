@@ -84,6 +84,16 @@ const data = [
 ];
 const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 
+const renderCustomizedLabel = ({
+  //@ts-ignore
+  x, y, name
+}) => {
+  return (
+    <text x={x} y={y} fill="black" textAnchor="end" dominantBaseline="central">
+      {name}
+    </text>
+  );
+};
 export default function page({
 
 }: {
@@ -110,13 +120,62 @@ export default function page({
     totalLoansIndebt: number;
     totalLoansProces: number;
   }>({
-    loanProfit: [],
-    totalAccounts: 0,
-    totalCustomers: 0,
-    totalEmployees: 0,
-    totalLoans: 0,
+    loanProfit: [
+      {
+          "month": "JUN",
+          "money": 50000
+      },
+      {
+          "month": "JUL",
+          "money": 28000
+      },
+      {
+          "month": "AUG",
+          "money": 43000
+      },
+      {
+          "month": "SEP",
+          "money": 32000
+      },
+      {
+          "month": "OCT",
+          "money": 60000
+      },
+      {
+          "month": "NOV",
+          "money": 30000
+      },
+      {
+          "month": "DEC",
+          "money": 10000
+      },
+      {
+          "month": "JAN",
+          "money": 20000
+      },
+      {
+          "month": "FEB",
+          "money": 35000
+      },
+      {
+          "month": "MAR",
+          "money": 127000
+      },
+      {
+          "month": "APR",
+          "money": 85666
+      },
+      {
+          "month": "MAY",
+          "money": 63623
+      }
+  ],
+    totalAccounts: 120,
+    totalCustomers: 200,
+    totalEmployees: 4,
+    totalLoans: 14,
     totalLoansIndebt: 0,
-    totalLoansProces: 0,
+    totalLoansProces: 7,
     latestLoanPaid: [],
   })
 
@@ -161,13 +220,13 @@ export default function page({
     
     
     setState(prev => ({...prev,
-      loanProfit: loanProfit,
-      totalAccounts:totalAccounts, 
-      totalCustomers:totalCustomers, 
-      totalEmployees:totalEmployees, 
-      totalLoans:totalLoans, 
-      totalLoansIndebt:totalLoansIndebt, 
-      totalLoansProces:totalLoansProcess,
+      // loanProfit: loanProfit,
+      // totalAccounts:totalAccounts, 
+      // totalCustomers:totalCustomers, 
+      // totalEmployees:totalEmployees, 
+      // totalLoans:totalLoans, 
+      // totalLoansIndebt:totalLoansIndebt, 
+      // totalLoansProces:totalLoansProcess,
       latestLoanPaid: latestLoanPaid 
     }))
   }
@@ -178,7 +237,7 @@ export default function page({
     GetReport()
   }, [])
   
-  console.log(state)
+  // console.log(state)
 
   return (
 
@@ -265,7 +324,12 @@ export default function page({
 
         </div>
 
-        <div className="bg-white rounded-2xl p-6 col-span-3 w-full">
+
+        <div className="bg-white rounded-2xl p-6 col-span-3 w-full min-h-60">
+          <div className="w-full h-full flex flex-col">
+            <h6 className=" text-sm">Loan Profit</h6>
+            <div className="w-full h-full">
+
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               width={500}
@@ -303,42 +367,88 @@ export default function page({
             </defs>
             </BarChart>
           </ResponsiveContainer>
-
+            </div>
+          </div>
         </div>
+
               
           
         <div className="bg-white rounded-2xl p-6 col-span-2 w-full min-h-60">
           <div className="w-full h-full flex flex-col">
-            <h6 className=" text-sm">hello</h6>
+            <h6 className=" text-sm">Amount Loan Apply</h6>
             <div className="w-full h-full">
             <ResponsiveContainer width="100%" height="100%">
             <PieChart width={730} height={350}>
                 <Pie data={[
                   {
-                    "name": "Group A",
-                    "value": 400
+                    "name": "Normal",
+                    "value": 5000,
+                    fill: '#A6C1EE',
                   },
                   {
-                    "name": "Group B",
-                    "value": 300
+                    "name": "Special",
+                    "value": 2000,
+                    fill: '#FBC2EB',
                   },
                 ]} 
-                label 
+                label={renderCustomizedLabel}
                 dataKey="value" 
                 nameKey="name" cx="50%" cy="50%" outerRadius={50} fill="#FBC2EB" />
+                  <Tooltip />
+
               </PieChart>
             </ResponsiveContainer>
               </div>
               </div>
 
         </div>
+            
 
-        <div className="bg-white rounded-2xl p-6 col-span-3 w-full">
+        <div className="bg-white rounded-2xl p-6 col-span-3 w-full min-h-60">
+          <div className="w-full h-full flex flex-col">
+            <h6 className=" text-sm">Total In flow-Out flow</h6>
+            <div className="w-full h-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               width={500}
               height={300}
-              data={data}
+              data={[
+                {
+                  "name": "NOV",
+                  "uv": 4000,
+                  "pv": 2400
+                },
+                {
+                  "name": "DEC",
+                  "uv": 3000,
+                  "pv": 1398
+                },
+                {
+                  "name": "JAN",
+                  "uv": 2000,
+                  "pv": 9800
+                },
+                {
+                  "name": "FEB",
+                  "uv": 2780,
+                  "pv": 3908
+                },
+                {
+                  "name": "MAR",
+                  "uv": 1890,
+                  "pv": 4800
+                },
+                {
+                  "name": "APR",
+                  "uv": 2390,
+                  "pv": 3800
+                },
+                {
+                  "name": "MAY",
+                  "uv": 3490,
+                  "pv": 4300
+                }
+              ]}
               margin={{
                 top: 5,
                 right: 30,
@@ -346,15 +456,38 @@ export default function page({
                 bottom: 5,
               }}
             >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="pv" fill="#8884d8" activeBar={<Rectangle fill="pink" stroke="blue" />} />
-              <Bar dataKey="uv" fill="#82ca9d" activeBar={<Rectangle fill="gold" stroke="purple" />} />
+            <defs>
+              <filter id="dropShadow">
+                <feDropShadow
+                  dx="5"
+                  stdDeviation="2"
+                  floodColor="rgba(72, 69, 229, 0.5)"
+                />
+              </filter>
+            </defs>
+            <CartesianGrid vertical={false} />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Bar
+              dataKey="pv"
+              style={{ fill: "url(#colorGradient)", filter: "url(#dropShadow)" }}
+            />
+            <Bar
+              dataKey="uv"
+              style={{ fill: "url(#colorGradient)", filter: "url(#dropShadow)" }}
+            />
+
+            <defs>
+              <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#FBC2EB" />
+                <stop offset="100%" stopColor="#A6C1EE" />
+              </linearGradient>
+            </defs>
             </BarChart>
           </ResponsiveContainer>
-        
+            </div>
+          </div>
         </div>
 
       </div>

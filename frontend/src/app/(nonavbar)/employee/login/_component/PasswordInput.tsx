@@ -19,7 +19,7 @@ export default function PasswordInput({
     return (
         <div className="font-rubik">
             <input
-                placeholder="gormixishere1234"
+                placeholder="password"
                 className="appearance-none outline-purple-500 w-full relative text-gray-[#a5a5a5] text-sm rounded-md bg-[#f5f5f5] py-[18px] ps-[24px] border-4 border-solid border-[#8351F433] box-border h-53 shadow-md tracking-0.02 font-rubik sm:text-sm focus:ring-purple-600"
                 type={showPassword ? 'text' : 'password'}
                 value={value}

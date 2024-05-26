@@ -61,7 +61,6 @@ export default function SidebarItem({
             />
 
 
-            {globalState.employee?.position === "owner" && 
             <NavigateSideBar
                 link="/employee/loan"
                 text="Loan"
@@ -75,7 +74,6 @@ export default function SidebarItem({
                     </svg>
                 }
             />
-            }
            
             {globalState.employee?.position === "owner" && 
             <NavigateSideBar

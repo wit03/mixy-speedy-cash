@@ -185,7 +185,7 @@ enum TransactionType {
 
 model Notification {
   notiId           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  reciever         String   @db.Uuid
+  reciever         String  
   customerReciever Account @relation(fields: [reciever], references: [accountId])
 
   createdBy       String   @db.Uuid // employee

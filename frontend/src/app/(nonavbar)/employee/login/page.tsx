@@ -17,8 +17,8 @@ export default function page({
     const { globalState, LoadData }:EmployeeContextType  = useEmployee?.()!;
 
     const [state, setState] = useState({
-        email:"owner@gmail.com",
-        password: "123"
+        email:"",
+        password: ""
     })
 
     async function handleSubmit(e:React.FormEvent<HTMLFormElement>) {
@@ -56,7 +56,7 @@ return (
     </div>
     <form onSubmit={handleSubmit}>
       <div className="flex flex-col w-[20rem] gap-3.5 ">
-        <label className="relative text-16 tracking-0.02 font-rubik text-black text-left">Employee ID</label>
+        <label className="relative text-16 tracking-0.02 font-rubik text-black text-left">Email</label>
         <div className="w-full relative">
           <UsernameInput
           value={state.email}

@@ -34,7 +34,7 @@ export default function page({
 })  {
 
     const [state, setState] = useState<{search:string, customer:Customer | null}>({
-        search:"cc2c3721-856a-4061-87bc-3f7295ccb03e",
+        search:"",
         customer: null,
     })
 
